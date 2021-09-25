@@ -17,7 +17,7 @@ abstract class BaseFavoriteFragment: Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
-
+            uiCommunicationListener = context as UICommunicationListener
         }catch(e: ClassCastException) {
             Log.e(TAG, "$context must implement UICommunicationListener")
         }

@@ -1,7 +1,16 @@
 <resources>
     <string name="app_name"></string>
-    <string name="home">Home</string>
+    <string name="search">Search</string>
     <string name="favorite">Favorite</string>
     <string name="shopping_list">Shopping List</string>
     <string name="account">Account</string>
+
+    <string name="holder_text">Holder Text</string>
+    <string name="text_error">Error</string>
+    <string name="text_success">Success</string>
+    <string name="text_ok">OK</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_info">Info</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="text_yes">yes</string>
 </resources>

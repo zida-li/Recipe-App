@@ -1,6 +1,7 @@
 package com.example.recipeappfivelearning.presentation.main
 
 import android.os.Bundle
+import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -8,6 +9,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.databinding.ActivityMainBinding
 import com.example.recipeappfivelearning.presentation.BaseActivity
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -48,6 +50,18 @@ class MainActivity : BaseActivity() {
             )
         )
         binding.toolBar.setupWithNavController(navController, appBarConfiguration)
+    }
+
+    override fun displayProgressBar(isLoading: Boolean) {
+        if(isLoading) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
+    }
+
+    override fun expandAppBar() {
+        //nothing
     }
 
 }

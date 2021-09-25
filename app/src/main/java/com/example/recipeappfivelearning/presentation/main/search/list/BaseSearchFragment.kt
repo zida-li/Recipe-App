@@ -1,4 +1,4 @@
-package com.example.recipeappfivelearning.presentation.main.search
+package com.example.recipeappfivelearning.presentation.main.search.list
 
 import android.content.Context
 import android.util.Log
@@ -17,7 +17,7 @@ abstract class BaseSearchFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
-
+            uiCommunicationListener = context as UICommunicationListener
         }catch(e: ClassCastException) {
             Log.e(TAG, "$context must implement UICommunicationListener")
         }
