@@ -4,10 +4,12 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.business.domain.util.Constants
 import com.example.recipeappfivelearning.business.domain.util.StateMessage
 import com.example.recipeappfivelearning.business.domain.util.UIComponentType
 import com.example.recipeappfivelearning.business.domain.util.doesMessageAlreadyExistInQueue
+import com.example.recipeappfivelearning.business.interactors.main.search.list.SaveRecipeToTemporaryRecipeDb
 import com.example.recipeappfivelearning.business.interactors.main.search.list.SearchRecipes
 import com.example.recipeappfivelearning.presentation.main.search.list.SearchEvents
 import com.example.recipeappfivelearning.presentation.main.search.list.SearchState
@@ -21,7 +23,8 @@ import javax.inject.Inject
 class SearchViewModel
 @Inject
 constructor(
-    private val searchRecipes: SearchRecipes
+    private val searchRecipes: SearchRecipes,
+    private val saveRecipeToTemporaryRecipeDb: SaveRecipeToTemporaryRecipeDb,
 ): ViewModel() {
 
     private val TAG: String = "AppDebug"
@@ -40,7 +43,7 @@ constructor(
                 nextPage()
             }
             is SearchEvents.SaveToTemporaryRecipeDb -> {
-                saveRecipeToTemporaryDb()
+                saveRecipeToTemporaryDb(event.recipe)
             }
             is SearchEvents.OnRemoveHeadFromQueue -> {
                 onRemoveHeadFromQueue()
@@ -48,6 +51,19 @@ constructor(
             is SearchEvents.Error -> {
                 appendToMessageQueue(event.stateMessage)
             }
+            is SearchEvents.SaveOrDeleteRecipeFromDb -> {
+                saveOrDeleteRecipeFromDb(event.recipe)
+            }
+        }
+    }
+
+    private fun saveOrDeleteRecipeFromDb(recipe: Recipe) {
+        if(recipe.isFavorite) {
+            recipe.isFavorite = false
+            Log.d(TAG, "saveOrDeleteRecipeFromDb: ${recipe.isFavorite}")
+        } else {
+            recipe.isFavorite = true
+            Log.d(TAG, "saveOrDeleteRecipeFromDb: ${recipe.isFavorite}")
         }
     }
 
@@ -96,8 +112,10 @@ constructor(
         }
     }
 
-    private fun saveRecipeToTemporaryDb() {
-
+    private fun saveRecipeToTemporaryDb(recipe: Recipe) {
+        saveRecipeToTemporaryRecipeDb.execute(
+            recipe = recipe
+        ).launchIn(viewModelScope)
     }
 
     private fun nextPage() {

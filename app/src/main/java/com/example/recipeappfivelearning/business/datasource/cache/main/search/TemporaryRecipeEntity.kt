@@ -3,9 +3,8 @@ package com.example.recipeappfivelearning.business.datasource.cache.main.search
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.business.domain.util.Converters
-import com.example.recipeappfivelearning.presentation.main.search.detail.ViewRecipeState
-import com.example.recipeappfivelearning.presentation.main.search.list.SearchState
 
 @Entity(tableName = "temporaryRecipe")
 data class TemporaryRecipeEntity (
@@ -31,7 +30,7 @@ data class TemporaryRecipeEntity (
 
 )
 
-fun SearchState.SearchStateRecipeModel.toEntity(): TemporaryRecipeEntity {
+fun Recipe.toEntity(): TemporaryRecipeEntity {
     return TemporaryRecipeEntity(
         recipeName = recipeName!!,
         recipeImageUrl = recipeImageUrl!!,
@@ -42,8 +41,8 @@ fun SearchState.SearchStateRecipeModel.toEntity(): TemporaryRecipeEntity {
     )
 }
 
-fun TemporaryRecipeEntity.toViewRecipeState(): ViewRecipeState.ViewRecipeStateRecipeModel{
-    return ViewRecipeState.ViewRecipeStateRecipeModel(
+fun TemporaryRecipeEntity.toRecipe(): Recipe{
+    return Recipe(
         recipeName = recipeName,
         recipeImageUrl = recipeImageUrl,
         recipeIngredients = Converters.convertIngredientsToList(recipeIngredients),

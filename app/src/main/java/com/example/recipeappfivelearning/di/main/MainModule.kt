@@ -5,6 +5,7 @@ import com.example.recipeappfivelearning.business.datasource.cache.main.search.F
 import com.example.recipeappfivelearning.business.datasource.cache.main.search.TemporaryRecipeDao
 import com.example.recipeappfivelearning.business.datasource.network.main.MainService
 import com.example.recipeappfivelearning.business.interactors.main.search.detail.FetchSearchRecipe
+import com.example.recipeappfivelearning.business.interactors.main.search.list.SaveRecipeToTemporaryRecipeDb
 import com.example.recipeappfivelearning.business.interactors.main.search.list.SearchRecipes
 import dagger.Module
 import dagger.Provides
@@ -40,6 +41,16 @@ object MainModule {
 
     @Singleton
     @Provides
+    fun provideSaveRecipeToTemporaryRecipeDb(
+        temporaryRecipeDao: TemporaryRecipeDao
+    ): SaveRecipeToTemporaryRecipeDb {
+        return SaveRecipeToTemporaryRecipeDb(
+            temporaryRecipeDao
+        )
+    }
+
+    @Singleton
+    @Provides
     fun provideFetchSearchRecipe(
         temporaryRecipeDao: TemporaryRecipeDao
     ): FetchSearchRecipe {
@@ -47,7 +58,6 @@ object MainModule {
             temporaryRecipeDao
         )
     }
-
 
     /**
      * DATABASE

@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipeappfivelearning.R
+import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.business.domain.util.*
+import com.example.recipeappfivelearning.business.interactors.main.search.list.SaveRecipeToTemporaryRecipeDb
 import com.example.recipeappfivelearning.databinding.FragmentSearchBinding
 import com.example.recipeappfivelearning.presentation.main.search.list.viewmodel.SearchViewModel
 import com.example.recipeappfivelearning.presentation.util.TopSpacingItemDecoration
@@ -151,8 +153,9 @@ class SearchFragment : BaseSearchFragment(),
         initSearchView()
     }
 
-    override fun onItemSelected(position: Int, item: SearchState.SearchStateRecipeModel) {
+    override fun onItemSelected(position: Int, item: Recipe) {
         try {
+            viewModel.onTriggerEvent(SearchEvents.SaveToTemporaryRecipeDb(item))
             viewModel.state.value?.let {state->
                 val bundle = bundleOf("recipeName" to item.recipeName)
                 findNavController().navigate(R.id.action_searchFragment_to_viewRecipeFragment, bundle)
@@ -171,6 +174,11 @@ class SearchFragment : BaseSearchFragment(),
                 )
             )
         }
+    }
+
+    override fun onFavoriteIconClicked(position: Int, item: Recipe) {
+        viewModel.onTriggerEvent(SearchEvents.SaveOrDeleteRecipeFromDb(item))
+        recyclerAdapter?.notifyItemChanged(position, item)
     }
 
     override fun onDestroyView() {

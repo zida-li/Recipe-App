@@ -1,5 +1,6 @@
 package com.example.recipeappfivelearning.business.datasource.network.main
 
+import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.presentation.main.search.list.SearchState
 import com.google.gson.annotations.SerializedName
 
@@ -29,8 +30,8 @@ data class SearchDtoModel(
 
 )
 
-fun SearchDto.toSearchStateRecipeModel(): SearchState.SearchStateRecipeModel {
-    return SearchState.SearchStateRecipeModel(
+fun SearchDto.toSearchStateRecipeModel(): Recipe {
+    return Recipe(
         recipeName = searchDto.recipeName,
         recipeImageUrl = searchDto.recipeImageUrl,
         recipeIngredients = searchDto.recipeIngredients,

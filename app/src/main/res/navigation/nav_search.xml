@@ -15,5 +15,5 @@
     <fragment
         android:id="@+id/viewRecipeFragment"
         android:name="com.example.recipeappfivelearning.presentation.main.search.detail.ViewRecipeFragment"
-        android:label="ViewRecipeFragment" />
+        android:label="" />
 </navigation>
