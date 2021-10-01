@@ -6,4 +6,8 @@ sealed class ViewRecipeEvents{
         val recipeName: String
     ): ViewRecipeEvents()
 
+    object SaveRecipe: ViewRecipeEvents()
+
+    object DeleteRecipe: ViewRecipeEvents()
+
 }

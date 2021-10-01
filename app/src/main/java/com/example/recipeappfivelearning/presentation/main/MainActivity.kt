@@ -1,14 +1,22 @@
 package com.example.recipeappfivelearning.presentation.main
 
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.databinding.ActivityMainBinding
+import com.example.recipeappfivelearning.databinding.LayoutMultiselectionToolbarBinding
 import com.example.recipeappfivelearning.presentation.BaseActivity
+import com.example.recipeappfivelearning.presentation.main.favorite.list.FavoriteEvents
+import com.example.recipeappfivelearning.presentation.main.favorite.list.FavoriteListToolbarState
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -61,7 +69,11 @@ class MainActivity : BaseActivity() {
     }
 
     override fun expandAppBar() {
-        //nothing
+
+    }
+
+    override fun hideAppBar() {
+
     }
 
 }

@@ -3,20 +3,26 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.25384615384615383" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.2574074074074074" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.2833333333333333" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_baseline_list_24.xml" value="0.2265625" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.22135416666666666" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2265625" />
-        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/fragment_account.xml" value="0.20520833333333333" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/fragment_favorite.xml" value="0.20520833333333333" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/fragment_search.xml" value="0.20520833333333333" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/fragment_shopping_list.xml" value="0.20520833333333333" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/fragment_view_recipe.xml" value="0.2513586956521739" />
+        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/layout_favorite_list_item.xml" value="0.22871376811594202" />
+        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/layout_multiselection_toolbar.xml" value="0.10094637223974763" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/layout_search_list_item.xml" value="0.29891304347826086" />
+        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/menu/favorite_fragment_menu.xml" value="0.25925925925925924" />
+        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/menu/favorite_recipe_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/menu/main_bottom_navigation_menu.xml" value="0.20520833333333333" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/menu/recipe_detail_menu.xml" value="0.21041666666666667" />
+        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/menu/search_fragment_menu.xml" value="0.24166666666666667" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/menu/search_menu.xml" value="0.36666666666666664" />
       </map>
     </option>

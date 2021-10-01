@@ -1,15 +1,15 @@
-package com.example.recipeappfivelearning.presentation.main.favorite.viewmodel
+package com.example.recipeappfivelearning.presentation.main.shoppinglist
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class FavoriteViewModel
+class ShoppingListViewModel
 @Inject
 constructor(
 
-) : ViewModel() {
+): ViewModel(){
 
 
 

@@ -1,4 +1,4 @@
-package com.example.recipeappfivelearning.business.datasource.cache.main.search
+package com.example.recipeappfivelearning.business.datasource.cache.main
 
 import androidx.room.*
 

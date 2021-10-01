@@ -17,12 +17,22 @@ sealed class SearchEvents{
         val recipe: Recipe
     ): SearchEvents()
 
-    object OnRemoveHeadFromQueue: SearchEvents()
-
-    data class Error(val stateMessage: StateMessage): SearchEvents()
-
     data class SaveOrDeleteRecipeFromDb(
         val recipe: Recipe
     ): SearchEvents()
+
+    data class SaveRecipe(
+        val recipe: Recipe
+    ): SearchEvents()
+
+    data class DeleteRecipe(
+        val recipe: Recipe
+    ): SearchEvents()
+
+    object CompareSearchToFavorite: SearchEvents()
+
+    object OnRemoveHeadFromQueue: SearchEvents()
+
+    data class Error(val stateMessage: StateMessage): SearchEvents()
 
 }

@@ -1,4 +1,4 @@
-package com.example.recipeappfivelearning.business.datasource.cache.main.search
+package com.example.recipeappfivelearning.business.datasource.cache.main
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.business.domain.util.Converters
 
-@Entity(tableName = "temporaryRecipe")
-data class TemporaryRecipeEntity (
+@Entity(tableName = "favoriteRecipes")
+data class FavoriteRecipeEntity (
 
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "label")
@@ -25,34 +25,29 @@ data class TemporaryRecipeEntity (
     @ColumnInfo(name = "calories")
     var recipeCalories: Float,
 
-    @ColumnInfo(name = "isFavorite")
-    var isFavorite: Boolean,
-
     @ColumnInfo(name = "timeSaved")
     var timeSaved: String? = null,
 
 )
 
-fun Recipe.toTemporaryEntity(): TemporaryRecipeEntity {
-    return TemporaryRecipeEntity(
+fun Recipe.toFavoriteEntity(): FavoriteRecipeEntity {
+    return FavoriteRecipeEntity(
         recipeName = recipeName!!,
         recipeImageUrl = recipeImageUrl!!,
         recipeIngredients = Converters.convertIngredientListToString(recipeIngredients!!),
         recipeId = recipeId!!,
         recipeCalories = recipeCalories!!,
-        isFavorite = isFavorite,
         timeSaved = timeSaved,
     )
 }
 
-fun TemporaryRecipeEntity.toTemporaryRecipe(): Recipe{
+fun FavoriteRecipeEntity.toFavoriteRecipe(): Recipe {
     return Recipe(
-        recipeName = recipeName,
-        recipeImageUrl = recipeImageUrl,
+        recipeName = recipeName!!,
+        recipeImageUrl = recipeImageUrl!!,
         recipeIngredients = Converters.convertIngredientsToList(recipeIngredients),
-        recipeId = recipeId,
-        recipeCalories = recipeCalories,
-        isFavorite = isFavorite,
+        recipeId = recipeId!!,
+        recipeCalories = recipeCalories!!,
         timeSaved = timeSaved,
     )
 }

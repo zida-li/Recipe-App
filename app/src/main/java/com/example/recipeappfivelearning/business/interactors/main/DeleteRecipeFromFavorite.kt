@@ -1,32 +1,30 @@
-package com.example.recipeappfivelearning.business.interactors.main.search.list
+package com.example.recipeappfivelearning.business.interactors.main
 
-import com.example.recipeappfivelearning.business.datasource.cache.main.search.TemporaryRecipeDao
-import com.example.recipeappfivelearning.business.datasource.cache.main.search.toTemporaryEntity
+import com.example.recipeappfivelearning.business.datasource.cache.main.FavoriteRecipeDao
+import com.example.recipeappfivelearning.business.datasource.cache.main.toFavoriteEntity
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.business.domain.util.DataState
 import com.example.recipeappfivelearning.business.domain.util.MessageType
 import com.example.recipeappfivelearning.business.domain.util.Response
 import com.example.recipeappfivelearning.business.domain.util.UIComponentType
-import com.example.recipeappfivelearning.presentation.main.search.list.SearchState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.lang.Exception
 
-class SaveRecipeToTemporaryRecipeDb (
-    private val temporaryRecipeDao: TemporaryRecipeDao
+class DeleteRecipeFromFavorite (
+    private val favoriteRecipeDao: FavoriteRecipeDao,
 ) {
 
     fun execute(
         recipe: Recipe
-    ): Flow<DataState<SearchState>> = flow {
+    ): Flow<DataState<Recipe>> = flow {
 
         try {
-            temporaryRecipeDao.insertRecipe(recipe.toTemporaryEntity())
+            favoriteRecipeDao.deleteRecipe(recipe.toFavoriteEntity())
         } catch (e: Exception) {
             emit(
-                DataState.error<SearchState>(
+                DataState.error<Recipe>(
                     response = Response(
-                        message = "SaveRecipeToTemporaryRecipeDb: Saving to Cache Was Unsuccessful",
+                        message = "SaveRecipeToFavorite: saving was Unsuccessful",
                         uiComponentType = UIComponentType.None,
                         messageType = MessageType.Error
                     )
@@ -35,4 +33,5 @@ class SaveRecipeToTemporaryRecipeDb (
         }
 
     }
+
 }

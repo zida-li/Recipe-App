@@ -15,4 +15,5 @@
     <string name="text_yes">yes</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
+    <string name="exit">Exit</string>
 </resources>

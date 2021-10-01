@@ -16,9 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.business.domain.util.*
-import com.example.recipeappfivelearning.business.interactors.main.search.list.SaveRecipeToTemporaryRecipeDb
 import com.example.recipeappfivelearning.databinding.FragmentSearchBinding
-import com.example.recipeappfivelearning.presentation.main.search.list.viewmodel.SearchViewModel
+import com.example.recipeappfivelearning.presentation.main.search.BaseSearchFragment
 import com.example.recipeappfivelearning.presentation.util.TopSpacingItemDecoration
 import com.example.recipeappfivelearning.presentation.util.processQueue
 
@@ -48,6 +47,17 @@ class SearchFragment : BaseSearchFragment(),
         setHasOptionsMenu(true)
         initRecyclerView()
         subscribeObservers()
+    }
+
+    override fun onResume() {
+        if (viewModel.state.value?.recipeList?.size!! > 0) {
+            try {
+                viewModel.onTriggerEvent(SearchEvents.CompareSearchToFavorite)
+            } catch (e: Exception) {
+
+            }
+        }
+        super.onResume()
     }
 
     private fun subscribeObservers() {
@@ -149,7 +159,7 @@ class SearchFragment : BaseSearchFragment(),
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         this.menu = menu
-        inflater.inflate(R.menu.search_menu, this.menu)
+        inflater.inflate(R.menu.search_fragment_menu, this.menu)
         initSearchView()
     }
 

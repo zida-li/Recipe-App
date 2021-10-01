@@ -1,7 +1,6 @@
-package com.example.recipeappfivelearning.presentation.main.search.detail
+package com.example.recipeappfivelearning.presentation.main.favorite.detail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
@@ -10,15 +9,15 @@ import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.business.domain.util.Converters
 import com.example.recipeappfivelearning.databinding.FragmentViewRecipeBinding
-import com.example.recipeappfivelearning.presentation.main.search.BaseSearchFragment
+import com.example.recipeappfivelearning.presentation.main.favorite.BaseFavoriteFragment
 
-class ViewRecipeFragment: BaseSearchFragment() {
+class FavoriteRecipeFragment: BaseFavoriteFragment() {
 
     private val requestOptions = RequestOptions
         .placeholderOf(R.drawable.empty_plate)
         .error(R.drawable.empty_plate)
 
-    private val viewModel: ViewRecipeViewModel by viewModels()
+    private val viewModel: FavoriteRecipeViewModel by viewModels()
 
     private var _binding: FragmentViewRecipeBinding? = null
     private val binding get() = _binding!!
@@ -43,49 +42,19 @@ class ViewRecipeFragment: BaseSearchFragment() {
 
             state.recipe?.let { setRecipeProperties(it) }
 
-            if(state.recipe?.isFavorite == true) {
-                Log.d(TAG, "observer isFavorite")
-                adaptViewToFavoriteIcon()
-            } else {
-                Log.d(TAG, "observer isNotFavorite")
-                adaptViewToNotFavoriteIcon()
-            }
-
         })
 
     }
 
-    private fun adaptViewToFavoriteIcon() {
-        activity?.invalidateOptionsMenu()
-    }
-
-    private fun adaptViewToNotFavoriteIcon() {
-        activity?.invalidateOptionsMenu()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.recipe_detail_menu, menu)
-        if(viewModel.state.value?.recipe?.isFavorite == true) {
-            menu.findItem(R.id.isFavorite).isVisible = true
-            menu.findItem(R.id.isNotFavorite).isVisible = false
-        }
-        if(viewModel.state.value?.recipe?.isFavorite == false){
-            menu.findItem(R.id.isFavorite).isVisible = false
-            menu.findItem(R.id.isNotFavorite).isVisible = true
-        }
+        inflater.inflate(R.menu.favorite_recipe_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
-            R.id.isFavorite -> {
-                viewModel.onTriggerEvent(ViewRecipeEvents.DeleteRecipe)
-                adaptViewToFavoriteIcon()
-                return true
-            }
-            R.id.isNotFavorite -> {
-                viewModel.onTriggerEvent(ViewRecipeEvents.SaveRecipe)
-                adaptViewToNotFavoriteIcon()
+            R.id.action_delete_favorite_detail -> {
+                viewModel.onTriggerEvent(FavoriteRecipeEvents.DeleteRecipe)
                 return true
             }
         }

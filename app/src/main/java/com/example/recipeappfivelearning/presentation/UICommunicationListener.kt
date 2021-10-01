@@ -6,6 +6,8 @@ interface UICommunicationListener {
 
     fun expandAppBar()
 
+    fun hideAppBar()
+
     fun hideSoftKeyboard()
 
 }

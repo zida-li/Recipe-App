@@ -2,8 +2,8 @@ package com.example.recipeappfivelearning.business.datasource.cache
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.recipeappfivelearning.business.datasource.cache.main.search.FavoriteRecipeDao
-import com.example.recipeappfivelearning.business.datasource.cache.main.search.FavoriteRecipeEntity
+import com.example.recipeappfivelearning.business.datasource.cache.main.FavoriteRecipeDao
+import com.example.recipeappfivelearning.business.datasource.cache.main.FavoriteRecipeEntity
 import com.example.recipeappfivelearning.business.datasource.cache.main.search.TemporaryRecipeDao
 import com.example.recipeappfivelearning.business.datasource.cache.main.search.TemporaryRecipeEntity
 

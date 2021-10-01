@@ -1,7 +1,7 @@
 package com.example.recipeappfivelearning.business.interactors.main.search.detail
 
 import com.example.recipeappfivelearning.business.datasource.cache.main.search.TemporaryRecipeDao
-import com.example.recipeappfivelearning.business.datasource.cache.main.search.toRecipe
+import com.example.recipeappfivelearning.business.datasource.cache.main.search.toTemporaryRecipe
 import com.example.recipeappfivelearning.business.datasource.network.handleUseCaseException
 import com.example.recipeappfivelearning.business.domain.util.DataState
 import com.example.recipeappfivelearning.presentation.main.search.detail.ViewRecipeState
@@ -17,7 +17,7 @@ class FetchSearchRecipe (
         recipeName: String
     ): Flow<DataState<ViewRecipeState>> = flow {
 
-        val cacheCall = temporaryRecipeDao.getRecipeByLabel(recipeName).toRecipe()
+        val cacheCall = temporaryRecipeDao.getRecipeByLabel(recipeName).toTemporaryRecipe()
 
         temporaryRecipeDao.deleteAllRecipes()
 

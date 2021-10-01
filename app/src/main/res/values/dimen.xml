@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="page_title_size">20sp</dimen>
+
+    <dimen name="toolbar_height">55dp</dimen>
+    <dimen name="default_view_margin">16dp</dimen>
+    <dimen name="toolbar_item_margin">24dp</dimen>
+    <dimen name="toolbar_title_margin">32dp</dimen>
+
+
+</resources>

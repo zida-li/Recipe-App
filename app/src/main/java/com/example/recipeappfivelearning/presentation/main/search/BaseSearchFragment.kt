@@ -1,4 +1,4 @@
-package com.example.recipeappfivelearning.presentation.main.search.list
+package com.example.recipeappfivelearning.presentation.main.search
 
 import android.content.Context
 import android.util.Log

@@ -51,10 +51,10 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt"
     kapt "com.google.dagger:hilt-compiler:$hilt"
 
-    def fragment = "1.4.0-alpha04"
+    def fragment = "1.4.0-alpha10"
     implementation "androidx.fragment:fragment-ktx:$fragment"
 
-    def nav_version = "2.4.0-alpha09"
+    def nav_version = "2.4.0-alpha10"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation "androidx.navigation:navigation-runtime-ktx:$nav_version"
