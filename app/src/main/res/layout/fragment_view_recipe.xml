@@ -80,6 +80,18 @@
 
             </View>
 
+            <Button
+                android:id="@+id/addToShoppingListButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_to_shoppingList"
+                android:textAllCaps="false"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="30dp"
+                android:visibility="invisible"/>
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

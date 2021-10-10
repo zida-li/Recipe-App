@@ -1,6 +1,7 @@
 package com.example.recipeappfivelearning.business.interactors.main.favorite.detail
 
-import com.example.recipeappfivelearning.business.datasource.cache.main.FavoriteRecipeDao
+import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.ShoppingListDao
+import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.toShoppingListEntity
 import com.example.recipeappfivelearning.business.datasource.cache.main.toFavoriteEntity
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.business.domain.util.DataState
@@ -10,23 +11,21 @@ import com.example.recipeappfivelearning.business.domain.util.UIComponentType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class DeleteMultipleRecipesFromFavorite (
-    private val favoriteRecipeDao: FavoriteRecipeDao,
+class AddToShoppingList (
+    private val shoppingListDao: ShoppingListDao
 ) {
 
     fun execute(
-        recipes: List<Recipe>
+        recipe: Recipe
     ): Flow<DataState<Recipe>> = flow {
 
         try {
-            for (recipe in recipes) {
-                favoriteRecipeDao.deleteRecipe(recipe.toFavoriteEntity())
-            }
+            shoppingListDao.insertRecipe(recipe.toShoppingListEntity())
         } catch (e: Exception) {
             emit(
                 DataState.error<Recipe>(
                     response = Response(
-                        message = "DeleteMultipleRecipesFromFavorite: Error Deleting Recipes",
+                        message = "SaveRecipeToFavorite: saving was Unsuccessful",
                         uiComponentType = UIComponentType.None,
                         messageType = MessageType.Error
                     )

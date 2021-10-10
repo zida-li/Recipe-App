@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_delete_favorite_fragment"
-        android:title="@string/delete"
+    <item android:id="@+id/action_grid_view_favorite_fragment"
+        android:title="@string/grid_view"
         app:showAsAction="ifRoom"
         android:visible="true"
-        android:icon="@drawable/ic_baseline_delete_24"
+        android:icon="@drawable/ic_baseline_grid_view_24"
         />
 
-    <item android:id="@+id/action_exit_multiselect_state"
-        android:title="@string/exit"
+    <item android:id="@+id/action_list_view_favorite_fragment"
+        android:title="@string/list_view"
         app:showAsAction="always"
         android:visible="true"
-        android:icon="@drawable/ic_baseline_close_24"
+        android:icon="@drawable/ic_baseline_view_list_24"
         />
 
 </menu>

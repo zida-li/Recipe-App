@@ -3,9 +3,12 @@ package com.example.recipeappfivelearning.di.main
 import com.example.recipeappfivelearning.business.datasource.cache.AppDatabase
 import com.example.recipeappfivelearning.business.datasource.cache.main.FavoriteRecipeDao
 import com.example.recipeappfivelearning.business.datasource.cache.main.search.TemporaryRecipeDao
+import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.ShoppingListDao
+import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.ShoppingListIngredientDao
 import com.example.recipeappfivelearning.business.datasource.network.main.MainService
 import com.example.recipeappfivelearning.business.interactors.main.favorite.list.FetchFavoriteRecipes
 import com.example.recipeappfivelearning.business.interactors.main.DeleteRecipeFromFavorite
+import com.example.recipeappfivelearning.business.interactors.main.favorite.detail.AddToShoppingList
 import com.example.recipeappfivelearning.business.interactors.main.favorite.detail.DeleteMultipleRecipesFromFavorite
 import com.example.recipeappfivelearning.business.interactors.main.favorite.detail.FetchFavoriteRecipe
 import com.example.recipeappfivelearning.business.interactors.main.search.SaveRecipeToFavorite
@@ -13,6 +16,8 @@ import com.example.recipeappfivelearning.business.interactors.main.search.detail
 import com.example.recipeappfivelearning.business.interactors.main.search.list.CompareSearchToFavorite
 import com.example.recipeappfivelearning.business.interactors.main.search.list.SaveRecipeToTemporaryRecipeDb
 import com.example.recipeappfivelearning.business.interactors.main.search.list.SearchRecipes
+import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.DeleteMultipleRecipesFromShoppingList
+import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.FetchShoppingListRecipes
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -127,6 +132,36 @@ object MainModule {
         )
     }
 
+    @Singleton
+    @Provides
+    fun provideFetchShoppingListRecipes(
+        shoppingListDao: ShoppingListDao
+    ): FetchShoppingListRecipes {
+        return FetchShoppingListRecipes(
+            shoppingListDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideAddToShoppingList(
+        shoppingListDao: ShoppingListDao
+    ): AddToShoppingList {
+        return AddToShoppingList(
+            shoppingListDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeleteMultipleRecipesFromShoppingList(
+        shoppingListDao: ShoppingListDao
+    ): DeleteMultipleRecipesFromShoppingList {
+        return DeleteMultipleRecipesFromShoppingList(
+            shoppingListDao
+        )
+    }
+
     /**
      * DATABASE
      */
@@ -140,6 +175,18 @@ object MainModule {
     @Provides
     fun provideFavoriteRecipeDao(app: AppDatabase): FavoriteRecipeDao {
         return app.getFavoriteRecipeDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideShoppingListDao(app: AppDatabase): ShoppingListDao {
+        return app.getShoppingListDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideShoppingListIngredientDao(app: AppDatabase): ShoppingListIngredientDao {
+        return app.getShoppingListIngredientDao()
     }
 
 }

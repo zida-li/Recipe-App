@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.business.interactors.main.DeleteRecipeFromFavorite
+import com.example.recipeappfivelearning.business.interactors.main.favorite.detail.AddToShoppingList
 import com.example.recipeappfivelearning.business.interactors.main.favorite.detail.FetchFavoriteRecipe
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -18,6 +20,7 @@ constructor(
     private val fetchFavoriteRecipe: FetchFavoriteRecipe,
     private val savedStateHandle: SavedStateHandle,
     private val deleteRecipeFromFavorite: DeleteRecipeFromFavorite,
+    private val addToShoppingList: AddToShoppingList,
 ): ViewModel(){
 
     init {
@@ -36,7 +39,13 @@ constructor(
             is FavoriteRecipeEvents.DeleteRecipe -> {
                 deleteRecipe()
             }
+            is FavoriteRecipeEvents.AddToShoppingList ->
+                addToShoppingList()
         }
+    }
+
+    private fun addToShoppingList() {
+        addToShoppingList.execute(state.value?.recipe!!).launchIn(viewModelScope)
     }
 
     private fun deleteRecipe() {

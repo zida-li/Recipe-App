@@ -1,6 +1,7 @@
 package com.example.recipeappfivelearning.presentation.main.favorite.detail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
@@ -35,6 +36,15 @@ class FavoriteRecipeFragment: BaseFavoriteFragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         subscribeObservers()
+        showAddToShoppingListButton()
+
+        binding.addToShoppingListButton.setOnClickListener{
+            viewModel.onTriggerEvent(FavoriteRecipeEvents.AddToShoppingList)
+        }
+    }
+
+    private fun showAddToShoppingListButton() {
+        binding.addToShoppingListButton.visibility = View.VISIBLE
     }
 
     private fun subscribeObservers() {

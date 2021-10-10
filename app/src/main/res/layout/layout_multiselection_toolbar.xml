@@ -20,7 +20,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:id="@+id/action_exit_multiselect_state"
+            android:id="@+id/action_exit_multiselect_state_favoritefragment"
             android:src="@drawable/ic_baseline_close_24"
             />
 
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/action_exit_multiselect_state"
+            app:layout_constraintLeft_toRightOf="@id/action_exit_multiselect_state_favoritefragment"
             app:layout_constraintRight_toLeftOf="@id/action_delete_recipes"
             app:layout_constraintHorizontal_bias="0"
             android:id="@+id/tool_bar_title"

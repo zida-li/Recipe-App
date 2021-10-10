@@ -7,5 +7,5 @@
     <fragment
         android:id="@+id/shoppingListFragment"
         android:name="com.example.recipeappfivelearning.presentation.main.shoppinglist.ShoppingListFragment"
-        android:label="ShoppingListFragment" />
+        android:label="" />
 </navigation>

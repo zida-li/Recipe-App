@@ -81,6 +81,11 @@ dependencies {
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$room_version"
 
+    //Groupie
+    def groupie_version = "2.9.0"
+    implementation "com.github.lisawray.groupie:groupie:$groupie_version"
+    implementation "com.github.lisawray.groupie:groupie-viewbinding:$groupie_version"
+
     def dataStore = "1.0.0"
     implementation "androidx.datastore:datastore-preferences:$dataStore"
 

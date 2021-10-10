@@ -2,10 +2,12 @@ package com.example.recipeappfivelearning.presentation.main.favorite.list
 
 import android.os.Bundle
 import android.view.*
+import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.business.domain.util.MessageType
@@ -48,6 +50,7 @@ class FavoriteFragment : BaseFavoriteFragment(),
     }
 
     private fun subscribeObservers() {
+
         viewModel.state.observe(viewLifecycleOwner, {state->
 
             recyclerAdapter?.apply {
@@ -90,6 +93,8 @@ class FavoriteFragment : BaseFavoriteFragment(),
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         if(isMultiSelectionModeEnabled()) {
+            inflater.inflate(R.menu.favorite_fragment_multiselection_menu, menu)
+        } else {
             inflater.inflate(R.menu.favorite_fragment_menu, menu)
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -102,17 +107,41 @@ class FavoriteFragment : BaseFavoriteFragment(),
                 viewModel.onTriggerEvent(FavoriteEvents.DeleteSelectedRecipes)
                 recyclerAdapter?.notifyDataSetChanged()
             }
-            R.id.action_exit_multiselect_state -> {
+            R.id.action_exit_multiselect_state_favoritefragment -> {
                 viewModel.onTriggerEvent(FavoriteEvents.SetToolBarState(FavoriteListToolbarState.SearchState))
             }
+            R.id.action_grid_view_favorite_fragment -> {
+                initGridView()
+            }
+            R.id.action_list_view_favorite_fragment -> {
+                initListView()
+            }
         }
-
         return super.onOptionsItemSelected(item)
     }
 
     private fun initRecyclerView() {
         binding.fragmentFavoriteRecyclerview.apply {
             layoutManager = GridLayoutManager(this@FavoriteFragment.context, 2)
+            val topSpacingDecorator = TopSpacingItemDecoration(30)
+            removeItemDecoration(topSpacingDecorator)
+            addItemDecoration(topSpacingDecorator)
+
+            recyclerAdapter = FavoriteListAdapter(this@FavoriteFragment,
+                viewLifecycleOwner,
+                viewModel.favoriteListInteractionManager.selectedRecipe)
+
+            adapter = recyclerAdapter
+        }
+    }
+
+    private fun initGridView() {
+        initRecyclerView()
+    }
+
+    private fun initListView() {
+        binding.fragmentFavoriteRecyclerview.apply {
+            layoutManager = LinearLayoutManager(this@FavoriteFragment.context)
             val topSpacingDecorator = TopSpacingItemDecoration(30)
             removeItemDecoration(topSpacingDecorator)
             addItemDecoration(topSpacingDecorator)

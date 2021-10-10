@@ -8,7 +8,7 @@ class Converters {
                 List<String>{
             val list: ArrayList<String> = ArrayList()
             ingredientsString?.let {
-                for(ingredient in it.split(",")){
+                for(ingredient in it.split("^&*")){
                     list.add(ingredient)
                 }
             }
@@ -19,7 +19,7 @@ class Converters {
                 String{
             val ingredientsString = StringBuilder()
             for(ingredient in ingredients) {
-                ingredientsString.append("$ingredient,")
+                ingredientsString.append("$ingredient^&*")
             }
             return ingredientsString.toString()
         }

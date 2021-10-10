@@ -1,5 +1,7 @@
 package com.example.recipeappfivelearning.presentation.main.favorite.detail
 
+import com.example.recipeappfivelearning.business.domain.models.Recipe
+
 sealed class FavoriteRecipeEvents{
 
     data class FetchFavoriteRecipe(
@@ -7,5 +9,7 @@ sealed class FavoriteRecipeEvents{
     ): FavoriteRecipeEvents()
 
     object DeleteRecipe: FavoriteRecipeEvents()
+
+    object AddToShoppingList: FavoriteRecipeEvents()
 
 }
