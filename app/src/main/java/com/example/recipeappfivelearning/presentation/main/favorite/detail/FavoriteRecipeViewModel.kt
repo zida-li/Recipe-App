@@ -1,5 +1,6 @@
 package com.example.recipeappfivelearning.presentation.main.favorite.detail
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

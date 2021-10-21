@@ -24,4 +24,12 @@ sealed class ShoppingListEvents {
 
     object ClearSelectedRecipesPosition: ShoppingListEvents()
 
+    data class SetIsCheckedIngredient(
+        val ingredient: Recipe.Ingredient
+    ): ShoppingListEvents()
+
+    data class SetIsExpandedRecipe(
+        val recipe: Recipe
+    ): ShoppingListEvents()
+
 }

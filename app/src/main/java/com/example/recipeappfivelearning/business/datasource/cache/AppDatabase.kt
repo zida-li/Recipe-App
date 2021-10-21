@@ -10,12 +10,13 @@ import com.example.recipeappfivelearning.business.datasource.cache.main.shopping
 import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.ShoppingListEntity
 import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.ShoppingListIngredientDao
 import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.ShoppingListIngredientEntity
+import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.relations.RecipeWithIngredientDao
 
 @Database(entities = [
     FavoriteRecipeEntity::class,
     TemporaryRecipeEntity::class,
     ShoppingListEntity::class,
-    ShoppingListIngredientEntity::class], version = 2)
+    ShoppingListIngredientEntity::class], version = 1)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun getTemporaryRecipeDao(): TemporaryRecipeDao
@@ -25,6 +26,8 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun getShoppingListDao(): ShoppingListDao
 
     abstract fun getShoppingListIngredientDao(): ShoppingListIngredientDao
+
+    abstract fun getRecipeWithIngredientDao(): RecipeWithIngredientDao
 
     companion object {
         const val DATABASE_NAME = "app_db"

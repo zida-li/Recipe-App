@@ -28,6 +28,9 @@ data class FavoriteRecipeEntity (
     @ColumnInfo(name = "timeSaved")
     var timeSaved: String? = null,
 
+    @ColumnInfo(name = "isExpanded")
+    var isExpanded: Boolean
+
 )
 
 fun Recipe.toFavoriteEntity(): FavoriteRecipeEntity {
@@ -38,6 +41,7 @@ fun Recipe.toFavoriteEntity(): FavoriteRecipeEntity {
         recipeId = recipeId!!,
         recipeCalories = recipeCalories!!,
         timeSaved = timeSaved,
+        isExpanded = isExpanded,
     )
 }
 
@@ -49,5 +53,6 @@ fun FavoriteRecipeEntity.toFavoriteRecipe(): Recipe {
         recipeId = recipeId!!,
         recipeCalories = recipeCalories!!,
         timeSaved = timeSaved,
+        isExpanded = isExpanded,
     )
 }

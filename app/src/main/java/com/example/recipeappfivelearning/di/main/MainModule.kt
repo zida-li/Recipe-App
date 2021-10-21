@@ -5,6 +5,7 @@ import com.example.recipeappfivelearning.business.datasource.cache.main.Favorite
 import com.example.recipeappfivelearning.business.datasource.cache.main.search.TemporaryRecipeDao
 import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.ShoppingListDao
 import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.ShoppingListIngredientDao
+import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.relations.RecipeWithIngredientDao
 import com.example.recipeappfivelearning.business.datasource.network.main.MainService
 import com.example.recipeappfivelearning.business.interactors.main.favorite.list.FetchFavoriteRecipes
 import com.example.recipeappfivelearning.business.interactors.main.DeleteRecipeFromFavorite
@@ -18,6 +19,8 @@ import com.example.recipeappfivelearning.business.interactors.main.search.list.S
 import com.example.recipeappfivelearning.business.interactors.main.search.list.SearchRecipes
 import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.DeleteMultipleRecipesFromShoppingList
 import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.FetchShoppingListRecipes
+import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.SetIsCheckedIngredient
+import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.SetIsExpandedRecipe
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -135,20 +138,22 @@ object MainModule {
     @Singleton
     @Provides
     fun provideFetchShoppingListRecipes(
-        shoppingListDao: ShoppingListDao
+        recipeWithIngredientDao: RecipeWithIngredientDao,
     ): FetchShoppingListRecipes {
         return FetchShoppingListRecipes(
-            shoppingListDao
+            recipeWithIngredientDao
         )
     }
 
     @Singleton
     @Provides
     fun provideAddToShoppingList(
-        shoppingListDao: ShoppingListDao
+        shoppingListDao: ShoppingListDao,
+        shoppingListIngredientDao: ShoppingListIngredientDao,
     ): AddToShoppingList {
         return AddToShoppingList(
-            shoppingListDao
+            shoppingListDao,
+            shoppingListIngredientDao
         )
     }
 
@@ -158,6 +163,26 @@ object MainModule {
         shoppingListDao: ShoppingListDao
     ): DeleteMultipleRecipesFromShoppingList {
         return DeleteMultipleRecipesFromShoppingList(
+            shoppingListDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideSetIsCheckedIngredient(
+        shoppingListIngredientDao: ShoppingListIngredientDao
+    ): SetIsCheckedIngredient {
+        return SetIsCheckedIngredient(
+            shoppingListIngredientDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideSetIsExpandedRecipe(
+        shoppingListDao: ShoppingListDao
+    ): SetIsExpandedRecipe {
+        return SetIsExpandedRecipe(
             shoppingListDao
         )
     }
@@ -187,6 +212,12 @@ object MainModule {
     @Provides
     fun provideShoppingListIngredientDao(app: AppDatabase): ShoppingListIngredientDao {
         return app.getShoppingListIngredientDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRecipeWithIngredientDao(app: AppDatabase): RecipeWithIngredientDao {
+        return app.getRecipeWithIngredientDao()
     }
 
 }

@@ -1,15 +1,16 @@
 package com.example.recipeappfivelearning.presentation.main.shoppinglist.groupie_expandable
 
-import android.graphics.drawable.Animatable
 import android.view.View
 import com.example.recipeappfivelearning.R
+import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.databinding.ShoppingListChildBinding
 import com.xwray.groupie.viewbinding.BindableItem
-import com.xwray.groupie.viewbinding.GroupieViewHolder
 
 class IngredientItem(
-    private val ingredient: String,
-    private val onFavoriteListener: (item: IngredientItem, favorite: Boolean) -> Unit
+    private val ingredient: Recipe.Ingredient,
+    private val interaction: Interaction,
+    private val isChecked: Boolean,
+    private val onFavoriteListener: (item: IngredientItem, favorite: Boolean) -> Unit,
 ): BindableItem<ShoppingListChildBinding?>() {
 
     companion object {
@@ -26,10 +27,12 @@ class IngredientItem(
 
     override fun bind(viewBinding: ShoppingListChildBinding, position: Int) {
         viewBinding.apply {
-            childTextTitle.text = ingredient
+            childTextTitle.text = ingredient.recipeIngredient
+            setFavoriteOnLoad(isChecked)
             bindCheckBox(viewBinding)
             ingredientBought.setOnClickListener {
                 onFavoriteListener(this@IngredientItem, !checked)
+                interaction.onIsCheckedClicked(ingredient)
             }
         }
     }
@@ -43,6 +46,10 @@ class IngredientItem(
         checked = favorite
     }
 
+    fun setFavoriteOnLoad(favorite: Boolean) {
+        checked = favorite
+    }
+
     override fun bind(
         viewBinding: ShoppingListChildBinding,
         position: Int,
@@ -53,5 +60,11 @@ class IngredientItem(
         } else {
             bind(viewBinding, position)
         }
+    }
+
+    interface Interaction {
+
+        fun onIsCheckedClicked(item: Recipe.Ingredient)
+
     }
 }

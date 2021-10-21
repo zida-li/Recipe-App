@@ -6,21 +6,18 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.databinding.ShoppingListParentBinding
 import com.xwray.groupie.ExpandableGroup
 import com.xwray.groupie.ExpandableItem
-import com.xwray.groupie.Item
 import com.xwray.groupie.viewbinding.BindableItem
 
 class ExpandableHeaderItem(
     private val recipe: Recipe,
     private val lifecycleOwner: LifecycleOwner,
     private val interaction: Interaction,
-    private val selectedRecipe: LiveData<ArrayList<Recipe>>
+    private val selectedRecipe: LiveData<ArrayList<Recipe>>,
 ) : BindableItem<ShoppingListParentBinding?>(), ExpandableItem {
 
     private var expandableGroup: ExpandableGroup? = null
@@ -36,6 +33,7 @@ class ExpandableHeaderItem(
             icon.setOnClickListener{
                 expandableGroup!!.onToggleExpanded()
                 bindIcon(viewBinding)
+                interaction.expand(expandableGroup!!.isExpanded, recipe)
             }
             shoppingListCardView.setOnClickListener{
                 interaction.onItemSelected(position, recipe)
@@ -82,8 +80,6 @@ class ExpandableHeaderItem(
         expandableGroup = onToggleListener
     }
 
-
-
     interface Interaction {
 
         fun onItemSelected(position: Int, item: Recipe)
@@ -93,6 +89,8 @@ class ExpandableHeaderItem(
         fun isMultiSelectionModeEnabled(): Boolean
 
         fun isRecipeSelected(recipe: Recipe): Boolean
+
+        fun expand(isExpanded: Boolean, recipe: Recipe)
 
     }
 

@@ -1,5 +1,6 @@
 package com.example.recipeappfivelearning.presentation.main.shoppinglist
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.DeleteMultipleRecipesFromShoppingList
 import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.FetchShoppingListRecipes
+import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.SetIsCheckedIngredient
+import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.SetIsExpandedRecipe
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -18,6 +21,8 @@ class ShoppingListViewModel
 constructor(
     private val fetchShoppingListRecipes: FetchShoppingListRecipes,
     private val deleteMultipleRecipesFromShoppingList: DeleteMultipleRecipesFromShoppingList,
+    private val setIsExpandedRecipe: SetIsExpandedRecipe,
+    private val setIsCheckedIngredient: SetIsCheckedIngredient,
 ): ViewModel(){
 
     val state: MutableLiveData<ShoppingListState> = MutableLiveData(ShoppingListState())
@@ -49,6 +54,12 @@ constructor(
             }
             is ShoppingListEvents.ClearSelectedRecipesPosition -> {
                 removeSelectedRecipePositionsFromList()
+            }
+            is ShoppingListEvents.SetIsExpandedRecipe -> {
+                setIsExpandedRecipe(event.recipe)
+            }
+            is ShoppingListEvents.SetIsCheckedIngredient -> {
+                setIsCheckedIngredient(event.ingredient)
             }
         }
     }
@@ -102,6 +113,14 @@ constructor(
 
     private fun clearSelectedRecipes() {
         shoppingListInteractionManager.clearSelectedRecipes()
+    }
+
+    private fun setIsExpandedRecipe(recipe: Recipe) {
+        setIsExpandedRecipe.execute(recipe).launchIn(viewModelScope)
+    }
+
+    private fun setIsCheckedIngredient(ingredient: Recipe.Ingredient) {
+        setIsCheckedIngredient.execute(ingredient).launchIn(viewModelScope)
     }
 
 }

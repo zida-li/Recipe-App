@@ -8,17 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.databinding.FragmentShoppingListBinding
-import com.example.recipeappfivelearning.presentation.main.favorite.list.FavoriteEvents
-import com.example.recipeappfivelearning.presentation.main.favorite.list.FavoriteListToolbarState
 import com.example.recipeappfivelearning.presentation.main.shoppinglist.groupie_expandable.ExpandableHeaderItem
 import com.example.recipeappfivelearning.presentation.main.shoppinglist.groupie_expandable.IngredientItem
 import com.xwray.groupie.ExpandableGroup
-import com.xwray.groupie.Group
 import com.xwray.groupie.GroupieAdapter
-import com.xwray.groupie.OnItemLongClickListener
 
 class ShoppingListFragment : BaseShoppingListFragment (),
-ExpandableHeaderItem.Interaction {
+ExpandableHeaderItem.Interaction,
+IngredientItem.Interaction {
 
     private val viewModel: ShoppingListViewModel by viewModels()
 
@@ -59,23 +56,20 @@ ExpandableHeaderItem.Interaction {
                     recipe = recipe,
                     viewLifecycleOwner,
                     this@ShoppingListFragment,
-                    viewModel.shoppingListInteractionManager.selectedRecipe
+                    viewModel.shoppingListInteractionManager.selectedRecipe,
                 )
 
                 groupAdapter.apply {
-                    groupAdapter.add(ExpandableGroup(expandableHeaderItem).apply {
-                        for (ingredient in recipe.recipeIngredients!!) {
-                            if (ingredient != "") {
-                                add(IngredientItem(ingredient) { item, favorite ->
-                                    item.setFavorite(favorite)
-                                    item.notifyChanged(IngredientItem.FAVORITE)
-                                })
-                            }
+                    groupAdapter.add(ExpandableGroup(expandableHeaderItem, recipe.isExpanded).apply {
+                        for (ingredient in recipe.recipeIngredientCheck!!) {
+                            add(IngredientItem(ingredient, this@ShoppingListFragment, ingredient.isChecked) { item, favorite ->
+                                item.setFavorite(favorite)
+                                item.notifyChanged(IngredientItem.FAVORITE)
+                            })
                         }
                     })
                 }
             }
-
         })
 
         viewModel.toolbarState.observe(viewLifecycleOwner, {toolbarState->
@@ -147,11 +141,37 @@ ExpandableHeaderItem.Interaction {
         return true
     }
 
+    override fun expand(isExpanded: Boolean, recipe: Recipe) {
+        viewModel.state.value?.let { state->
+            for(mRecipe in state.recipeList) {
+                if(mRecipe.recipeName == recipe.recipeName){
+                    mRecipe.isExpanded = isExpanded
+                    viewModel.onTriggerEvent(ShoppingListEvents.SetIsExpandedRecipe(mRecipe))
+                }
+            }
+        }
+    }
+
     override fun onItemSelected(position: Int, item: Recipe) {
         if(isMultiSelectionModeEnabled()) {
             viewModel.onTriggerEvent(ShoppingListEvents.AddOrRemoveRecipeFromSelectedList(item))
             viewModel.onTriggerEvent(ShoppingListEvents.AddOrRemoveRecipePositionFromSelectedList(position))
         }
     }
+
+    override fun onIsCheckedClicked(item: Recipe.Ingredient) {
+        viewModel.state.value?.let { state->
+            for(recipe in state.recipeList) {
+                for(ingredient in recipe.recipeIngredientCheck!!) {
+                    if(ingredient.recipeIngredient == item.recipeIngredient) {
+                        item.isChecked = !item.isChecked
+                        viewModel.onTriggerEvent(ShoppingListEvents.SetIsCheckedIngredient(item))
+                    }
+                }
+            }
+        }
+    }
+
+
 
 }
