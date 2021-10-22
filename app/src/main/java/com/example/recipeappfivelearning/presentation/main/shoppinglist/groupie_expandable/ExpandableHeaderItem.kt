@@ -1,9 +1,10 @@
 package com.example.recipeappfivelearning.presentation.main.shoppinglist.groupie_expandable
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Animatable
-import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import com.example.recipeappfivelearning.R
@@ -18,6 +19,7 @@ class ExpandableHeaderItem(
     private val lifecycleOwner: LifecycleOwner,
     private val interaction: Interaction,
     private val selectedRecipe: LiveData<ArrayList<Recipe>>,
+    private val context: Context
 ) : BindableItem<ShoppingListParentBinding?>(), ExpandableItem {
 
     private var expandableGroup: ExpandableGroup? = null
@@ -49,7 +51,7 @@ class ExpandableHeaderItem(
             selectedRecipe.observe(lifecycleOwner, {recipe->
                 if (recipe != null) {
                     if (recipe.contains(mRecipe)) {
-                        shoppingListCardView.setBackgroundColor(Color.RED)
+                        shoppingListCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor))
                     }
                     else {
                         shoppingListCardView.setBackgroundColor(Color.WHITE)

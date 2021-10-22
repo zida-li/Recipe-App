@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -101,7 +102,7 @@ class FavoriteListAdapter(
             selectedRecipe.observe(lifecycleOwner, {recipe->
                 if (recipe != null) {
                     if (recipe.contains(mRecipe)) {
-                        binding.cardViewFavoriteFragment.setBackgroundColor(Color.RED)
+                        binding.cardViewFavoriteFragment.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor))
                     }
                     else {
                         binding.cardViewFavoriteFragment.setBackgroundColor(Color.WHITE)

@@ -57,6 +57,7 @@ IngredientItem.Interaction {
                     viewLifecycleOwner,
                     this@ShoppingListFragment,
                     viewModel.shoppingListInteractionManager.selectedRecipe,
+                    context!!
                 )
 
                 groupAdapter.apply {
