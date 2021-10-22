@@ -3,6 +3,7 @@ package com.example.recipeappfivelearning.presentation.main.search.list
 import android.app.SearchManager
 import android.content.Context.SEARCH_SERVICE
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -76,6 +77,7 @@ class SearchFragment : BaseSearchFragment(),
 
             recyclerAdapter?.apply {
                 submitList(recipeList = state.recipeList)
+                recyclerAdapter?.notifyDataSetChanged()
             }
 
         })
@@ -141,14 +143,17 @@ class SearchFragment : BaseSearchFragment(),
 
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val layoutManager = recyclerView.layoutManager as GridLayoutManager
                     val lastPosition = layoutManager.findLastVisibleItemPosition()
                     if (
                         lastPosition == recyclerAdapter?.itemCount?.minus(1)
-                        && viewModel.state.value?.isLoading == false
-                        && viewModel.state.value?.moreResultAvailable == true
+//                        && viewModel.state.value?.isLoading == false
+//                        && viewModel.state.value?.moreResultAvailable == true
                     ) {
-                        viewModel.onTriggerEvent(SearchEvents.NextPage)
+                        if((lastPosition + 1) >= (viewModel.state.value?.page!! * viewModel.state.value?.pageSize!!)) {
+                            Log.d(TAG, "SearchFragment: nextPage() Triggered")
+                            viewModel.onTriggerEvent(SearchEvents.NextPage)
+                        }
                     }
                 }
             })

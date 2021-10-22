@@ -29,7 +29,10 @@ data class ShoppingListEntity(
     var timeSaved: String? = null,
 
     @ColumnInfo(name = "isExpanded")
-    var isExpanded: Boolean
+    var isExpanded: Boolean,
+
+    @ColumnInfo(name = "isInShoppingList")
+    var isInShoppingList: Boolean,
 
 )
 
@@ -42,6 +45,7 @@ fun Recipe.toShoppingListEntity(): ShoppingListEntity{
         recipeCalories = recipeCalories!!,
         timeSaved = timeSaved,
         isExpanded = isExpanded,
+        isInShoppingList = isInShoppingList,
     )
 }
 
@@ -53,6 +57,7 @@ fun ShoppingListEntity.toShoppingListRecipe(): Recipe{
         recipeId = recipeId!!,
         recipeCalories = recipeCalories!!,
         timeSaved = timeSaved,
-        isExpanded = isExpanded
+        isExpanded = isExpanded,
+        isInShoppingList = isInShoppingList,
     )
 }

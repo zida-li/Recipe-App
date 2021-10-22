@@ -12,4 +12,8 @@ sealed class FavoriteRecipeEvents{
 
     object AddToShoppingList: FavoriteRecipeEvents()
 
+    object CompareFavoriteToShoppingList: FavoriteRecipeEvents()
+
+    object DeleteRecipeFromShoppingList: FavoriteRecipeEvents()
+
 }

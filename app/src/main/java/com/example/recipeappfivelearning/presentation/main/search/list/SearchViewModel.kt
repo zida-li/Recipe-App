@@ -9,7 +9,7 @@ import com.example.recipeappfivelearning.business.domain.util.Constants
 import com.example.recipeappfivelearning.business.domain.util.StateMessage
 import com.example.recipeappfivelearning.business.domain.util.UIComponentType
 import com.example.recipeappfivelearning.business.domain.util.doesMessageAlreadyExistInQueue
-import com.example.recipeappfivelearning.business.interactors.main.DeleteRecipeFromFavorite
+import com.example.recipeappfivelearning.business.interactors.main.shared.DeleteRecipeFromFavorite
 import com.example.recipeappfivelearning.business.interactors.main.search.SaveRecipeToFavorite
 import com.example.recipeappfivelearning.business.interactors.main.search.list.CompareSearchToFavorite
 import com.example.recipeappfivelearning.business.interactors.main.search.list.SaveRecipeToTemporaryRecipeDb
@@ -72,20 +72,41 @@ constructor(
     }
 
     private fun newSearch() {
-        clearList()
+        resetSearchState()
         state.value?.let { state->
             searchRecipes.execute(
                 app_key = Constants.app_key,
                 app_id = Constants.app_id,
                 query = state.query,
-                from = 0,
-                to = 10
+                from = state.fromPage?: 0,
+                to = state.toPage?: 10,
             ).onEach { dataState ->
 
                 this.state.value = state.copy(isLoading = dataState.isLoading)
 
-                dataState.data?.let { searchState->
-                    this.state.value = state.copy(recipeList = searchState.recipeList)
+                dataState.data?.let { list->
+                    this.state.value = state.copy(recipeList = list.recipeList)
+                }
+
+            }.launchIn(viewModelScope)
+        }
+    }
+
+    private fun nextPage() {
+        incrementPageNumber()
+        state.value?.let { state->
+            searchRecipes.execute(
+                app_key = Constants.app_key,
+                app_id = Constants.app_id,
+                query = state.query,
+                from = state.fromPage?: 0,
+                to = state.toPage?: 10,
+            ).onEach { dataState->
+
+                this.state.value = state.copy(isLoading = dataState.isLoading)
+
+                dataState.data?.let { list->
+                    appendRecipes(list.recipeList)
                 }
 
             }.launchIn(viewModelScope)
@@ -94,10 +115,6 @@ constructor(
 
     private fun onUpdateQuery(query: String) {
         state.value = state.value?.copy(query = query)
-    }
-
-    private fun nextPage() {
-        TODO("Not yet implemented")
     }
 
     private fun saveRecipe(recipe: Recipe) {
@@ -161,10 +178,28 @@ constructor(
         recipe.timeSaved = timeInserted
     }
 
-    private fun clearList() {
+    private fun resetSearchState() {
         state.value?.let { state->
             this.state.value = state.copy(recipeList = mutableListOf())
+            state.page = 0
+            state.fromPage = 0
+            state.toPage = 10
         }
+    }
+
+    private fun incrementPageNumber() {
+        val page = state.value?.copy()!!.page?: 1
+        val fromPage = state.value?.copy()!!.fromPage?: 0
+        val toPage = state.value?.copy()!!.toPage?: 10
+        state.value?.page = page.plus(1)
+        state.value?.fromPage = fromPage.plus(11)
+        state.value?.toPage = toPage.plus(11)
+    }
+
+    private fun appendRecipes(recipes: MutableList<Recipe>) {
+        val current = state.value?.recipeList
+        current?.addAll(recipes)
+        state.value?.recipeList = current!!
     }
 
 }

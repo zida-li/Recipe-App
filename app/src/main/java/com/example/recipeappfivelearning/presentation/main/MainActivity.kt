@@ -45,6 +45,17 @@ class MainActivity : BaseActivity() {
     private fun setupBottomNavigationView() {
         bottomNavigationView = findViewById(R.id.bottom_navigation_view)
         bottomNavigationView.setupWithNavController(navController)
+        bottomNavigationView.setOnItemReselectedListener {item->
+
+            when(item.itemId) {
+                R.id.nav_search -> {
+                    navController.navigateUp()
+                }
+                R.id.nav_favorite -> {
+                    navController.popBackStack(R.id.favoriteFragment, inclusive = false)
+                }
+            }
+        }
     }
 
     private fun setupActionBar() {
@@ -59,6 +70,7 @@ class MainActivity : BaseActivity() {
         )
         binding.toolBar.setupWithNavController(navController, appBarConfiguration)
     }
+
 
     override fun displayProgressBar(isLoading: Boolean) {
         if(isLoading) {

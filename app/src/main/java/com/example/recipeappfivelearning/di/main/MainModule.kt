@@ -8,8 +8,10 @@ import com.example.recipeappfivelearning.business.datasource.cache.main.shopping
 import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.relations.RecipeWithIngredientDao
 import com.example.recipeappfivelearning.business.datasource.network.main.MainService
 import com.example.recipeappfivelearning.business.interactors.main.favorite.list.FetchFavoriteRecipes
-import com.example.recipeappfivelearning.business.interactors.main.DeleteRecipeFromFavorite
-import com.example.recipeappfivelearning.business.interactors.main.favorite.detail.AddToShoppingList
+import com.example.recipeappfivelearning.business.interactors.main.shared.DeleteRecipeFromFavorite
+import com.example.recipeappfivelearning.business.interactors.main.shared.DeleteRecipeFromShoppingList
+import com.example.recipeappfivelearning.business.interactors.main.shared.CompareToShoppingList
+import com.example.recipeappfivelearning.business.interactors.main.shared.AddToShoppingList
 import com.example.recipeappfivelearning.business.interactors.main.favorite.detail.DeleteMultipleRecipesFromFavorite
 import com.example.recipeappfivelearning.business.interactors.main.favorite.detail.FetchFavoriteRecipe
 import com.example.recipeappfivelearning.business.interactors.main.search.SaveRecipeToFavorite
@@ -183,6 +185,26 @@ object MainModule {
         shoppingListDao: ShoppingListDao
     ): SetIsExpandedRecipe {
         return SetIsExpandedRecipe(
+            shoppingListDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideCompareFavoriteToShoppingList(
+        shoppingListDao: ShoppingListDao
+    ): CompareToShoppingList {
+        return CompareToShoppingList(
+            shoppingListDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeleteRecipeFromShoppingList(
+        shoppingListDao: ShoppingListDao
+    ): DeleteRecipeFromShoppingList {
+        return DeleteRecipeFromShoppingList (
             shoppingListDao
         )
     }

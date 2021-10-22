@@ -49,7 +49,7 @@ class SearchListAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is SearchViewHolder -> {
-                holder.bind(differ.currentList.get(position))
+                holder.bind(differ.currentList[position])
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.recipeappfivelearning.business.interactors.main.favorite.detail
 
+import android.util.Log
 import com.example.recipeappfivelearning.business.datasource.cache.main.FavoriteRecipeDao
 import com.example.recipeappfivelearning.business.datasource.cache.main.toFavoriteRecipe
 import com.example.recipeappfivelearning.business.datasource.network.handleUseCaseException

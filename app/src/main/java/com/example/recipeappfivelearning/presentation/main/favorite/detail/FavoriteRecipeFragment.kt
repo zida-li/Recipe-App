@@ -4,13 +4,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
-import com.example.recipeappfivelearning.business.domain.util.Converters
 import com.example.recipeappfivelearning.databinding.FragmentViewRecipeBinding
 import com.example.recipeappfivelearning.presentation.main.favorite.BaseFavoriteFragment
+import com.example.recipeappfivelearning.business.domain.models.groupie.IngredientItem
+import com.xwray.groupie.GroupieAdapter
 
 class FavoriteRecipeFragment: BaseFavoriteFragment() {
 
@@ -19,6 +21,7 @@ class FavoriteRecipeFragment: BaseFavoriteFragment() {
         .error(R.drawable.empty_plate)
 
     private val viewModel: FavoriteRecipeViewModel by viewModels()
+    private lateinit var groupAdapter: GroupieAdapter
 
     private var _binding: FragmentViewRecipeBinding? = null
     private val binding get() = _binding!!
@@ -36,21 +39,75 @@ class FavoriteRecipeFragment: BaseFavoriteFragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         subscribeObservers()
-        showAddToShoppingListButton()
+        initGroupieAdapter()
+        initRecyclerView()
 
         binding.addToShoppingListButton.setOnClickListener{
-            viewModel.onTriggerEvent(FavoriteRecipeEvents.AddToShoppingList)
+
+            if(viewModel.state.value?.recipe!!.isInShoppingList) {
+                viewModel.state.value?.recipe!!.isInShoppingList = false
+                refreshButtonState()
+                viewModel.onTriggerEvent(FavoriteRecipeEvents.DeleteRecipeFromShoppingList)
+            } else {
+                viewModel.state.value?.recipe!!.isInShoppingList = true
+                refreshButtonState()
+                viewModel.onTriggerEvent(FavoriteRecipeEvents.AddToShoppingList)
+            }
+        }
+    }
+
+    override fun onResume() {
+        if(viewModel.state.value?.recipe != null) {
+            viewModel.onTriggerEvent(FavoriteRecipeEvents.CompareFavoriteToShoppingList)
+//            Log.d(TAG, "onResume: ${viewModel.state.value?.recipe!!.isInShoppingList}")
+        }
+        super.onResume()
+    }
+
+    private fun initRecyclerView() {
+        binding.detailRecipeIngredients.apply {
+            layoutManager = LinearLayoutManager(this@FavoriteRecipeFragment.context)
+            adapter = groupAdapter
+        }
+    }
+
+    private fun initGroupieAdapter() {
+        groupAdapter = GroupieAdapter()
+    }
+
+    private fun refreshButtonState() {
+//        Log.d(TAG, "refreshButtonState: ${viewModel.state.value?.recipe!!.isInShoppingList}")
+        if(viewModel.state.value?.recipe!!.isInShoppingList) {
+            showDeleteToShoppingListButton()
+        } else {
+            showAddToShoppingListButton()
         }
     }
 
     private fun showAddToShoppingListButton() {
-        binding.addToShoppingListButton.visibility = View.VISIBLE
+        binding.addToShoppingListButton.setText(R.string.add_to_shoppingList)
+    }
+
+    private fun showDeleteToShoppingListButton() {
+        binding.addToShoppingListButton.setText(R.string.delete_from_shoppingList)
     }
 
     private fun subscribeObservers() {
         viewModel.state.observe(viewLifecycleOwner, {state->
 
-            state.recipe?.let { setRecipeProperties(it) }
+            state.recipe?.let {
+//                Log.d(TAG, "observerState: ${viewModel.state.value?.recipe!!.isInShoppingList}")
+                setRecipeProperties(it)
+                refreshButtonState()
+            }
+
+            groupAdapter.apply {
+                if(state.recipe?.recipeIngredients != null) {
+                    for (ingredient in state.recipe?.recipeIngredients!!) {
+                        add(IngredientItem(ingredient))
+                    }
+                }
+            }
 
         })
 
@@ -77,6 +134,5 @@ class FavoriteRecipeFragment: BaseFavoriteFragment() {
             .load(recipe.recipeImageUrl)
             .into(binding.detailRecipeImage)
         binding.detailRecipeTitle.text = recipe.recipeName
-        binding.detailRecipeIngredients.text = Converters.convertIngredientListToString(recipe.recipeIngredients!!)
     }
 }

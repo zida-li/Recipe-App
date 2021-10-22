@@ -5,6 +5,7 @@ import android.view.*
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager

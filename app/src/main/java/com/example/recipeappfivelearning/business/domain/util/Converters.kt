@@ -1,5 +1,7 @@
 package com.example.recipeappfivelearning.business.domain.util
 
+import android.util.Log
+
 class Converters {
 
     companion object {
@@ -8,8 +10,10 @@ class Converters {
                 List<String>{
             val list: ArrayList<String> = ArrayList()
             ingredientsString?.let {
-                for(ingredient in it.split("^&*")){
-                    list.add(ingredient)
+                for(ingredient in it.split("@#")){
+                    val regex = Regex("[\\\\@#\"-]")
+                    val result = regex.replace(ingredient, "")
+                    list.add(result)
                 }
             }
             return list
@@ -19,7 +23,7 @@ class Converters {
                 String{
             val ingredientsString = StringBuilder()
             for(ingredient in ingredients) {
-                ingredientsString.append("$ingredient^&*")
+                ingredientsString.append("$ingredient@#")
             }
             return ingredientsString.toString()
         }

@@ -1,13 +1,13 @@
 package com.example.recipeappfivelearning.presentation.main.favorite.detail
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipeappfivelearning.business.domain.models.Recipe
-import com.example.recipeappfivelearning.business.interactors.main.DeleteRecipeFromFavorite
-import com.example.recipeappfivelearning.business.interactors.main.favorite.detail.AddToShoppingList
+import com.example.recipeappfivelearning.business.interactors.main.shared.DeleteRecipeFromFavorite
+import com.example.recipeappfivelearning.business.interactors.main.shared.DeleteRecipeFromShoppingList
+import com.example.recipeappfivelearning.business.interactors.main.shared.CompareToShoppingList
+import com.example.recipeappfivelearning.business.interactors.main.shared.AddToShoppingList
 import com.example.recipeappfivelearning.business.interactors.main.favorite.detail.FetchFavoriteRecipe
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -22,6 +22,8 @@ constructor(
     private val savedStateHandle: SavedStateHandle,
     private val deleteRecipeFromFavorite: DeleteRecipeFromFavorite,
     private val addToShoppingList: AddToShoppingList,
+    private val compareToShoppingList: CompareToShoppingList,
+    private val deleteRecipeFromShoppingList: DeleteRecipeFromShoppingList,
 ): ViewModel(){
 
     init {
@@ -40,8 +42,15 @@ constructor(
             is FavoriteRecipeEvents.DeleteRecipe -> {
                 deleteRecipe()
             }
-            is FavoriteRecipeEvents.AddToShoppingList ->
+            is FavoriteRecipeEvents.AddToShoppingList -> {
                 addToShoppingList()
+            }
+            is FavoriteRecipeEvents.CompareFavoriteToShoppingList -> {
+                compareFavoriteToShoppingList()
+            }
+            is FavoriteRecipeEvents.DeleteRecipeFromShoppingList -> {
+                deleteRecipeFromShoppingList()
+            }
         }
     }
 
@@ -66,9 +75,29 @@ constructor(
 
             dataState.data?.let {
                 state.value = state.value?.copy(recipe = it)
+                compareFavoriteToShoppingList()
+//                Log.d("AppDebug", "fetchFavoriteRecipe: ${it.isInShoppingList}")
             }
 
         }.launchIn(viewModelScope)
+    }
+
+    private fun compareFavoriteToShoppingList() {
+        compareToShoppingList.execute(
+            state.value?.recipe!!
+        ).onEach {dataState ->
+
+            dataState.data?.let {
+                state.value = state.value?.copy(recipe = it)
+            }
+
+        }.launchIn(viewModelScope)
+    }
+
+    private fun deleteRecipeFromShoppingList(){
+        deleteRecipeFromShoppingList.execute(
+            state.value?.recipe!!
+        ).launchIn(viewModelScope)
     }
 
 }

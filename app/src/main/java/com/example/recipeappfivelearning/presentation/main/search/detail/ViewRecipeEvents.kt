@@ -10,4 +10,10 @@ sealed class ViewRecipeEvents{
 
     object DeleteRecipe: ViewRecipeEvents()
 
+    object CompareSearchToShoppingList: ViewRecipeEvents()
+
+    object DeleteRecipeFromShoppingList: ViewRecipeEvents()
+
+    object AddToShoppingList: ViewRecipeEvents()
+
 }

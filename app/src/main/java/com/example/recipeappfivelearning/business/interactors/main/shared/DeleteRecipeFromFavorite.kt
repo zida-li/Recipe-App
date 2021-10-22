@@ -1,4 +1,4 @@
-package com.example.recipeappfivelearning.business.interactors.main
+package com.example.recipeappfivelearning.business.interactors.main.shared
 
 import com.example.recipeappfivelearning.business.datasource.cache.main.FavoriteRecipeDao
 import com.example.recipeappfivelearning.business.datasource.cache.main.toFavoriteEntity

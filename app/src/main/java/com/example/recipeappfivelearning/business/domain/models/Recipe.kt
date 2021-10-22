@@ -10,6 +10,7 @@ data class Recipe (
     var recipeCalories: Float? = null,
     var timeSaved: String? = null,
     var isFavorite: Boolean = false,
+    var isInShoppingList: Boolean = false,
     var isExpanded: Boolean = false,
 ) {
 

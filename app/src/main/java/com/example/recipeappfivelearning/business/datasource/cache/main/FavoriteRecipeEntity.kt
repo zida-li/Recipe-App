@@ -29,7 +29,13 @@ data class FavoriteRecipeEntity (
     var timeSaved: String? = null,
 
     @ColumnInfo(name = "isExpanded")
-    var isExpanded: Boolean
+    var isExpanded: Boolean,
+
+    @ColumnInfo(name = "isFavorite")
+    var isFavorite: Boolean,
+
+    @ColumnInfo(name = "isInShoppingList")
+    var isInShoppingList: Boolean = false,
 
 )
 
@@ -42,17 +48,21 @@ fun Recipe.toFavoriteEntity(): FavoriteRecipeEntity {
         recipeCalories = recipeCalories!!,
         timeSaved = timeSaved,
         isExpanded = isExpanded,
+        isFavorite = isFavorite,
+        isInShoppingList = isInShoppingList,
     )
 }
 
 fun FavoriteRecipeEntity.toFavoriteRecipe(): Recipe {
     return Recipe(
-        recipeName = recipeName!!,
-        recipeImageUrl = recipeImageUrl!!,
+        recipeName = recipeName,
+        recipeImageUrl = recipeImageUrl,
         recipeIngredients = Converters.convertIngredientsToList(recipeIngredients),
-        recipeId = recipeId!!,
-        recipeCalories = recipeCalories!!,
+        recipeId = recipeId,
+        recipeCalories = recipeCalories,
         timeSaved = timeSaved,
         isExpanded = isExpanded,
+        isFavorite = isFavorite,
+        isInShoppingList = isInShoppingList,
     )
 }

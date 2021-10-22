@@ -10,8 +10,9 @@ data class SearchState (
     var query: String = "",
     val isLoading: Boolean = false,
     var moreResultAvailable: Boolean? = null,
-    var page: Int? = null,
-    var fromPage: Int? = null,
-    var toPage: Int? = null,
+    var page: Int? = 1,
+    var pageSize: Int = 10,
+    var fromPage: Int? = 0,
+    var toPage: Int? = 10,
     val queue: Queue<StateMessage> = Queue(mutableListOf()),
 )

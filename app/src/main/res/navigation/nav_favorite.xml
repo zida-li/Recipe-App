@@ -15,5 +15,9 @@
     <fragment
         android:id="@+id/favoriteRecipeFragment"
         android:name="com.example.recipeappfivelearning.presentation.main.favorite.detail.FavoriteRecipeFragment"
-        android:label="" />
+        android:label="" >
+        <action
+            android:id="@+id/action_favoriteRecipeFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
+    </fragment>
 </navigation>
