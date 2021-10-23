@@ -1,6 +1,5 @@
 package com.example.recipeappfivelearning.presentation.main.shoppinglist
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -67,15 +66,34 @@ constructor(
     private fun fetchShoppingList() {
 
         state.value?.let {state->
+
             fetchShoppingListRecipes.execute().onEach {dataState ->
 
                 dataState.data?.let { list->
-                    this.state.value = state.copy(recipeList = list)
-                }
 
+                    val initialSize = list.size
+
+                    if(state.initialListSize != initialSize) {
+                        state.initialListSize = list.size
+
+                        setNeedToReloadToTrue()
+                        this.state.value = state.copy(recipeList = list)
+                        setNeedToReloadToFalse()
+
+                    } else if (state.initialListSize == initialSize) {
+                        setNeedToReloadToFalse()
+                    }
+                }
             }.launchIn(viewModelScope)
         }
+    }
 
+    private fun setNeedToReloadToTrue() {
+        state.value?.needToReload = true
+    }
+
+    private fun setNeedToReloadToFalse() {
+        state.value?.needToReload = false
     }
 
     private fun setToolbarState(shoppingListToolbarState: ShoppingListToolbarState) {

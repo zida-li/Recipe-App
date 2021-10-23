@@ -64,6 +64,7 @@ class ViewRecipeFragment: BaseSearchFragment() {
         if(viewModel.state.value?.recipe != null) {
             viewModel.onTriggerEvent(ViewRecipeEvents.CompareSearchToShoppingList)
             refreshButtonState()
+//            Log.d(TAG, "onResume(): ViewRecipeFragment")
         }
         super.onResume()
     }

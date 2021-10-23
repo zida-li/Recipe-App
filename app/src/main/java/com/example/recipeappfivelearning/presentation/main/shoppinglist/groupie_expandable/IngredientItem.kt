@@ -4,6 +4,7 @@ import android.view.View
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.databinding.ShoppingListChildBinding
+import com.xwray.groupie.Item
 import com.xwray.groupie.viewbinding.BindableItem
 
 class IngredientItem(

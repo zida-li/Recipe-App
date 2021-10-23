@@ -41,9 +41,7 @@ IngredientItem.Interaction {
     }
 
     override fun onResume() {
-        if(viewModel.state.value?.recipeList?.size == 0) {
-            viewModel.onTriggerEvent(ShoppingListEvents.FetchShoppingList)
-        }
+        viewModel.onTriggerEvent(ShoppingListEvents.FetchShoppingList)
         super.onResume()
     }
 
@@ -51,7 +49,11 @@ IngredientItem.Interaction {
 
         viewModel.state.observe(viewLifecycleOwner, {state->
 
-            for(recipe in state.recipeList) {
+            if(state.needToReload) {
+                resetAdapterState()
+            }
+
+            for (recipe in state.recipeList) {
                 val expandableHeaderItem = ExpandableHeaderItem(
                     recipe = recipe,
                     viewLifecycleOwner,
@@ -60,10 +62,19 @@ IngredientItem.Interaction {
                     context!!
                 )
 
-                groupAdapter.apply {
-                    groupAdapter.add(ExpandableGroup(expandableHeaderItem, recipe.isExpanded).apply {
-                        for (ingredient in recipe.recipeIngredientCheck!!) {
-                            add(IngredientItem(ingredient, this@ShoppingListFragment, ingredient.isChecked) { item, favorite ->
+            groupAdapter.apply {
+                groupAdapter.add(
+                    ExpandableGroup(
+                        expandableHeaderItem,
+                        recipe.isExpanded
+                    ).apply {
+                    for (ingredient in recipe.recipeIngredientCheck!!) {
+                        add(
+                            IngredientItem(
+                                ingredient,
+                                this@ShoppingListFragment,
+                                ingredient.isChecked
+                            ) { item, favorite ->
                                 item.setFavorite(favorite)
                                 item.notifyChanged(IngredientItem.FAVORITE)
                             })
@@ -85,6 +96,11 @@ IngredientItem.Interaction {
             }
         })
 
+    }
+
+    private fun resetAdapterState() {
+        initGroupieAdapter()
+        initRecyclerView()
     }
 
     private fun enableMultiSelectToolbarState() {

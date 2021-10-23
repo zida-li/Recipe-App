@@ -12,6 +12,7 @@ import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.databinding.ShoppingListParentBinding
 import com.xwray.groupie.ExpandableGroup
 import com.xwray.groupie.ExpandableItem
+import com.xwray.groupie.Item
 import com.xwray.groupie.viewbinding.BindableItem
 
 class ExpandableHeaderItem(
@@ -80,6 +81,14 @@ class ExpandableHeaderItem(
 
     override fun setExpandableGroup(onToggleListener: ExpandableGroup) {
         expandableGroup = onToggleListener
+    }
+
+    override fun isSameAs(other: Item<*>): Boolean {
+        return other is ExpandableHeaderItem && other.recipe.recipeId == other.recipe.recipeId
+    }
+
+    override fun hasSameContentAs(other: Item<*>): Boolean {
+        return other is ExpandableHeaderItem && other.recipe == other.recipe
     }
 
     interface Interaction {

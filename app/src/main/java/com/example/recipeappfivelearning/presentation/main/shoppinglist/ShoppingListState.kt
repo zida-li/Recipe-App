@@ -10,6 +10,8 @@ data class ShoppingListState (
     var recipe: Recipe? = null,
     var query: String = "",
     val isLoading: Boolean = false,
+    var initialListSize: Int? = null,
+    var needToReload: Boolean = false,
     val queue: Queue<StateMessage> = Queue(mutableListOf()),
 
 )

@@ -104,7 +104,10 @@ constructor(
         ).onEach { dataState ->
 
             dataState.data.let {
+                val ingredient = it?.recipeIngredients
+                it?.recipeIngredients = null
                 state.value = state.value?.copy(recipe = it)
+                it?.recipeIngredients = ingredient
             }
 
         }.launchIn(viewModelScope)
