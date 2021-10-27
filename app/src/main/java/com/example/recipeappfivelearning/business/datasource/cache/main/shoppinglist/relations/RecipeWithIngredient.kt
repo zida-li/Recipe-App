@@ -29,5 +29,6 @@ fun RecipeWithIngredient.toRecipeWithIngredient(): Recipe {
         timeSaved = recipe.timeSaved,
         recipeIngredientCheck = ingredients.map { it.toRecipeIngredients() }.toMutableList(),
         isExpanded = recipe.isExpanded,
+        isMultiSelectionModeEnabled = recipe.isMultiSelectionModeEnabled,
     )
 }

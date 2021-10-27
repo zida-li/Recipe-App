@@ -8,7 +8,7 @@ import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.DeleteMultipleRecipesFromShoppingList
 import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.FetchShoppingListRecipes
 import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.SetIsCheckedIngredient
-import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.SetIsExpandedRecipe
+import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.UpdateRecipeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -20,7 +20,7 @@ class ShoppingListViewModel
 constructor(
     private val fetchShoppingListRecipes: FetchShoppingListRecipes,
     private val deleteMultipleRecipesFromShoppingList: DeleteMultipleRecipesFromShoppingList,
-    private val setIsExpandedRecipe: SetIsExpandedRecipe,
+    private val updateRecipeState: UpdateRecipeState,
     private val setIsCheckedIngredient: SetIsCheckedIngredient,
 ): ViewModel(){
 
@@ -55,10 +55,13 @@ constructor(
                 removeSelectedRecipePositionsFromList()
             }
             is ShoppingListEvents.SetIsExpandedRecipe -> {
-                setIsExpandedRecipe(event.recipe)
+                setIsExpandedRecipe(event.isExpanded, event.recipe)
             }
             is ShoppingListEvents.SetIsCheckedIngredient -> {
                 setIsCheckedIngredient(event.ingredient)
+            }
+            is ShoppingListEvents.ForceReloadForMultiSelectionMode -> {
+                forceReloadForMultiSelectionMode()
             }
         }
     }
@@ -83,6 +86,19 @@ constructor(
                     } else if (state.initialListSize == initialSize) {
                         setNeedToReloadToFalse()
                     }
+                }
+            }.launchIn(viewModelScope)
+        }
+    }
+
+    private fun forceReloadForMultiSelectionMode() {
+        //Workaround because I cannot get updateAsync to work with ExpandableItems
+        state.value?.let {state->
+            fetchShoppingListRecipes.execute().onEach {dataState ->
+                dataState.data?.let { list->
+                    setNeedToReloadToTrue()
+                    this.state.value = state.copy(recipeList = list)
+                    setNeedToReloadToFalse()
                 }
             }.launchIn(viewModelScope)
         }
@@ -133,12 +149,42 @@ constructor(
         shoppingListInteractionManager.clearSelectedRecipes()
     }
 
-    private fun setIsExpandedRecipe(recipe: Recipe) {
-        setIsExpandedRecipe.execute(recipe).launchIn(viewModelScope)
+    private fun setIsExpandedRecipe(isExpanded: Boolean, recipe: Recipe) {
+        state.value?.let { state->
+            for(mRecipe in state.recipeList) {
+                if(mRecipe.recipeName == recipe.recipeName){
+                    mRecipe.isExpanded = isExpanded
+                    updateRecipeState.execute(mRecipe).launchIn(viewModelScope)
+                }
+            }
+        }
     }
 
-    private fun setIsCheckedIngredient(ingredient: Recipe.Ingredient) {
-        setIsCheckedIngredient.execute(ingredient).launchIn(viewModelScope)
+    private fun setIsCheckedIngredient(item: Recipe.Ingredient) {
+        state.value?.let { state->
+            for(recipe in state.recipeList) {
+                for(ingredient in recipe.recipeIngredientCheck!!) {
+                    if(ingredient.recipeIngredient == item.recipeIngredient) {
+                        item.isChecked = !item.isChecked
+                        setIsCheckedIngredient.execute(item).launchIn(viewModelScope)
+                    }
+                }
+            }
+        }
+    }
+
+    fun setMultiSelectionModeToTrue() {
+        for(recipe in state.value?.recipeList!!) {
+            recipe.isMultiSelectionModeEnabled = true
+            updateRecipeState.execute(recipe).launchIn(viewModelScope)
+        }
+    }
+
+    fun setMultiSelectionModeToFalse() {
+        for(recipe in state.value?.recipeList!!) {
+            recipe.isMultiSelectionModeEnabled = false
+            updateRecipeState.execute(recipe).launchIn(viewModelScope)
+        }
     }
 
 }

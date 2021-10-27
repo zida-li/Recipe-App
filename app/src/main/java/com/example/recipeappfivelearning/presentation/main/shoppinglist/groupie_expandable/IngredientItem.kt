@@ -1,5 +1,7 @@
 package com.example.recipeappfivelearning.presentation.main.shoppinglist.groupie_expandable
 
+import android.graphics.Paint
+import android.util.Log
 import android.view.View
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
@@ -28,12 +30,32 @@ class IngredientItem(
 
     override fun bind(viewBinding: ShoppingListChildBinding, position: Int) {
         viewBinding.apply {
-            childTextTitle.text = ingredient.recipeIngredient
             setFavoriteOnLoad(isChecked)
+            if(isChecked) {
+                childTextTitle.apply {
+                    text = ingredient.recipeIngredient
+                    paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                }
+            } else {
+                childTextTitle.apply {
+                    text = ingredient.recipeIngredient
+                }
+            }
             bindCheckBox(viewBinding)
-            ingredientBought.setOnClickListener {
+            wholeIngredientItem.setOnClickListener {
                 onFavoriteListener(this@IngredientItem, !checked)
                 interaction.onIsCheckedClicked(ingredient)
+                childTextTitle.apply {
+                    if(!paint.isStrikeThruText) {
+                        text = ingredient.recipeIngredient
+                        paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    } else {
+                        childTextTitle.apply {
+                            text = ingredient.recipeIngredient
+                            paintFlags = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                        }
+                    }
+                }
             }
         }
     }
@@ -47,7 +69,7 @@ class IngredientItem(
         checked = favorite
     }
 
-    fun setFavoriteOnLoad(favorite: Boolean) {
+    private fun setFavoriteOnLoad(favorite: Boolean) {
         checked = favorite
     }
 

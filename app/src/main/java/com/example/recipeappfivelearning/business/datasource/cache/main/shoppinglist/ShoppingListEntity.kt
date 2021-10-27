@@ -34,6 +34,9 @@ data class ShoppingListEntity(
     @ColumnInfo(name = "isInShoppingList")
     var isInShoppingList: Boolean,
 
+    @ColumnInfo(name = "isMultiSelectionModeEnabled")
+    var isMultiSelectionModeEnabled: Boolean,
+
 )
 
 fun Recipe.toShoppingListEntity(): ShoppingListEntity{
@@ -46,6 +49,7 @@ fun Recipe.toShoppingListEntity(): ShoppingListEntity{
         timeSaved = timeSaved,
         isExpanded = isExpanded,
         isInShoppingList = isInShoppingList,
+        isMultiSelectionModeEnabled = isMultiSelectionModeEnabled,
     )
 }
 
@@ -59,5 +63,6 @@ fun ShoppingListEntity.toShoppingListRecipe(): Recipe{
         timeSaved = timeSaved,
         isExpanded = isExpanded,
         isInShoppingList = isInShoppingList,
+        isMultiSelectionModeEnabled = isMultiSelectionModeEnabled,
     )
 }

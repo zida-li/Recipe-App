@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -122,6 +123,7 @@ class FavoriteRecipeFragment: BaseFavoriteFragment() {
         when (item.itemId) {
             R.id.action_delete_favorite_detail -> {
                 viewModel.onTriggerEvent(FavoriteRecipeEvents.DeleteRecipe)
+                findNavController().popBackStack()
                 return true
             }
         }

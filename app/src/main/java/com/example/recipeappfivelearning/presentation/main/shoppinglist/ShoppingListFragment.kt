@@ -1,7 +1,6 @@
 package com.example.recipeappfivelearning.presentation.main.shoppinglist
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -59,7 +58,8 @@ IngredientItem.Interaction {
                     viewLifecycleOwner,
                     this@ShoppingListFragment,
                     viewModel.shoppingListInteractionManager.selectedRecipe,
-                    context!!
+                    context!!,
+                    recipe.isMultiSelectionModeEnabled
                 )
 
             groupAdapter.apply {
@@ -124,6 +124,8 @@ IngredientItem.Interaction {
                 viewModel.onTriggerEvent(ShoppingListEvents.DeleteSelectedRecipes)
             }
             R.id.action_exit_multiselect_state_shoppinglist -> {
+                viewModel.setMultiSelectionModeToFalse()
+                viewModel.onTriggerEvent(ShoppingListEvents.ForceReloadForMultiSelectionMode)
                 viewModel.onTriggerEvent(ShoppingListEvents.SetToolbarState(ShoppingListToolbarState.SearchState))
             }
         }
@@ -148,25 +150,18 @@ IngredientItem.Interaction {
         }
     }
 
-    override fun activateMultiSelectionMode() {
+    override fun activateMultiSelectionMode(position: Int, item: Recipe) {
+        viewModel.setMultiSelectionModeToTrue()
+        viewModel.onTriggerEvent(ShoppingListEvents.AddOrRemoveRecipeFromSelectedList(item))
+        viewModel.onTriggerEvent(ShoppingListEvents.AddOrRemoveRecipePositionFromSelectedList(position))
+        viewModel.onTriggerEvent(ShoppingListEvents.ForceReloadForMultiSelectionMode)
         viewModel.onTriggerEvent(ShoppingListEvents.SetToolbarState(ShoppingListToolbarState.MultiSelectionState))
     }
 
     override fun isMultiSelectionModeEnabled() = viewModel.shoppingListInteractionManager.isMultiSelectionStateActive()
 
-    override fun isRecipeSelected(recipe: Recipe): Boolean {
-        return true
-    }
-
     override fun expand(isExpanded: Boolean, recipe: Recipe) {
-        viewModel.state.value?.let { state->
-            for(mRecipe in state.recipeList) {
-                if(mRecipe.recipeName == recipe.recipeName){
-                    mRecipe.isExpanded = isExpanded
-                    viewModel.onTriggerEvent(ShoppingListEvents.SetIsExpandedRecipe(mRecipe))
-                }
-            }
-        }
+        viewModel.onTriggerEvent(ShoppingListEvents.SetIsExpandedRecipe(isExpanded, recipe))
     }
 
     override fun onItemSelected(position: Int, item: Recipe) {
@@ -177,18 +172,7 @@ IngredientItem.Interaction {
     }
 
     override fun onIsCheckedClicked(item: Recipe.Ingredient) {
-        viewModel.state.value?.let { state->
-            for(recipe in state.recipeList) {
-                for(ingredient in recipe.recipeIngredientCheck!!) {
-                    if(ingredient.recipeIngredient == item.recipeIngredient) {
-                        item.isChecked = !item.isChecked
-                        viewModel.onTriggerEvent(ShoppingListEvents.SetIsCheckedIngredient(item))
-                    }
-                }
-            }
-        }
+        viewModel.onTriggerEvent(ShoppingListEvents.SetIsCheckedIngredient(item))
     }
-
-
 
 }

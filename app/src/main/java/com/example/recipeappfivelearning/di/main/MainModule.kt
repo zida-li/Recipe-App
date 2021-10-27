@@ -22,7 +22,7 @@ import com.example.recipeappfivelearning.business.interactors.main.search.list.S
 import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.DeleteMultipleRecipesFromShoppingList
 import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.FetchShoppingListRecipes
 import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.SetIsCheckedIngredient
-import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.SetIsExpandedRecipe
+import com.example.recipeappfivelearning.business.interactors.main.shoppinglist.UpdateRecipeState
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -183,8 +183,8 @@ object MainModule {
     @Provides
     fun provideSetIsExpandedRecipe(
         shoppingListDao: ShoppingListDao
-    ): SetIsExpandedRecipe {
-        return SetIsExpandedRecipe(
+    ): UpdateRecipeState {
+        return UpdateRecipeState(
             shoppingListDao
         )
     }

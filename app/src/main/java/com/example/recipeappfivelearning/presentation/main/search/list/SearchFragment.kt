@@ -151,7 +151,7 @@ class SearchFragment : BaseSearchFragment(),
 //                        && viewModel.state.value?.moreResultAvailable == true
                     ) {
                         if((lastPosition + 1) >= (viewModel.state.value?.page!! * viewModel.state.value?.pageSize!!)) {
-                            Log.d(TAG, "SearchFragment: nextPage() Triggered")
+//                            Log.d(TAG, "SearchFragment: nextPage() Triggered")
                             viewModel.onTriggerEvent(SearchEvents.NextPage)
                         }
                     }

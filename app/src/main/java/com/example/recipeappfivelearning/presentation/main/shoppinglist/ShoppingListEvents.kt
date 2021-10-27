@@ -29,7 +29,10 @@ sealed class ShoppingListEvents {
     ): ShoppingListEvents()
 
     data class SetIsExpandedRecipe(
-        val recipe: Recipe
+        val isExpanded: Boolean,
+        val recipe: Recipe,
     ): ShoppingListEvents()
+
+    object ForceReloadForMultiSelectionMode: ShoppingListEvents()
 
 }

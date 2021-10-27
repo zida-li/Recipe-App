@@ -3,6 +3,7 @@ package com.example.recipeappfivelearning.presentation.main.shoppinglist.groupie
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Animatable
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
@@ -20,7 +21,8 @@ class ExpandableHeaderItem(
     private val lifecycleOwner: LifecycleOwner,
     private val interaction: Interaction,
     private val selectedRecipe: LiveData<ArrayList<Recipe>>,
-    private val context: Context
+    private val context: Context,
+    private val isMultiSelectionModeEnabled: Boolean,
 ) : BindableItem<ShoppingListParentBinding?>(), ExpandableItem {
 
     private var expandableGroup: ExpandableGroup? = null
@@ -33,25 +35,35 @@ class ExpandableHeaderItem(
             icon.visibility = View.VISIBLE
             parentTextTitle.text = recipe.recipeName
             icon.setImageResource(if (expandableGroup!!.isExpanded) R.drawable.collapse else R.drawable.expand)
-            icon.setOnClickListener{
-                expandableGroup!!.onToggleExpanded()
-                bindIcon(viewBinding)
-                interaction.expand(expandableGroup!!.isExpanded, recipe)
-            }
+//            Log.d("AppDebug", "isMultiEnabled: $isMultiSelectionModeEnabled")
             shoppingListCardView.setOnClickListener{
+                if (!isMultiSelectionModeEnabled) {
+                    expandableGroup!!.onToggleExpanded()
+                    bindIcon(viewBinding)
+                }
+                interaction.expand(expandableGroup!!.isExpanded, recipe)
                 interaction.onItemSelected(position, recipe)
             }
             shoppingListCardView.setOnLongClickListener {
-                interaction.activateMultiSelectionMode()
                 interaction.onItemSelected(position, recipe)
+                interaction.activateMultiSelectionMode(position, recipe)
                 true
             }
 
             mRecipe = recipe
+//            Log.d("AppDebug", "mRecipe: ${mRecipe.recipeName.toString()}")
 
             selectedRecipe.observe(lifecycleOwner, {recipe->
+
+                if(recipe != null) {
+                    for (blah in recipe) {
+                        Log.d("AppDebug", "selectedRecipe: ${blah.recipeName.toString()}")
+                    }
+                }
+
                 if (recipe != null) {
                     if (recipe.contains(mRecipe)) {
+                        Log.d("AppDebug", "matchfound: ${mRecipe.recipeName.toString()}")
                         shoppingListCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor))
                     }
                     else {
@@ -95,11 +107,9 @@ class ExpandableHeaderItem(
 
         fun onItemSelected(position: Int, item: Recipe)
 
-        fun activateMultiSelectionMode()
+        fun activateMultiSelectionMode(position: Int, item: Recipe)
 
         fun isMultiSelectionModeEnabled(): Boolean
-
-        fun isRecipeSelected(recipe: Recipe): Boolean
 
         fun expand(isExpanded: Boolean, recipe: Recipe)
 

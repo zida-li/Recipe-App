@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.lang.Exception
 
-class SetIsExpandedRecipe (
+class UpdateRecipeState (
     private val shoppingListDao: ShoppingListDao
 ) {
 

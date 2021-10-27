@@ -12,6 +12,7 @@ data class Recipe (
     var isFavorite: Boolean = false,
     var isInShoppingList: Boolean = false,
     var isExpanded: Boolean = false,
+    var isMultiSelectionModeEnabled: Boolean = false,
 ) {
 
     data class Ingredient(
