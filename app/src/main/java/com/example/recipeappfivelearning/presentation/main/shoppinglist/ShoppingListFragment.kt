@@ -125,7 +125,6 @@ IngredientItem.Interaction {
             }
             R.id.action_exit_multiselect_state_shoppinglist -> {
                 viewModel.setMultiSelectionModeToFalse()
-                viewModel.onTriggerEvent(ShoppingListEvents.ForceReloadForMultiSelectionMode)
                 viewModel.onTriggerEvent(ShoppingListEvents.SetToolbarState(ShoppingListToolbarState.SearchState))
             }
         }
@@ -154,7 +153,6 @@ IngredientItem.Interaction {
         viewModel.setMultiSelectionModeToTrue()
         viewModel.onTriggerEvent(ShoppingListEvents.AddOrRemoveRecipeFromSelectedList(item))
         viewModel.onTriggerEvent(ShoppingListEvents.AddOrRemoveRecipePositionFromSelectedList(position))
-        viewModel.onTriggerEvent(ShoppingListEvents.ForceReloadForMultiSelectionMode)
         viewModel.onTriggerEvent(ShoppingListEvents.SetToolbarState(ShoppingListToolbarState.MultiSelectionState))
     }
 

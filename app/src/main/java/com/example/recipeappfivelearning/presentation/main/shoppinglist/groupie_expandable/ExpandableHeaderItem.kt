@@ -35,7 +35,7 @@ class ExpandableHeaderItem(
             icon.visibility = View.VISIBLE
             parentTextTitle.text = recipe.recipeName
             icon.setImageResource(if (expandableGroup!!.isExpanded) R.drawable.collapse else R.drawable.expand)
-//            Log.d("AppDebug", "isMultiEnabled: $isMultiSelectionModeEnabled")
+            Log.d("AppDebug", "isMultiEnabled: $isMultiSelectionModeEnabled")
             shoppingListCardView.setOnClickListener{
                 if (!isMultiSelectionModeEnabled) {
                     expandableGroup!!.onToggleExpanded()
@@ -57,13 +57,13 @@ class ExpandableHeaderItem(
 
                 if(recipe != null) {
                     for (blah in recipe) {
-                        Log.d("AppDebug", "selectedRecipe: ${blah.recipeName.toString()}")
+//                        Log.d("AppDebug", "selectedRecipe: ${blah.recipeName.toString()}")
                     }
                 }
 
                 if (recipe != null) {
                     if (recipe.contains(mRecipe)) {
-                        Log.d("AppDebug", "matchfound: ${mRecipe.recipeName.toString()}")
+//                        Log.d("AppDebug", "matchfound: ${mRecipe.recipeName.toString()}")
                         shoppingListCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor))
                     }
                     else {
