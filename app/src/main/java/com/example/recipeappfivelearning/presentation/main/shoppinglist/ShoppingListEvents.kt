@@ -6,33 +6,32 @@ sealed class ShoppingListEvents {
 
     object FetchShoppingList: ShoppingListEvents()
 
-    data class SetToolbarState(
-        val shoppingListToolbarState: ShoppingListToolbarState
-    ): ShoppingListEvents()
-
-    data class AddOrRemoveRecipeFromSelectedList(
-        val recipe: Recipe
-    ): ShoppingListEvents()
-
-    data class AddOrRemoveRecipePositionFromSelectedList(
-        val position: Int
-    ): ShoppingListEvents()
-
-    object DeleteSelectedRecipes: ShoppingListEvents()
-
-    object ClearSelectedRecipes: ShoppingListEvents()
-
-    object ClearSelectedRecipesPosition: ShoppingListEvents()
-
-    data class SetIsCheckedIngredient(
-        val ingredient: Recipe.Ingredient
-    ): ShoppingListEvents()
+    /**
+     * To save states for ExpandableGroups, on navigating back & on app reload
+     */
 
     data class SetIsExpandedRecipe(
         val isExpanded: Boolean,
         val recipe: Recipe,
     ): ShoppingListEvents()
 
-    object ForceReloadForMultiSelectionMode: ShoppingListEvents()
+    data class SetIsCheckedIngredient(
+        val ingredient: Recipe.Ingredient
+    ): ShoppingListEvents()
+
+    /**
+     *MultiSelectionMode
+     */
+
+    object ActivateMultiSelectionMode: ShoppingListEvents()
+
+    object DisableMultiSelectMode: ShoppingListEvents()
+
+    data class AddOrRemoveRecipeFromSelectedList(
+        val position: Int,
+        val recipe: Recipe
+    ): ShoppingListEvents()
+
+    object DeleteSelectedRecipes: ShoppingListEvents()
 
 }

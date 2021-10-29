@@ -35,7 +35,7 @@ class ExpandableHeaderItem(
             icon.visibility = View.VISIBLE
             parentTextTitle.text = recipe.recipeName
             icon.setImageResource(if (expandableGroup!!.isExpanded) R.drawable.collapse else R.drawable.expand)
-            Log.d("AppDebug", "isMultiEnabled: $isMultiSelectionModeEnabled")
+            Log.d("AppDebug", "ExpandableHeaderItem: isMultiEnabled: $isMultiSelectionModeEnabled")
             shoppingListCardView.setOnClickListener{
                 if (!isMultiSelectionModeEnabled) {
                     expandableGroup!!.onToggleExpanded()
@@ -45,32 +45,34 @@ class ExpandableHeaderItem(
                 interaction.onItemSelected(position, recipe)
             }
             shoppingListCardView.setOnLongClickListener {
+                interaction.activateMultiSelectionMode()
                 interaction.onItemSelected(position, recipe)
-                interaction.activateMultiSelectionMode(position, recipe)
                 true
             }
 
             mRecipe = recipe
-//            Log.d("AppDebug", "mRecipe: ${mRecipe.recipeName.toString()}")
+            Log.d("AppDebug", "ExpandableHeaderItem: mRecipe: ${mRecipe.recipeName}")
 
             selectedRecipe.observe(lifecycleOwner, {recipe->
 
                 if(recipe != null) {
-                    for (blah in recipe) {
-//                        Log.d("AppDebug", "selectedRecipe: ${blah.recipeName.toString()}")
+                    for (r in recipe) {
+                        Log.d("AppDebug", "ExpandableHeaderItem: selectedRecipe: ${r.recipeName}")
                     }
                 }
 
                 if (recipe != null) {
                     if (recipe.contains(mRecipe)) {
-//                        Log.d("AppDebug", "matchfound: ${mRecipe.recipeName.toString()}")
+                        Log.d("AppDebug", "ExpandableHeaderItem: match found: ${mRecipe.recipeName}")
                         shoppingListCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor))
                     }
                     else {
                         shoppingListCardView.setBackgroundColor(Color.WHITE)
+                        Log.d("AppDebug", "ExpandableHeaderItem: else1")
                     }
                 } else {
                     shoppingListCardView.setBackgroundColor(Color.WHITE)
+                    Log.d("AppDebug", "ExpandableHeaderItem: else2")
                 }
             })
         }
@@ -96,18 +98,20 @@ class ExpandableHeaderItem(
     }
 
     override fun isSameAs(other: Item<*>): Boolean {
-        return other is ExpandableHeaderItem && other.recipe.recipeId == other.recipe.recipeId
+        if (other !is ExpandableHeaderItem) return false
+        return recipe.recipeId == other.recipe.recipeId
     }
 
     override fun hasSameContentAs(other: Item<*>): Boolean {
-        return other is ExpandableHeaderItem && other.recipe == other.recipe
+        if (other !is ExpandableHeaderItem) return false
+        return recipe == other.recipe
     }
 
     interface Interaction {
 
         fun onItemSelected(position: Int, item: Recipe)
 
-        fun activateMultiSelectionMode(position: Int, item: Recipe)
+        fun activateMultiSelectionMode()
 
         fun isMultiSelectionModeEnabled(): Boolean
 

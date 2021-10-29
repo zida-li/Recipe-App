@@ -87,55 +87,15 @@ IngredientItem.Interaction {
         viewModel.toolbarState.observe(viewLifecycleOwner, {toolbarState->
             when(toolbarState) {
                 is ShoppingListToolbarState.MultiSelectionState -> {
-                    enableMultiSelectToolbarState()
+                    changeMultiSelectToolbarState()
 
                 }
                 is ShoppingListToolbarState.SearchState -> {
-                    disableMultiSelectToolbarState()
+                    changeMultiSelectToolbarState()
                 }
             }
         })
 
-    }
-
-    private fun resetAdapterState() {
-        initGroupieAdapter()
-        initRecyclerView()
-    }
-
-    private fun enableMultiSelectToolbarState() {
-        activity?.invalidateOptionsMenu()
-    }
-
-    private fun disableMultiSelectToolbarState() {
-        viewModel.onTriggerEvent(ShoppingListEvents.ClearSelectedRecipes)
-        viewModel.onTriggerEvent(ShoppingListEvents.ClearSelectedRecipesPosition)
-        activity?.invalidateOptionsMenu()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when(item.itemId) {
-            R.id.action_delete_shoppinglist_fragment -> {
-                val positions = viewModel.getSelectedRecipesPosition()
-                for(position in positions) {
-                    groupAdapter.removeGroupAtAdapterPosition(position)
-                }
-                viewModel.onTriggerEvent(ShoppingListEvents.DeleteSelectedRecipes)
-            }
-            R.id.action_exit_multiselect_state_shoppinglist -> {
-                viewModel.setMultiSelectionModeToFalse()
-                viewModel.onTriggerEvent(ShoppingListEvents.SetToolbarState(ShoppingListToolbarState.SearchState))
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        if(isMultiSelectionModeEnabled()) {
-            inflater.inflate(R.menu.shoppinglist_fragment_menu, menu)
-        }
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun initGroupieAdapter() {
@@ -149,11 +109,41 @@ IngredientItem.Interaction {
         }
     }
 
-    override fun activateMultiSelectionMode(position: Int, item: Recipe) {
-        viewModel.setMultiSelectionModeToTrue()
-        viewModel.onTriggerEvent(ShoppingListEvents.AddOrRemoveRecipeFromSelectedList(item))
-        viewModel.onTriggerEvent(ShoppingListEvents.AddOrRemoveRecipePositionFromSelectedList(position))
-        viewModel.onTriggerEvent(ShoppingListEvents.SetToolbarState(ShoppingListToolbarState.MultiSelectionState))
+    private fun resetAdapterState() {
+        initGroupieAdapter()
+        initRecyclerView()
+    }
+
+    private fun changeMultiSelectToolbarState() {
+        activity?.invalidateOptionsMenu()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        if(isMultiSelectionModeEnabled()) {
+            inflater.inflate(R.menu.shoppinglist_fragment_menu, menu)
+        }
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when(item.itemId) {
+            R.id.action_delete_shoppinglist_fragment -> {
+                val positions = viewModel.getSelectedRecipesPosition()
+                for(position in positions) {
+                    groupAdapter.removeGroupAtAdapterPosition(position)
+                }
+                viewModel.onTriggerEvent(ShoppingListEvents.DeleteSelectedRecipes)
+            }
+            R.id.action_exit_multiselect_state_shoppinglist -> {
+                viewModel.onTriggerEvent(ShoppingListEvents.DisableMultiSelectMode)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun activateMultiSelectionMode() {
+        viewModel.onTriggerEvent(ShoppingListEvents.ActivateMultiSelectionMode)
     }
 
     override fun isMultiSelectionModeEnabled() = viewModel.shoppingListInteractionManager.isMultiSelectionStateActive()
@@ -164,8 +154,7 @@ IngredientItem.Interaction {
 
     override fun onItemSelected(position: Int, item: Recipe) {
         if(isMultiSelectionModeEnabled()) {
-            viewModel.onTriggerEvent(ShoppingListEvents.AddOrRemoveRecipeFromSelectedList(item))
-            viewModel.onTriggerEvent(ShoppingListEvents.AddOrRemoveRecipePositionFromSelectedList(position))
+            viewModel.onTriggerEvent(ShoppingListEvents.AddOrRemoveRecipeFromSelectedList(position, item))
         }
     }
 

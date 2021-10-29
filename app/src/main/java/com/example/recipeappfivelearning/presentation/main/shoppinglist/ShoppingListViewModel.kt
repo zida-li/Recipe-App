@@ -36,32 +36,23 @@ constructor(
             is ShoppingListEvents.FetchShoppingList -> {
                 fetchShoppingList()
             }
-            is ShoppingListEvents.SetToolbarState -> {
-                setToolbarState(event.shoppingListToolbarState)
-            }
-            is ShoppingListEvents.AddOrRemoveRecipeFromSelectedList -> {
-                addOrRemoveRecipeFromSelectedList(event.recipe)
-            }
-            is ShoppingListEvents.AddOrRemoveRecipePositionFromSelectedList -> {
-                addOrRemoveRecipePositionFromSelectedList(event.position)
-            }
-            is ShoppingListEvents.DeleteSelectedRecipes -> {
-                deleteSelectedRecipes()
-            }
-            is ShoppingListEvents.ClearSelectedRecipes -> {
-                clearSelectedRecipes()
-            }
-            is ShoppingListEvents.ClearSelectedRecipesPosition -> {
-                removeSelectedRecipePositionsFromList()
-            }
             is ShoppingListEvents.SetIsExpandedRecipe -> {
                 setIsExpandedRecipe(event.isExpanded, event.recipe)
             }
             is ShoppingListEvents.SetIsCheckedIngredient -> {
                 setIsCheckedIngredient(event.ingredient)
             }
-            is ShoppingListEvents.ForceReloadForMultiSelectionMode -> {
-                forceReloadForMultiSelectionMode()
+            is ShoppingListEvents.ActivateMultiSelectionMode -> {
+                activateMultiSelectionMode()
+            }
+            is ShoppingListEvents.DisableMultiSelectMode -> {
+                disableMultiSelectionMode()
+            }
+            is ShoppingListEvents.AddOrRemoveRecipeFromSelectedList -> {
+                addOrRemoveRecipeFromSelectedList(event.position, event.recipe)
+            }
+            is ShoppingListEvents.DeleteSelectedRecipes -> {
+                deleteSelectedRecipes()
             }
         }
     }
@@ -91,63 +82,9 @@ constructor(
         }
     }
 
-    private fun forceReloadForMultiSelectionMode() {
-        //Workaround because I cannot get updateAsync to work with ExpandableItems
-        state.value?.let {state->
-            fetchShoppingListRecipes.execute().onEach {dataState ->
-                dataState.data?.let { list->
-                    setNeedToReloadToTrue()
-                    this.state.value = state.copy(recipeList = list)
-                    setNeedToReloadToFalse()
-                }
-            }.launchIn(viewModelScope)
-        }
-    }
-
-    private fun setNeedToReloadToTrue() {
-        state.value?.needToReload = true
-    }
-
-    private fun setNeedToReloadToFalse() {
-        state.value?.needToReload = false
-    }
-
-    private fun setToolbarState(shoppingListToolbarState: ShoppingListToolbarState) {
-        shoppingListInteractionManager.setToolbarState(shoppingListToolbarState)
-    }
-
-    private fun addOrRemoveRecipeFromSelectedList(recipe: Recipe) {
-        shoppingListInteractionManager.addOrRemoveRecipeFromSelectedList(recipe)
-    }
-
-    private fun addOrRemoveRecipePositionFromSelectedList(position: Int) {
-        shoppingListInteractionManager.addOrRemoveRecipePositionFromSelectedList(position)
-    }
-
-    private fun getSelectedRecipes() = shoppingListInteractionManager.getSelectedRecipes()
-
-    fun getSelectedRecipesPosition() = shoppingListInteractionManager.getSelectedRecipesPosition()
-
-    private fun deleteSelectedRecipes() {
-        if(getSelectedRecipes().size > 0) {
-            deleteMultipleRecipesFromShoppingList.execute(getSelectedRecipes()).launchIn(viewModelScope)
-            removeSelectedRecipesFromList()
-            removeSelectedRecipePositionsFromList()
-        }
-    }
-
-    private fun removeSelectedRecipesFromList() {
-        state.value?.recipeList?.removeAll(getSelectedRecipes())
-        clearSelectedRecipes()
-    }
-
-    private fun removeSelectedRecipePositionsFromList() {
-        shoppingListInteractionManager.clearSelectedRecipesPosition()
-    }
-
-    private fun clearSelectedRecipes() {
-        shoppingListInteractionManager.clearSelectedRecipes()
-    }
+    /**
+     * To save states for ExpandableGroups, on navigating back & on app reload
+     */
 
     private fun setIsExpandedRecipe(isExpanded: Boolean, recipe: Recipe) {
         state.value?.let { state->
@@ -173,18 +110,89 @@ constructor(
         }
     }
 
-    fun setMultiSelectionModeToTrue() {
+    /**
+     *MultiSelectionMode
+     */
+
+    private fun activateMultiSelectionMode() {
+        setMultiSelectionModeToTrue()
+        forceReloadForMultiSelectionMode()
+        setToolbarState(ShoppingListToolbarState.MultiSelectionState)
+    }
+
+    private fun disableMultiSelectionMode() {
+        setMultiSelectionModeToFalse()
+        clearSelectedRecipes()
+        removeSelectedRecipesFromList()
+        forceReloadForMultiSelectionMode()
+        setToolbarState(ShoppingListToolbarState.SearchState)
+    }
+
+    private fun addOrRemoveRecipeFromSelectedList(position: Int, recipe: Recipe) {
+        shoppingListInteractionManager.addOrRemoveRecipeFromSelectedList(recipe)
+        shoppingListInteractionManager.addOrRemoveRecipePositionFromSelectedList(position)
+    }
+
+    private fun deleteSelectedRecipes() {
+        if(getSelectedRecipes().size > 0) {
+            deleteMultipleRecipesFromShoppingList.execute(getSelectedRecipes()).launchIn(viewModelScope)
+            removeSelectedRecipesFromList()
+            removeSelectedRecipePositionsFromList()
+        }
+    }
+
+    /**
+     * Supporting Functions
+     */
+
+    private fun forceReloadForMultiSelectionMode() {
+        //Workaround because I cannot get updateAsync to work with ExpandableItems
+        setNeedToReloadToTrue()
+        this.state.value = state.value?.copy(recipeList = state.value!!.recipeList)
+        setNeedToReloadToFalse()
+    }
+
+    private fun setNeedToReloadToTrue() {
+        state.value?.needToReload = true
+    }
+
+    private fun setNeedToReloadToFalse() {
+        state.value?.needToReload = false
+    }
+
+    private fun setToolbarState(shoppingListToolbarState: ShoppingListToolbarState) {
+        shoppingListInteractionManager.setToolbarState(shoppingListToolbarState)
+    }
+
+    private fun getSelectedRecipes() = shoppingListInteractionManager.getSelectedRecipes()
+
+    fun getSelectedRecipesPosition() = shoppingListInteractionManager.getSelectedRecipesPosition()
+
+    private fun removeSelectedRecipesFromList() {
+        state.value?.recipeList?.removeAll(getSelectedRecipes())
+        clearSelectedRecipes()
+    }
+
+    private fun setMultiSelectionModeToTrue() {
         for(recipe in state.value?.recipeList!!) {
             recipe.isMultiSelectionModeEnabled = true
             updateRecipeState.execute(recipe).launchIn(viewModelScope)
         }
     }
 
-    fun setMultiSelectionModeToFalse() {
+    private fun setMultiSelectionModeToFalse() {
         for(recipe in state.value?.recipeList!!) {
             recipe.isMultiSelectionModeEnabled = false
             updateRecipeState.execute(recipe).launchIn(viewModelScope)
         }
+    }
+
+    private fun clearSelectedRecipes() {
+        shoppingListInteractionManager.clearSelectedRecipes()
+    }
+
+    private fun removeSelectedRecipePositionsFromList() {
+        shoppingListInteractionManager.clearSelectedRecipesPosition()
     }
 
 }
