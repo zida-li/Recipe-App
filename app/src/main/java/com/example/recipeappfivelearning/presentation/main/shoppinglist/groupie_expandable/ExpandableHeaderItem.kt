@@ -35,7 +35,7 @@ class ExpandableHeaderItem(
             icon.visibility = View.VISIBLE
             parentTextTitle.text = recipe.recipeName
             icon.setImageResource(if (expandableGroup!!.isExpanded) R.drawable.collapse else R.drawable.expand)
-            Log.d("AppDebug", "ExpandableHeaderItem: isMultiEnabled: $isMultiSelectionModeEnabled")
+//            Log.d("AppDebug", "ExpandableHeaderItem: isMultiEnabled: $isMultiSelectionModeEnabled")
             shoppingListCardView.setOnClickListener{
                 if (!isMultiSelectionModeEnabled) {
                     expandableGroup!!.onToggleExpanded()
@@ -51,28 +51,28 @@ class ExpandableHeaderItem(
             }
 
             mRecipe = recipe
-            Log.d("AppDebug", "ExpandableHeaderItem: mRecipe: ${mRecipe.recipeName}")
+//            Log.d("AppDebug", "ExpandableHeaderItem: mRecipe: ${mRecipe.recipeName}")
 
             selectedRecipe.observe(lifecycleOwner, {recipe->
 
                 if(recipe != null) {
                     for (r in recipe) {
-                        Log.d("AppDebug", "ExpandableHeaderItem: selectedRecipe: ${r.recipeName}")
+//                        Log.d("AppDebug", "ExpandableHeaderItem: selectedRecipe: ${r.recipeName}")
                     }
                 }
 
                 if (recipe != null) {
                     if (recipe.contains(mRecipe)) {
-                        Log.d("AppDebug", "ExpandableHeaderItem: match found: ${mRecipe.recipeName}")
+//                        Log.d("AppDebug", "ExpandableHeaderItem: match found: ${mRecipe.recipeName}")
                         shoppingListCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor))
                     }
                     else {
                         shoppingListCardView.setBackgroundColor(Color.WHITE)
-                        Log.d("AppDebug", "ExpandableHeaderItem: else1")
+//                        Log.d("AppDebug", "ExpandableHeaderItem: else1")
                     }
                 } else {
                     shoppingListCardView.setBackgroundColor(Color.WHITE)
-                    Log.d("AppDebug", "ExpandableHeaderItem: else2")
+//                    Log.d("AppDebug", "ExpandableHeaderItem: else2")
                 }
             })
         }

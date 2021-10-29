@@ -74,8 +74,6 @@ constructor(
                         this.state.value = state.copy(recipeList = list)
                         setNeedToReloadToFalse()
 
-                    } else if (state.initialListSize == initialSize) {
-                        setNeedToReloadToFalse()
                     }
                 }
             }.launchIn(viewModelScope)
@@ -176,14 +174,12 @@ constructor(
     private fun setMultiSelectionModeToTrue() {
         for(recipe in state.value?.recipeList!!) {
             recipe.isMultiSelectionModeEnabled = true
-            updateRecipeState.execute(recipe).launchIn(viewModelScope)
         }
     }
 
     private fun setMultiSelectionModeToFalse() {
         for(recipe in state.value?.recipeList!!) {
             recipe.isMultiSelectionModeEnabled = false
-            updateRecipeState.execute(recipe).launchIn(viewModelScope)
         }
     }
 
