@@ -1,9 +1,12 @@
 package com.example.recipeappfivelearning.presentation.main.shoppinglist
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.databinding.FragmentShoppingListBinding
@@ -103,6 +106,18 @@ IngredientItem.Interaction {
     private fun initRecyclerView() {
         binding.shoppingListRecyclerview.apply {
             layoutManager = LinearLayoutManager(this@ShoppingListFragment.context)
+            addOnScrollListener(object: RecyclerView.OnScrollListener(){
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val lastPosition = layoutManager.findLastVisibleItemPosition()
+                    viewModel.onScrollChangedListener(lastPosition)
+                }
+            })
+            if (viewModel.state.value!!.scrollPosition != 0) {
+                scrollToPosition(viewModel.state.value!!.scrollPosition)
+                Log.d(TAG, "Scrolled to: ${viewModel.state.value!!.scrollPosition}")
+            }
             adapter = groupAdapter
         }
     }

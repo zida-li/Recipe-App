@@ -1,5 +1,6 @@
 package com.example.recipeappfivelearning.presentation.main.shoppinglist
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -189,6 +190,11 @@ constructor(
 
     private fun removeSelectedRecipePositionsFromList() {
         shoppingListInteractionManager.clearSelectedRecipesPosition()
+    }
+
+    fun onScrollChangedListener(position: Int) {
+        state.value!!.scrollPosition = position
+        Log.d("AppDebug", "$position")
     }
 
 }

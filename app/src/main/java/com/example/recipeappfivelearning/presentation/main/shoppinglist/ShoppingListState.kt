@@ -12,6 +12,7 @@ data class ShoppingListState (
     val isLoading: Boolean = false,
     var initialListSize: Int? = null,
     var needToReload: Boolean = false,
+    var scrollPosition: Int = 0,
     val queue: Queue<StateMessage> = Queue(mutableListOf()),
 
 )
