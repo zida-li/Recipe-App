@@ -62,25 +62,23 @@ IngredientItem.Interaction {
                     recipe.isMultiSelectionModeEnabled
                 )
 
-            groupAdapter.apply {
-                groupAdapter.add(
-                    ExpandableGroup(
-                        expandableHeaderItem,
-                        recipe.isExpanded
-                    ).apply {
-                    for (ingredient in recipe.recipeIngredientCheck!!) {
-                        add(
-                            IngredientItem(
-                                ingredient,
-                                this@ShoppingListFragment,
-                                ingredient.isChecked
-                            ) { item, favorite ->
-                                item.setFavorite(favorite)
-                                item.notifyChanged(IngredientItem.FAVORITE)
-                            })
-                        }
-                    })
-                }
+            groupAdapter.add(
+                ExpandableGroup(
+                    expandableHeaderItem,
+                    recipe.isExpanded
+                ).apply {
+                for (ingredient in recipe.recipeIngredientCheck!!) {
+                    add(
+                        IngredientItem(
+                            ingredient,
+                            this@ShoppingListFragment,
+                            ingredient.isChecked
+                        ) { item, favorite ->
+                            item.setFavorite(favorite)
+                            item.notifyChanged(IngredientItem.FAVORITE)
+                        })
+                    }
+                })
             }
         })
 
