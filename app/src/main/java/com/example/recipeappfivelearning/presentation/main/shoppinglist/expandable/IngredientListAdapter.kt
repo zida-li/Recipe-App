@@ -11,20 +11,19 @@ import com.example.recipeappfivelearning.databinding.ShoppingListChildBinding
 class IngredientListAdapter(private val interaction: Interaction? = null) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Recipe>() {
+    val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Recipe.Ingredient>() {
 
-        override fun areItemsTheSame(oldItem: Recipe, newItem: Recipe): Boolean {
-            return oldItem.recipeId == newItem.recipeId
+        override fun areItemsTheSame(oldItem: Recipe.Ingredient, newItem: Recipe.Ingredient): Boolean {
+            return oldItem.recipeName == newItem.recipeName
         }
 
-        override fun areContentsTheSame(oldItem: Recipe, newItem: Recipe): Boolean {
+        override fun areContentsTheSame(oldItem: Recipe.Ingredient, newItem: Recipe.Ingredient): Boolean {
             return oldItem == newItem
         }
 
     }
 
     private val differ = AsyncListDiffer(this, DIFF_CALLBACK)
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -41,7 +40,7 @@ class IngredientListAdapter(private val interaction: Interaction? = null) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ShoppingListChildViewHolder -> {
-                holder.bind(differ.currentList.get(position))
+                holder.bind(differ.currentList[position])
             }
         }
     }
@@ -50,7 +49,7 @@ class IngredientListAdapter(private val interaction: Interaction? = null) :
         return differ.currentList.size
     }
 
-    fun submitList(list: List<Recipe>) {
+    fun submitList(list: List<Recipe.Ingredient>) {
         differ.submitList(list)
     }
 
@@ -60,25 +59,25 @@ class IngredientListAdapter(private val interaction: Interaction? = null) :
         private val interaction: Interaction?
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Recipe) = with(itemView) {
+        fun bind(item: Recipe.Ingredient) = with(itemView) {
             itemView.setOnClickListener {
                 interaction?.onItemSelected(adapterPosition, item)
             }
 
-
+            binding.childTextTitle.text = item.recipeIngredient
 
         }
     }
 
     interface Interaction {
 
-        fun onItemSelected(position: Int, item: Recipe)
+        fun onItemSelected(position: Int, item: Recipe.Ingredient)
 
         fun activateMultiSelectionMode()
 
         fun isMultiSelectionModeEnabled(): Boolean
 
-        fun expand(isExpanded: Boolean, recipe: Recipe)
+        fun expand(isExpanded: Boolean, recipe: Recipe.Ingredient)
 
         fun onIsCheckedClicked(item: Recipe.Ingredient)
     }

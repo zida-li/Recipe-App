@@ -9,6 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.databinding.ShoppingListParentBinding
@@ -37,22 +38,26 @@ class ShoppingListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        return ShoppingListViewHolder(
-            ShoppingListParentBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            ),
-            interaction,
-            lifecycleOwner,
-            selectedRecipe,
-        )
+    return when(viewType) {
+
+            else -> {ShoppingListViewHolder(
+                ShoppingListParentBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                ),
+                interaction,
+                lifecycleOwner,
+                selectedRecipe,
+            )
+        }
+    }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ShoppingListViewHolder -> {
-                holder.bind(differ.currentList.get(position))
+                holder.bind(differ.currentList[position])
             }
         }
     }
@@ -84,6 +89,13 @@ class ShoppingListAdapter(
                 interaction?.onItemSelected(adapterPosition, mRecipe)
                 true
             }
+
+            val ingredientListAdapter = IngredientListAdapter()
+            binding.shoppingListParentRecyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            ingredientListAdapter.submitList(
+                item.recipeIngredientCheck!!
+            )
+            binding.shoppingListParentRecyclerview.adapter = ingredientListAdapter
 
             mRecipe = item
 

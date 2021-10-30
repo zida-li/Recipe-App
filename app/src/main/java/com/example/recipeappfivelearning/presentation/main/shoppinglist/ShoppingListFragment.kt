@@ -50,6 +50,7 @@ class ShoppingListFragment : BaseShoppingListFragment (),
                 submitList(
                     list = state.recipeList
                 )
+                recyclerAdapter?.notifyDataSetChanged()
             }
 
         })
