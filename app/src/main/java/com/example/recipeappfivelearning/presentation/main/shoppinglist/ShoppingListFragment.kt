@@ -110,7 +110,7 @@ IngredientItem.Interaction {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                    val lastPosition = layoutManager.findLastVisibleItemPosition()
+                    val lastPosition = layoutManager.findFirstVisibleItemPosition()
                     viewModel.onScrollChangedListener(lastPosition)
                 }
             })
