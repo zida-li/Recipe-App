@@ -12,8 +12,6 @@ import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.databinding.FragmentViewRecipeBinding
 import com.example.recipeappfivelearning.presentation.main.favorite.BaseFavoriteFragment
-import com.example.recipeappfivelearning.business.domain.models.groupie.IngredientItem
-import com.xwray.groupie.GroupieAdapter
 
 class FavoriteRecipeFragment: BaseFavoriteFragment() {
 
@@ -22,7 +20,6 @@ class FavoriteRecipeFragment: BaseFavoriteFragment() {
         .error(R.drawable.empty_plate)
 
     private val viewModel: FavoriteRecipeViewModel by viewModels()
-    private lateinit var groupAdapter: GroupieAdapter
 
     private var _binding: FragmentViewRecipeBinding? = null
     private val binding get() = _binding!!
@@ -40,7 +37,6 @@ class FavoriteRecipeFragment: BaseFavoriteFragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         subscribeObservers()
-        initGroupieAdapter()
         initRecyclerView()
 
         binding.addToShoppingListButton.setOnClickListener{
@@ -68,12 +64,7 @@ class FavoriteRecipeFragment: BaseFavoriteFragment() {
     private fun initRecyclerView() {
         binding.detailRecipeIngredients.apply {
             layoutManager = LinearLayoutManager(this@FavoriteRecipeFragment.context)
-            adapter = groupAdapter
         }
-    }
-
-    private fun initGroupieAdapter() {
-        groupAdapter = GroupieAdapter()
     }
 
     private fun refreshButtonState() {
@@ -100,14 +91,6 @@ class FavoriteRecipeFragment: BaseFavoriteFragment() {
 //                Log.d(TAG, "observerState: ${viewModel.state.value?.recipe!!.isInShoppingList}")
                 setRecipeProperties(it)
                 refreshButtonState()
-            }
-
-            groupAdapter.apply {
-                if(state.recipe?.recipeIngredients != null) {
-                    for (ingredient in state.recipe?.recipeIngredients!!) {
-                        add(IngredientItem(ingredient))
-                    }
-                }
             }
 
         })

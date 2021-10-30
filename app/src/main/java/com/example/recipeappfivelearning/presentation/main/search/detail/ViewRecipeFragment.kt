@@ -9,12 +9,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
-import com.example.recipeappfivelearning.business.domain.models.groupie.IngredientItem
 import com.example.recipeappfivelearning.business.domain.util.Converters
 import com.example.recipeappfivelearning.databinding.FragmentViewRecipeBinding
 import com.example.recipeappfivelearning.presentation.main.favorite.detail.FavoriteRecipeEvents
 import com.example.recipeappfivelearning.presentation.main.search.BaseSearchFragment
-import com.xwray.groupie.GroupieAdapter
 
 class ViewRecipeFragment: BaseSearchFragment() {
 
@@ -23,7 +21,6 @@ class ViewRecipeFragment: BaseSearchFragment() {
         .error(R.drawable.empty_plate)
 
     private val viewModel: ViewRecipeViewModel by viewModels()
-    private lateinit var groupAdapter: GroupieAdapter
 
     private var _binding: FragmentViewRecipeBinding? = null
     private val binding get() = _binding!!
@@ -41,7 +38,6 @@ class ViewRecipeFragment: BaseSearchFragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         subscribeObservers()
-        initGroupieAdapter()
         initRecyclerView()
 
         binding.addToShoppingListButton.setOnClickListener{
@@ -72,12 +68,7 @@ class ViewRecipeFragment: BaseSearchFragment() {
     private fun initRecyclerView() {
         binding.detailRecipeIngredients.apply {
             layoutManager = LinearLayoutManager(this@ViewRecipeFragment.context)
-            adapter = groupAdapter
         }
-    }
-
-    private fun initGroupieAdapter() {
-        groupAdapter = GroupieAdapter()
     }
 
     private fun showAddToShoppingListButton() {
@@ -104,16 +95,6 @@ class ViewRecipeFragment: BaseSearchFragment() {
                 setRecipeProperties(it)
                 refreshButtonState()
             }
-
-            groupAdapter.apply {
-                if(state.recipe?.recipeIngredients != null) {
-                    for (ingredient in state.recipe?.recipeIngredients!!) {
-                        add(IngredientItem(ingredient))
-                    }
-                }
-            }
-
-
 
             if(state.recipe?.isFavorite == true) {
                 adaptViewToFavoriteIcon()

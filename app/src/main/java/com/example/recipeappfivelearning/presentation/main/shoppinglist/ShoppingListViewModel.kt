@@ -115,7 +115,6 @@ constructor(
 
     private fun activateMultiSelectionMode() {
         setMultiSelectionModeToTrue()
-        forceReloadForMultiSelectionMode()
         setToolbarState(ShoppingListToolbarState.MultiSelectionState)
     }
 
@@ -123,7 +122,6 @@ constructor(
         setMultiSelectionModeToFalse()
         clearSelectedRecipes()
         removeSelectedRecipesFromList()
-        forceReloadForMultiSelectionMode()
         setToolbarState(ShoppingListToolbarState.SearchState)
     }
 
@@ -143,13 +141,6 @@ constructor(
     /**
      * Supporting Functions
      */
-
-    private fun forceReloadForMultiSelectionMode() {
-        //Workaround because I cannot get updateAsync to work with ExpandableItems
-        setNeedToReloadToTrue()
-        this.state.value = state.value?.copy(recipeList = state.value!!.recipeList)
-        setNeedToReloadToFalse()
-    }
 
     private fun setNeedToReloadToTrue() {
         state.value?.needToReload = true
@@ -190,11 +181,6 @@ constructor(
 
     private fun removeSelectedRecipePositionsFromList() {
         shoppingListInteractionManager.clearSelectedRecipesPosition()
-    }
-
-    fun onScrollChangedListener(position: Int) {
-        state.value!!.scrollPosition = position
-        Log.d("AppDebug", "$position")
     }
 
 }

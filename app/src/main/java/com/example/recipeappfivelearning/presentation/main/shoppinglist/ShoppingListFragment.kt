@@ -4,26 +4,22 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.databinding.FragmentShoppingListBinding
-import com.example.recipeappfivelearning.presentation.main.shoppinglist.groupie_expandable.ExpandableHeaderItem
-import com.example.recipeappfivelearning.presentation.main.shoppinglist.groupie_expandable.IngredientItem
-import com.xwray.groupie.ExpandableGroup
-import com.xwray.groupie.GroupieAdapter
+import com.example.recipeappfivelearning.presentation.main.shoppinglist.expandable.ShoppingListAdapter
+import com.example.recipeappfivelearning.presentation.util.TopSpacingItemDecoration
 
 class ShoppingListFragment : BaseShoppingListFragment (),
-ExpandableHeaderItem.Interaction,
-IngredientItem.Interaction {
+    ShoppingListAdapter.Interaction {
 
     private val viewModel: ShoppingListViewModel by viewModels()
 
+    private var recyclerAdapter: ShoppingListAdapter? = null
     private var _binding: FragmentShoppingListBinding? = null
     private val binding get() = _binding!!
-    private lateinit var groupAdapter: GroupieAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +34,6 @@ IngredientItem.Interaction {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         subscribeObservers()
-        initGroupieAdapter()
         initRecyclerView()
     }
 
@@ -51,38 +46,12 @@ IngredientItem.Interaction {
 
         viewModel.state.observe(viewLifecycleOwner, {state->
 
-            if(state.needToReload) {
-                resetAdapterState()
-            }
-
-            for (recipe in state.recipeList) {
-                val expandableHeaderItem = ExpandableHeaderItem(
-                    recipe = recipe,
-                    viewLifecycleOwner,
-                    this@ShoppingListFragment,
-                    viewModel.shoppingListInteractionManager.selectedRecipe,
-                    context!!,
-                    recipe.isMultiSelectionModeEnabled
+            recyclerAdapter?.apply {
+                submitList(
+                    list = state.recipeList
                 )
-
-            groupAdapter.add(
-                ExpandableGroup(
-                    expandableHeaderItem,
-                    recipe.isExpanded
-                ).apply {
-                for (ingredient in recipe.recipeIngredientCheck!!) {
-                    add(
-                        IngredientItem(
-                            ingredient,
-                            this@ShoppingListFragment,
-                            ingredient.isChecked
-                        ) { item, favorite ->
-                            item.setFavorite(favorite)
-                            item.notifyChanged(IngredientItem.FAVORITE)
-                        })
-                    }
-                })
             }
+
         })
 
         viewModel.toolbarState.observe(viewLifecycleOwner, {toolbarState->
@@ -99,32 +68,20 @@ IngredientItem.Interaction {
 
     }
 
-    private fun initGroupieAdapter() {
-        groupAdapter = GroupieAdapter()
-    }
-
     private fun initRecyclerView() {
         binding.shoppingListRecyclerview.apply {
             layoutManager = LinearLayoutManager(this@ShoppingListFragment.context)
-            addOnScrollListener(object: RecyclerView.OnScrollListener(){
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
-                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                    val lastPosition = layoutManager.findFirstVisibleItemPosition()
-                    viewModel.onScrollChangedListener(lastPosition)
-                }
-            })
-            if (viewModel.state.value!!.scrollPosition != 0) {
-                scrollToPosition(viewModel.state.value!!.scrollPosition)
-                Log.d(TAG, "Scrolled to: ${viewModel.state.value!!.scrollPosition}")
-            }
-            adapter = groupAdapter
-        }
-    }
+            val topSpacingDecorator = TopSpacingItemDecoration(30)
+            removeItemDecoration(topSpacingDecorator)
+            addItemDecoration(topSpacingDecorator)
 
-    private fun resetAdapterState() {
-        initGroupieAdapter()
-        initRecyclerView()
+            recyclerAdapter = ShoppingListAdapter(
+                this@ShoppingListFragment,
+                viewLifecycleOwner,
+                viewModel.shoppingListInteractionManager.selectedRecipe
+            )
+            adapter = recyclerAdapter
+        }
     }
 
     private fun changeMultiSelectToolbarState() {
@@ -142,11 +99,8 @@ IngredientItem.Interaction {
 
         when(item.itemId) {
             R.id.action_delete_shoppinglist_fragment -> {
-                val positions = viewModel.getSelectedRecipesPosition()
-                for(position in positions) {
-                    groupAdapter.removeGroupAtAdapterPosition(position)
-                }
                 viewModel.onTriggerEvent(ShoppingListEvents.DeleteSelectedRecipes)
+                recyclerAdapter?.notifyDataSetChanged()
             }
             R.id.action_exit_multiselect_state_shoppinglist -> {
                 viewModel.onTriggerEvent(ShoppingListEvents.DisableMultiSelectMode)
