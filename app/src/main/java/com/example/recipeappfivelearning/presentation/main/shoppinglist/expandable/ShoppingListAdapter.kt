@@ -1,9 +1,16 @@
 package com.example.recipeappfivelearning.presentation.main.shoppinglist.expandable
 
+import android.animation.ValueAnimator
+import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
+import android.os.Build
+import android.util.DisplayMetrics
+import android.util.Log
+import android.util.TypedValue
+import android.view.*
 import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -78,24 +85,39 @@ class ShoppingListAdapter(
         private val selectedRecipe: LiveData<ArrayList<Recipe>>,
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        private val ingredientListAdapter = IngredientListAdapter()
+
         private lateinit var mRecipe: Recipe
 
         fun bind(item: Recipe) = with(itemView) {
+
             itemView.setOnClickListener {
+
                 interaction?.onItemSelected(adapterPosition, item)
+
+                if(!item.isExpanded) {
+                    Log.d("AppDebug", "ShoppingListAdapter: expand")
+                    item.isExpanded != item.isExpanded
+                    binding.shoppingListParentRecyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                    ingredientListAdapter.submitList(
+                        item.recipeIngredientCheck!!
+                    )
+                    binding.shoppingListParentRecyclerview.adapter = ingredientListAdapter
+                } else if (item.isExpanded){
+                    Log.d("AppDebug", "ShoppingListAdapter: else")
+                    ingredientListAdapter.submitList(
+                        item.recipeIngredientCheckEmpty
+                    )
+                }
+
+                interaction?.expand(!item.isExpanded, item)
             }
+
             itemView.setOnLongClickListener {
                 interaction?.activateMultiSelectionMode()
                 interaction?.onItemSelected(adapterPosition, mRecipe)
                 true
             }
-
-            val ingredientListAdapter = IngredientListAdapter()
-            binding.shoppingListParentRecyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            ingredientListAdapter.submitList(
-                item.recipeIngredientCheck!!
-            )
-            binding.shoppingListParentRecyclerview.adapter = ingredientListAdapter
 
             mRecipe = item
 
@@ -114,6 +136,7 @@ class ShoppingListAdapter(
                 }
             })
         }
+
     }
 
     interface Interaction {
