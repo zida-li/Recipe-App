@@ -1,5 +1,7 @@
 package com.example.recipeappfivelearning.presentation.main.shoppinglist.expandable
 
+import android.graphics.Paint
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,16 +10,24 @@ import androidx.recyclerview.widget.DiffUtil
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.databinding.ShoppingListChildBinding
 
-class IngredientListAdapter(private val interaction: Interaction? = null) :
+class IngredientListAdapter(
+    private val interaction: Interaction? = null
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Recipe.Ingredient>() {
 
-        override fun areItemsTheSame(oldItem: Recipe.Ingredient, newItem: Recipe.Ingredient): Boolean {
+        override fun areItemsTheSame(
+            oldItem: Recipe.Ingredient,
+            newItem: Recipe.Ingredient
+        ): Boolean {
             return oldItem.recipeName == newItem.recipeName
         }
 
-        override fun areContentsTheSame(oldItem: Recipe.Ingredient, newItem: Recipe.Ingredient): Boolean {
+        override fun areContentsTheSame(
+            oldItem: Recipe.Ingredient,
+            newItem: Recipe.Ingredient
+        ): Boolean {
             return oldItem == newItem
         }
 
@@ -60,25 +70,55 @@ class IngredientListAdapter(private val interaction: Interaction? = null) :
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Recipe.Ingredient) = with(itemView) {
+
+            checkCheckedOnInit(item, item.isChecked)
+
             itemView.setOnClickListener {
-                interaction?.onItemSelected(adapterPosition, item)
+                checkItemClicked(item)
+                interaction?.onIsCheckedClickedIngredientListAdapter(item)
             }
 
             binding.childTextTitle.text = item.recipeIngredient
 
         }
+
+        private fun checkCheckedOnInit(
+            item: Recipe.Ingredient,
+            isChecked: Boolean,
+        ) {
+            if (isChecked) {
+//                Log.d("AppDebug", "ShoppingListAdapter: checked")
+                binding.childTextTitle.apply {
+                    text = item.recipeIngredient
+                    paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                }
+            } else if (!isChecked) {
+//                Log.d("AppDebug", "ShoppingListAdapter: else")
+                binding.childTextTitle.apply {
+                    text = item.recipeIngredient
+                    paintFlags = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                }
+            }
+        }
+
+        private fun checkItemClicked(item: Recipe.Ingredient) {
+            binding.childTextTitle.apply {
+                if (!paint.isStrikeThruText) {
+                    Log.d("AppDebug", "IngredientListAdapter: checked")
+                    text = item.recipeIngredient
+                    paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                } else {
+                    Log.d("AppDebug", "IngredientListAdapter: else")
+                    binding.childTextTitle.apply {
+                        text = item.recipeIngredient
+                        paintFlags = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                    }
+                }
+            }
+        }
     }
 
     interface Interaction {
-
-        fun onItemSelected(position: Int, item: Recipe.Ingredient)
-
-        fun activateMultiSelectionMode()
-
-        fun isMultiSelectionModeEnabled(): Boolean
-
-        fun expand(isExpanded: Boolean, recipe: Recipe.Ingredient)
-
-        fun onIsCheckedClicked(item: Recipe.Ingredient)
+        fun onIsCheckedClickedIngredientListAdapter(item: Recipe.Ingredient)
     }
 }

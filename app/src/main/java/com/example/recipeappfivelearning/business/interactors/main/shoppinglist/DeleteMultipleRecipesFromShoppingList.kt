@@ -2,7 +2,9 @@ package com.example.recipeappfivelearning.business.interactors.main.shoppinglist
 
 import com.example.recipeappfivelearning.business.datasource.cache.main.FavoriteRecipeDao
 import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.ShoppingListDao
+import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.ShoppingListIngredientDao
 import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.toShoppingListEntity
+import com.example.recipeappfivelearning.business.datasource.cache.main.shoppinglist.toShoppingListIngredientEntity
 import com.example.recipeappfivelearning.business.datasource.cache.main.toFavoriteEntity
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.business.domain.util.DataState
@@ -14,6 +16,7 @@ import kotlinx.coroutines.flow.flow
 
 class DeleteMultipleRecipesFromShoppingList (
     private val shoppingListDao: ShoppingListDao,
+    private val shoppingListIngredientDao: ShoppingListIngredientDao,
 ) {
 
     fun execute(
@@ -23,6 +26,9 @@ class DeleteMultipleRecipesFromShoppingList (
         try {
             for (recipe in recipes) {
                 shoppingListDao.deleteRecipe(recipe.toShoppingListEntity())
+                for (ingredient in recipe.recipeIngredientCheck!!) {
+                    shoppingListIngredientDao.deleteRecipe(ingredient.toShoppingListIngredientEntity())
+                }
             }
         } catch (e: Exception) {
             emit(

@@ -1,16 +1,10 @@
 package com.example.recipeappfivelearning.presentation.main.shoppinglist.expandable
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Typeface
-import android.os.Build
-import android.util.DisplayMetrics
 import android.util.Log
-import android.util.TypedValue
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -83,33 +77,29 @@ class ShoppingListAdapter(
         private val interaction: Interaction?,
         private val lifecycleOwner: LifecycleOwner,
         private val selectedRecipe: LiveData<ArrayList<Recipe>>,
-    ) : RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root), IngredientListAdapter.Interaction {
 
-        private val ingredientListAdapter = IngredientListAdapter()
+        private var ingredientListAdapter = IngredientListAdapter()
 
         private lateinit var mRecipe: Recipe
 
         fun bind(item: Recipe) = with(itemView) {
 
+            binding.shoppingListParentRecyclerview.layoutManager = LinearLayoutManager(
+                context, LinearLayoutManager.VERTICAL, false)
+
+            ingredientListAdapter = IngredientListAdapter(
+                this@ShoppingListViewHolder
+            )
+
+            binding.shoppingListParentRecyclerview.adapter = ingredientListAdapter
+
+            expandOnInit(item, item.isExpanded, context)
+
             itemView.setOnClickListener {
 
                 interaction?.onItemSelected(adapterPosition, item)
-
-                if(!item.isExpanded) {
-                    Log.d("AppDebug", "ShoppingListAdapter: expand")
-                    item.isExpanded != item.isExpanded
-                    binding.shoppingListParentRecyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                    ingredientListAdapter.submitList(
-                        item.recipeIngredientCheck!!
-                    )
-                    binding.shoppingListParentRecyclerview.adapter = ingredientListAdapter
-                } else if (item.isExpanded){
-                    Log.d("AppDebug", "ShoppingListAdapter: else")
-                    ingredientListAdapter.submitList(
-                        item.recipeIngredientCheckEmpty
-                    )
-                }
-
+                expandOnClicked(item, item.isExpanded, context)
                 interaction?.expand(!item.isExpanded, item)
             }
 
@@ -137,6 +127,39 @@ class ShoppingListAdapter(
             })
         }
 
+        private fun expandOnInit(item: Recipe, isExpanded: Boolean, context: Context) {
+            if(isExpanded) {
+//                Log.d("AppDebug", "ShoppingListAdapter: expand")
+                ingredientListAdapter.submitList(
+                    item.recipeIngredientCheck!!
+                )
+            } else if (!isExpanded){
+//                Log.d("AppDebug", "ShoppingListAdapter: else")
+                ingredientListAdapter.submitList(
+                    item.recipeIngredientCheckEmpty
+                )
+            }
+        }
+
+        private fun expandOnClicked(item: Recipe, isExpanded: Boolean, context: Context) {
+            if(!isExpanded) {
+//                Log.d("AppDebug", "ShoppingListAdapter: expand")
+                binding.shoppingListParentRecyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                ingredientListAdapter.submitList(
+                    item.recipeIngredientCheck!!
+                )
+                binding.shoppingListParentRecyclerview.adapter = ingredientListAdapter
+            } else if (isExpanded){
+                ingredientListAdapter.submitList(
+                    item.recipeIngredientCheckEmpty
+                )
+//                Log.d("AppDebug", "ShoppingListAdapter: else")
+            }
+        }
+
+        override fun onIsCheckedClickedIngredientListAdapter(item: Recipe.Ingredient) {
+            interaction?.onIsCheckedClicked(item)
+        }
     }
 
     interface Interaction {
@@ -150,5 +173,6 @@ class ShoppingListAdapter(
         fun expand(isExpanded: Boolean, recipe: Recipe)
 
         fun onIsCheckedClicked(item: Recipe.Ingredient)
+
     }
 }

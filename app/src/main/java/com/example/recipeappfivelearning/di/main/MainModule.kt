@@ -162,10 +162,12 @@ object MainModule {
     @Singleton
     @Provides
     fun provideDeleteMultipleRecipesFromShoppingList(
-        shoppingListDao: ShoppingListDao
+        shoppingListDao: ShoppingListDao,
+        shoppingListIngredientDao: ShoppingListIngredientDao
     ): DeleteMultipleRecipesFromShoppingList {
         return DeleteMultipleRecipesFromShoppingList(
-            shoppingListDao
+            shoppingListDao,
+            shoppingListIngredientDao
         )
     }
 

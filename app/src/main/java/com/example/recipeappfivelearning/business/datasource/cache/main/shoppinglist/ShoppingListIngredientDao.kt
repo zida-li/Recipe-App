@@ -14,4 +14,7 @@ interface ShoppingListIngredientDao {
     @Query("SELECT * FROM shoppingListIngredient")
     suspend fun getAllIngredients(): MutableList<ShoppingListIngredientEntity>
 
+    @Delete
+    suspend fun deleteRecipe(recipe: ShoppingListIngredientEntity)
+
 }

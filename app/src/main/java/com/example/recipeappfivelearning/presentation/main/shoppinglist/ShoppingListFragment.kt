@@ -9,11 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.databinding.FragmentShoppingListBinding
+import com.example.recipeappfivelearning.presentation.main.shoppinglist.expandable.IngredientListAdapter
 import com.example.recipeappfivelearning.presentation.main.shoppinglist.expandable.ShoppingListAdapter
 import com.example.recipeappfivelearning.presentation.util.TopSpacingItemDecoration
 
 class ShoppingListFragment : BaseShoppingListFragment (),
-    ShoppingListAdapter.Interaction {
+ShoppingListAdapter.Interaction
+{
 
     private val viewModel: ShoppingListViewModel by viewModels()
 
@@ -50,7 +52,6 @@ class ShoppingListFragment : BaseShoppingListFragment (),
                 submitList(
                     list = state.recipeList
                 )
-                recyclerAdapter?.notifyDataSetChanged()
             }
 
         })
@@ -127,6 +128,7 @@ class ShoppingListFragment : BaseShoppingListFragment (),
     }
 
     override fun onIsCheckedClicked(item: Recipe.Ingredient) {
+        Log.d(TAG, "ShoppingListFragment: onIsCheckedClicked Triggered")
         viewModel.onTriggerEvent(ShoppingListEvents.SetIsCheckedIngredient(item))
     }
 
