@@ -20,6 +20,7 @@ class FavoriteRecipeFragment: BaseFavoriteFragment() {
         .error(R.drawable.empty_plate)
 
     private val viewModel: FavoriteRecipeViewModel by viewModels()
+    private var recyclerAdapter: FavoriteIngredientListAdapter? = null
 
     private var _binding: FragmentViewRecipeBinding? = null
     private val binding get() = _binding!!
@@ -36,8 +37,8 @@ class FavoriteRecipeFragment: BaseFavoriteFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        subscribeObservers()
         initRecyclerView()
+        subscribeObservers()
 
         binding.addToShoppingListButton.setOnClickListener{
 
@@ -61,9 +62,33 @@ class FavoriteRecipeFragment: BaseFavoriteFragment() {
         super.onResume()
     }
 
+    private fun subscribeObservers() {
+        viewModel.state.observe(viewLifecycleOwner, {state->
+
+            state.recipe?.let {
+                setRecipeProperties(it)
+                refreshButtonState()
+            }
+
+            state.recipe?.recipeIngredientCheck.let {
+
+                if(it != null) {
+                    recyclerAdapter?.apply {
+                        submitList(it)
+                    }
+                }
+
+            }
+
+        })
+
+    }
+
     private fun initRecyclerView() {
         binding.detailRecipeIngredients.apply {
             layoutManager = LinearLayoutManager(this@FavoriteRecipeFragment.context)
+            recyclerAdapter = FavoriteIngredientListAdapter()
+            adapter = recyclerAdapter
         }
     }
 
@@ -82,19 +107,6 @@ class FavoriteRecipeFragment: BaseFavoriteFragment() {
 
     private fun showDeleteToShoppingListButton() {
         binding.addToShoppingListButton.setText(R.string.delete_from_shoppingList)
-    }
-
-    private fun subscribeObservers() {
-        viewModel.state.observe(viewLifecycleOwner, {state->
-
-            state.recipe?.let {
-//                Log.d(TAG, "observerState: ${viewModel.state.value?.recipe!!.isInShoppingList}")
-                setRecipeProperties(it)
-                refreshButtonState()
-            }
-
-        })
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

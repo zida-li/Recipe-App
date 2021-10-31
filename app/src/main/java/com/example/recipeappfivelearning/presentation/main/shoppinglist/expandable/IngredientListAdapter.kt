@@ -104,11 +104,11 @@ class IngredientListAdapter(
         private fun checkItemClicked(item: Recipe.Ingredient) {
             binding.childTextTitle.apply {
                 if (!paint.isStrikeThruText) {
-                    Log.d("AppDebug", "IngredientListAdapter: checked")
+//                    Log.d("AppDebug", "IngredientListAdapter: checked")
                     text = item.recipeIngredient
                     paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 } else {
-                    Log.d("AppDebug", "IngredientListAdapter: else")
+//                    Log.d("AppDebug", "IngredientListAdapter: else")
                     binding.childTextTitle.apply {
                         text = item.recipeIngredient
                         paintFlags = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()

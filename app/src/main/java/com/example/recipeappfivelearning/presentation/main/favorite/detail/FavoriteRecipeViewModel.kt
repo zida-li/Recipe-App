@@ -1,9 +1,11 @@
 package com.example.recipeappfivelearning.presentation.main.favorite.detail
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.business.interactors.main.shared.DeleteRecipeFromFavorite
 import com.example.recipeappfivelearning.business.interactors.main.shared.DeleteRecipeFromShoppingList
 import com.example.recipeappfivelearning.business.interactors.main.shared.CompareToShoppingList
@@ -74,8 +76,22 @@ constructor(
         ).onEach { dataState ->
 
             dataState.data?.let {
+
+                if(it.recipeIngredients != null) {
+                    for (ingredient in it.recipeIngredients!!) {
+                        it.recipeIngredientCheck!!.add(
+                            Recipe.Ingredient(
+                                it.recipeName!!,
+                                ingredient
+                            )
+                        )
+                    }
+                }
+
                 state.value = state.value?.copy(recipe = it)
+
                 compareFavoriteToShoppingList()
+
 //                Log.d("AppDebug", "fetchFavoriteRecipe: ${it.isInShoppingList}")
             }
 

@@ -16,7 +16,7 @@ import com.example.recipeappfivelearning.business.datasource.cache.main.shopping
     FavoriteRecipeEntity::class,
     TemporaryRecipeEntity::class,
     ShoppingListEntity::class,
-    ShoppingListIngredientEntity::class], version = 2)
+    ShoppingListIngredientEntity::class], version = 1)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun getTemporaryRecipeDao(): TemporaryRecipeDao

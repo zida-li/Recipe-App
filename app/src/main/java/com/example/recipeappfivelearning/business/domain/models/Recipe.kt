@@ -5,7 +5,7 @@ data class Recipe (
     var recipeImageUrl: String? = null,
     var recipeIngredient: String? = null,
     var recipeIngredients: List<String>? = null,
-    var recipeIngredientCheck: MutableList<Ingredient>? = null,
+    var recipeIngredientCheck: MutableList<Ingredient>? = mutableListOf(),
     var recipeIngredientCheckEmpty: MutableList<Ingredient> = mutableListOf(),
     val recipeId: String? = null,
     var recipeCalories: Float? = null,

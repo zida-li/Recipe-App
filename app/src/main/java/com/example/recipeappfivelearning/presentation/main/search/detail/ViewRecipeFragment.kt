@@ -21,6 +21,7 @@ class ViewRecipeFragment: BaseSearchFragment() {
         .error(R.drawable.empty_plate)
 
     private val viewModel: ViewRecipeViewModel by viewModels()
+    private var recyclerAdapter: ViewIngredientListAdapter? = null
 
     private var _binding: FragmentViewRecipeBinding? = null
     private val binding get() = _binding!!
@@ -65,9 +66,39 @@ class ViewRecipeFragment: BaseSearchFragment() {
         super.onResume()
     }
 
+    private fun subscribeObservers() {
+        viewModel.state.observe(viewLifecycleOwner, {state->
+
+            state.recipe?.let {
+                setRecipeProperties(it)
+                refreshButtonState()
+            }
+
+            state.recipe?.recipeIngredientCheck.let {
+
+                if(it != null) {
+                    recyclerAdapter?.submitList(
+                        it
+                    )
+                }
+
+            }
+
+            if(state.recipe?.isFavorite == true) {
+                adaptViewToFavoriteIcon()
+            } else {
+                adaptViewToNotFavoriteIcon()
+            }
+
+        })
+
+    }
+
     private fun initRecyclerView() {
         binding.detailRecipeIngredients.apply {
             layoutManager = LinearLayoutManager(this@ViewRecipeFragment.context)
+            recyclerAdapter = ViewIngredientListAdapter()
+            adapter = recyclerAdapter
         }
     }
 
@@ -86,24 +117,6 @@ class ViewRecipeFragment: BaseSearchFragment() {
         } else {
             showAddToShoppingListButton()
         }
-    }
-
-    private fun subscribeObservers() {
-        viewModel.state.observe(viewLifecycleOwner, {state->
-
-            state.recipe?.let {
-                setRecipeProperties(it)
-                refreshButtonState()
-            }
-
-            if(state.recipe?.isFavorite == true) {
-                adaptViewToFavoriteIcon()
-            } else {
-                adaptViewToNotFavoriteIcon()
-            }
-
-        })
-
     }
 
     private fun adaptViewToFavoriteIcon() {

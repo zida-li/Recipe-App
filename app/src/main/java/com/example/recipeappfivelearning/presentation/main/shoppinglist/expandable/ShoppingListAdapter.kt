@@ -39,20 +39,16 @@ class ShoppingListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-    return when(viewType) {
-
-            else -> {ShoppingListViewHolder(
-                ShoppingListParentBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                ),
-                interaction,
-                lifecycleOwner,
-                selectedRecipe,
-            )
-        }
-    }
+        return ShoppingListViewHolder(
+            ShoppingListParentBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ),
+            interaction,
+            lifecycleOwner,
+            selectedRecipe,
+        )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -142,18 +138,21 @@ class ShoppingListAdapter(
         }
 
         private fun expandOnClicked(item: Recipe, isExpanded: Boolean, context: Context) {
-            if(!isExpanded) {
+            if (!item.isMultiSelectionModeEnabled){
+                if (!isExpanded) {
 //                Log.d("AppDebug", "ShoppingListAdapter: expand")
-                binding.shoppingListParentRecyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                ingredientListAdapter.submitList(
-                    item.recipeIngredientCheck!!
-                )
-                binding.shoppingListParentRecyclerview.adapter = ingredientListAdapter
-            } else if (isExpanded){
-                ingredientListAdapter.submitList(
-                    item.recipeIngredientCheckEmpty
-                )
+                    binding.shoppingListParentRecyclerview.layoutManager =
+                        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                    ingredientListAdapter.submitList(
+                        item.recipeIngredientCheck!!
+                    )
+                    binding.shoppingListParentRecyclerview.adapter = ingredientListAdapter
+                } else if (isExpanded) {
+                    ingredientListAdapter.submitList(
+                        item.recipeIngredientCheckEmpty
+                    )
 //                Log.d("AppDebug", "ShoppingListAdapter: else")
+                }
             }
         }
 
