@@ -65,7 +65,6 @@ class MainActivity : BaseActivity() {
                 R.id.searchFragment,
                 R.id.favoriteFragment,
                 R.id.shoppingListFragment,
-                R.id.accountFragment
             )
         )
         binding.toolBar.setupWithNavController(navController, appBarConfiguration)
