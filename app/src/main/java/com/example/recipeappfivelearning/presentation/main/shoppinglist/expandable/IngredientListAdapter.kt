@@ -1,5 +1,6 @@
 package com.example.recipeappfivelearning.presentation.main.shoppinglist.expandable
 
+import android.graphics.Color
 import android.graphics.Paint
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
+import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
 import com.example.recipeappfivelearning.databinding.ShoppingListChildBinding
 
@@ -92,12 +94,16 @@ class IngredientListAdapter(
                     text = item.recipeIngredient
                     paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 }
+                binding.childCheckbox.setImageResource(R.drawable.ic_baseline_check_box_24)
+                binding.wholeIngredientItem.setBackgroundResource(R.drawable.shoppinglist_child_border_checked)
             } else if (!isChecked) {
 //                Log.d("AppDebug", "ShoppingListAdapter: else")
                 binding.childTextTitle.apply {
                     text = item.recipeIngredient
                     paintFlags = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                 }
+                binding.childCheckbox.setImageResource(R.drawable.ic_baseline_check_box_outline_blank_24)
+                binding.wholeIngredientItem.setBackgroundResource(R.drawable.shoppinglist_child_border_unchecked)
             }
         }
 
@@ -107,12 +113,16 @@ class IngredientListAdapter(
 //                    Log.d("AppDebug", "IngredientListAdapter: checked")
                     text = item.recipeIngredient
                     paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    binding.childCheckbox.setImageResource(R.drawable.ic_baseline_check_box_24)
+                    binding.wholeIngredientItem.setBackgroundResource(R.drawable.shoppinglist_child_border_checked)
                 } else {
 //                    Log.d("AppDebug", "IngredientListAdapter: else")
                     binding.childTextTitle.apply {
                         text = item.recipeIngredient
                         paintFlags = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                     }
+                    binding.childCheckbox.setImageResource(R.drawable.ic_baseline_check_box_outline_blank_24)
+                    binding.wholeIngredientItem.setBackgroundResource(R.drawable.shoppinglist_child_border_unchecked)
                 }
             }
         }

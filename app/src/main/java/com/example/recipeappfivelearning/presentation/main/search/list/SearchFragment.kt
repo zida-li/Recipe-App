@@ -2,6 +2,7 @@ package com.example.recipeappfivelearning.presentation.main.search.list
 
 import android.app.SearchManager
 import android.content.Context.SEARCH_SERVICE
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -102,6 +103,8 @@ class SearchFragment : BaseSearchFragment(),
 //                binding.focusableView.requestFocus()
             }
         }
+
+        searchPlate.setTextColor(Color.WHITE)
 
         searchPlate.setOnEditorActionListener{ v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED

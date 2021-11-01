@@ -128,7 +128,7 @@ ShoppingListAdapter.Interaction
     }
 
     override fun onIsCheckedClicked(item: Recipe.Ingredient) {
-        Log.d(TAG, "ShoppingListFragment: onIsCheckedClicked Triggered")
+//        Log.d(TAG, "ShoppingListFragment: onIsCheckedClicked Triggered")
         viewModel.onTriggerEvent(ShoppingListEvents.SetIsCheckedIngredient(item))
     }
 

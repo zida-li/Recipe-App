@@ -38,7 +38,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@id/favorite_icon_search"
             android:orientation="vertical"
-            android:padding="10dp"
+            android:padding="5dp"
             >
 
             <TextView
@@ -46,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/search_list_name"
                 android:text="@string/holder_text"
+                android:gravity="center"
                 />
 
         </LinearLayout>
