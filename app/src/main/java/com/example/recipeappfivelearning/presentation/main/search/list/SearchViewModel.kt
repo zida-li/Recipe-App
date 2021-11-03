@@ -41,11 +41,17 @@ constructor(
             is SearchEvents.NewSearch -> {
                 newSearch()
             }
+            is SearchEvents.NextPage -> {
+                nextPage()
+            }
             is SearchEvents.UpdateQuery -> {
                 onUpdateQuery(event.query)
             }
-            is SearchEvents.NextPage -> {
-                nextPage()
+            is SearchEvents.CompareSearchToFavorite -> {
+                compareSearchToFavorite()
+            }
+            is SearchEvents.SaveOrDeleteRecipeFromDb -> {
+                saveOrDeleteRecipeFromDb(event.recipe)
             }
             is SearchEvents.SaveRecipe -> {
                 saveRecipe(event.recipe)
@@ -56,20 +62,18 @@ constructor(
             is SearchEvents.SaveToTemporaryRecipeDb -> {
                 saveRecipeToTemporaryDb(event.recipe)
             }
-            is SearchEvents.SaveOrDeleteRecipeFromDb -> {
-                saveOrDeleteRecipeFromDb(event.recipe)
-            }
-            is SearchEvents.CompareSearchToFavorite -> {
-                compareSearchToFavorite()
+            is SearchEvents.AppendToMessageQueue -> {
+                appendToMessageQueue(event.stateMessage)
             }
             is SearchEvents.OnRemoveHeadFromQueue -> {
                 onRemoveHeadFromQueue()
             }
-            is SearchEvents.Error -> {
-                appendToMessageQueue(event.stateMessage)
-            }
         }
     }
+
+    /**
+     * Search
+     */
 
     private fun newSearch() {
         resetSearchState()
@@ -117,6 +121,27 @@ constructor(
         state.value = state.value?.copy(query = query)
     }
 
+    private fun compareSearchToFavorite() {
+        compareSearchToFavorite.execute(
+            state.value!!.recipeList
+        ).launchIn(viewModelScope)
+    }
+
+    /**
+     * Save/Delete To Database
+     */
+
+    private fun saveOrDeleteRecipeFromDb(recipe: Recipe) {
+        if(recipe.isFavorite) {
+            recipe.isFavorite = false
+            onTriggerEvent(SearchEvents.DeleteRecipe(recipe))
+        } else {
+            recipe.isFavorite = true
+            setRecipeSavedTime(recipe)
+            onTriggerEvent(SearchEvents.SaveRecipe(recipe))
+        }
+    }
+
     private fun saveRecipe(recipe: Recipe) {
         setRecipeSavedTime(recipe)
         saveRecipeToFavorite.execute(recipe).launchIn(viewModelScope)
@@ -132,21 +157,20 @@ constructor(
         ).launchIn(viewModelScope)
     }
 
-    private fun saveOrDeleteRecipeFromDb(recipe: Recipe) {
-        if(recipe.isFavorite) {
-            recipe.isFavorite = false
-            onTriggerEvent(SearchEvents.DeleteRecipe(recipe))
-        } else {
-            recipe.isFavorite = true
-            setRecipeSavedTime(recipe)
-            onTriggerEvent(SearchEvents.SaveRecipe(recipe))
-        }
-    }
+    /**
+     * Alert Dialogs
+     */
 
-    private fun compareSearchToFavorite() {
-        compareSearchToFavorite.execute(
-            state.value!!.recipeList
-        ).launchIn(viewModelScope)
+    private fun appendToMessageQueue(stateMessage: StateMessage) {
+        state.value?.let { state->
+            val queue = state.queue
+            if(!(stateMessage.doesMessageAlreadyExistInQueue(queue = queue))){
+                if(stateMessage.response.uiComponentType !is UIComponentType.None){
+                    queue.add(stateMessage)
+                    this.state.value = state.copy(queue = queue)
+                }
+            }
+        }
     }
 
     private fun onRemoveHeadFromQueue() {
@@ -161,17 +185,9 @@ constructor(
         }
     }
 
-    private fun appendToMessageQueue(stateMessage: StateMessage) {
-        state.value?.let { state->
-            val queue = state.queue
-            if(!(stateMessage.doesMessageAlreadyExistInQueue(queue = queue))){
-                if(stateMessage.response.uiComponentType !is UIComponentType.None){
-                    queue.add(stateMessage)
-                    this.state.value = state.copy(queue = queue)
-                }
-            }
-        }
-    }
+    /**
+     * Supporting Functions
+     */
 
     private fun setRecipeSavedTime(recipe: Recipe) {
         val timeInserted = Calendar.getInstance().time.toString()

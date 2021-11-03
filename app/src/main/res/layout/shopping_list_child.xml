@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/whole_ingredient_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="15dp"
-    android:paddingTop="20dp"
-    android:paddingBottom="20dp"
-    android:id="@+id/whole_ingredient_item"
-    >
+    android:layout_marginTop="8dp"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/child_textTitle"
@@ -17,20 +14,18 @@
         android:gravity="fill"
         android:padding="8sp"
         android:text="@string/holder_text"
-        app:layout_constraintLeft_toRightOf="@id/child_checkbox"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintLeft_toRightOf="@id/child_checkbox"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/child_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_check_box_outline_blank_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

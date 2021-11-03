@@ -2,22 +2,17 @@ package com.example.recipeappfivelearning.presentation.main.favorite.list
 
 import android.os.Bundle
 import android.view.*
-import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
-import com.example.recipeappfivelearning.business.domain.util.MessageType
-import com.example.recipeappfivelearning.business.domain.util.Response
-import com.example.recipeappfivelearning.business.domain.util.StateMessage
-import com.example.recipeappfivelearning.business.domain.util.UIComponentType
+import com.example.recipeappfivelearning.business.domain.util.*
 import com.example.recipeappfivelearning.databinding.FragmentFavoriteBinding
 import com.example.recipeappfivelearning.presentation.main.favorite.BaseFavoriteFragment
 import com.example.recipeappfivelearning.presentation.util.TopSpacingItemDecoration
+import com.example.recipeappfivelearning.presentation.util.processQueue
 
 class FavoriteFragment : BaseFavoriteFragment(),
     FavoriteListAdapter.Interaction
@@ -52,14 +47,24 @@ class FavoriteFragment : BaseFavoriteFragment(),
 
     private fun subscribeObservers() {
 
+
         viewModel.state.observe(viewLifecycleOwner, {state->
+
+            processQueue(
+                context = context,
+                queue = state.queue,
+                stateMessageCallback = object: StateMessageCallback {
+                    override fun removeMessageFromStack() {
+                        viewModel.onTriggerEvent(FavoriteEvents.OnRemoveHeadFromQueue)
+                    }
+                }
+            )
 
             recyclerAdapter?.apply {
                 submitList(
                     recipeList = state.recipeList
                 )
             }
-
         })
 
         viewModel.toolbarState.observe(viewLifecycleOwner, {toolbarState->
@@ -75,44 +80,6 @@ class FavoriteFragment : BaseFavoriteFragment(),
         })
     }
 
-    /*
-       Enable MultiSelection State
-     */
-
-    private fun enableMultiSelectToolbarState() {
-        activity?.invalidateOptionsMenu()
-    }
-
-    /*
-        Disable MultiSelection State
-     */
-
-    private fun disableMultiSelectToolbarState() {
-        viewModel.onTriggerEvent(FavoriteEvents.ClearSelectedRecipes)
-        activity?.invalidateOptionsMenu()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        if(isMultiSelectionModeEnabled()) {
-            inflater.inflate(R.menu.favorite_fragment_multiselection_menu, menu)
-        }
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when(item.itemId) {
-            R.id.action_delete_favorite_fragment -> {
-                viewModel.onTriggerEvent(FavoriteEvents.DeleteSelectedRecipes)
-                recyclerAdapter?.notifyDataSetChanged()
-            }
-            R.id.action_exit_multiselect_state_favoritefragment -> {
-                viewModel.onTriggerEvent(FavoriteEvents.SetToolBarState(FavoriteListToolbarState.SearchState))
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun initRecyclerView() {
         binding.fragmentFavoriteRecyclerview.apply {
             layoutManager = GridLayoutManager(this@FavoriteFragment.context, 2)
@@ -126,6 +93,53 @@ class FavoriteFragment : BaseFavoriteFragment(),
 
             adapter = recyclerAdapter
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        if(isMultiSelectionModeEnabled()) {
+            inflater.inflate(R.menu.favorite_fragment_multiselection_menu, menu)
+        }
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when(item.itemId) {
+            R.id.action_delete_favorite_fragment -> {
+                confirmDeleteRequest()
+            }
+            R.id.action_exit_multiselect_state_favoritefragment -> {
+                viewModel.onTriggerEvent(FavoriteEvents.SetToolBarState(FavoriteListToolbarState.SearchState))
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    /**
+     * Recipe Functions
+     */
+
+    private fun confirmDeleteRequest() {
+        val callback: AreYouSureCallback = object: AreYouSureCallback {
+
+            override fun proceed() {
+                viewModel.onTriggerEvent(FavoriteEvents.DeleteSelectedRecipes)
+                recyclerAdapter?.notifyDataSetChanged()
+            }
+
+            override fun cancel() {
+                //do nothing
+            }
+        }
+        viewModel.onTriggerEvent(FavoriteEvents.AppendToMessageQueue(
+            stateMessage = StateMessage(
+                response = Response(
+                    message = "Are You Sure? This cannot be undone",
+                    uiComponentType = UIComponentType.AreYouSureDialog(callback),
+                    messageType = MessageType.Info
+                )
+            )
+        ))
     }
 
     override fun onItemSelected(position: Int, item: Recipe) {
@@ -144,7 +158,7 @@ class FavoriteFragment : BaseFavoriteFragment(),
             } catch (e: Exception) {
                 e.printStackTrace()
                 viewModel.onTriggerEvent(
-                    FavoriteEvents.Error(
+                    FavoriteEvents.AppendToMessageQueue(
                         stateMessage = StateMessage(
                             response = Response(
                                 message = e.message,
@@ -156,6 +170,19 @@ class FavoriteFragment : BaseFavoriteFragment(),
                 )
             }
         }
+    }
+
+    /**
+     * MultiSelectMode
+     */
+
+    private fun enableMultiSelectToolbarState() {
+        activity?.invalidateOptionsMenu()
+    }
+
+    private fun disableMultiSelectToolbarState() {
+        viewModel.onTriggerEvent(FavoriteEvents.ClearSelectedRecipes)
+        activity?.invalidateOptionsMenu()
     }
 
     override fun activateMultiSelectionMode() {

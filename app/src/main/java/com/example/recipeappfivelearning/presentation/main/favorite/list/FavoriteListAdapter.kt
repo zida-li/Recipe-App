@@ -102,13 +102,16 @@ class FavoriteListAdapter(
             selectedRecipe.observe(lifecycleOwner, {recipe->
                 if (recipe != null) {
                     if (recipe.contains(mRecipe)) {
-                        binding.cardViewFavoriteFragment.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor))
+                        binding.cardViewFavoriteFragment.setBackgroundColor(ContextCompat.getColor(context, R.color.multiSelectionModeColor))
+                        binding.layoutContainer2.setBackgroundColor(ContextCompat.getColor(context, R.color.Accent))
                     }
                     else {
                         binding.cardViewFavoriteFragment.setBackgroundColor(Color.WHITE)
+                        binding.layoutContainer2.setBackgroundColor(Color.WHITE)
                     }
                 } else {
                     binding.cardViewFavoriteFragment.setBackgroundColor(Color.WHITE)
+                    binding.layoutContainer2.setBackgroundColor(Color.WHITE)
                 }
             })
 

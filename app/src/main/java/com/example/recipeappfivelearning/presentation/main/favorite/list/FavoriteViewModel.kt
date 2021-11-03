@@ -38,6 +38,9 @@ constructor(
             is FavoriteEvents.FetchFavoriteRecipes -> {
                 fetchFavoriteRecipes()
             }
+            is FavoriteEvents.SetToolBarState -> {
+                setToolBarState(event.favoriteListToolbarState)
+            }
             is FavoriteEvents.AddOrRemoveRecipeFromSelectedList -> {
                 addOrRemoveRecipeFromSelectedList(event.recipe)
             }
@@ -47,14 +50,18 @@ constructor(
             is FavoriteEvents.DeleteSelectedRecipes -> {
                 deleteSelectedRecipes()
             }
-            is FavoriteEvents.SetToolBarState -> {
-                setToolBarState(event.favoriteListToolbarState)
-            }
-            is FavoriteEvents.Error -> {
+            is FavoriteEvents.AppendToMessageQueue -> {
                 appendToMessageQueue(event.stateMessage)
+            }
+            is FavoriteEvents.OnRemoveHeadFromQueue -> {
+                removeHeadFromQueue()
             }
         }
     }
+
+    /**
+     * Fetch Recipes From Database
+     */
 
     private fun fetchFavoriteRecipes() {
         state.value?.let {state->
@@ -66,6 +73,14 @@ constructor(
 
             }.launchIn(viewModelScope)
         }
+    }
+
+    /**
+     * MultiSelectionMode
+     */
+
+    private fun setToolBarState(favoriteListToolbarState: FavoriteListToolbarState) {
+        favoriteListInteractionManager.setToolbarState(favoriteListToolbarState)
     }
 
     private fun addOrRemoveRecipeFromSelectedList(recipe: Recipe) {
@@ -83,12 +98,20 @@ constructor(
         }
     }
 
-    fun isRecipeSelected(recipe: Recipe): Boolean {
-        return favoriteListInteractionManager.isRecipeSelected(recipe)
-    }
+    /**
+     * Alert Dialogs
+     */
 
-    private fun setToolBarState(favoriteListToolbarState: FavoriteListToolbarState) {
-        favoriteListInteractionManager.setToolbarState(favoriteListToolbarState)
+    private fun removeHeadFromQueue() {
+        state.value?.let { state ->
+            try {
+                val queue = state.queue
+                queue.remove() // can throw exception if empty
+                this.state.value = state.copy(queue = queue)
+            } catch (e: Exception) {
+                Log.d(TAG, "removeHeadFromQueue: Nothing to remove from DialogQueue")
+            }
+        }
     }
 
     private fun appendToMessageQueue(stateMessage: StateMessage) {
@@ -101,6 +124,14 @@ constructor(
                 }
             }
         }
+    }
+
+    /**
+     * Supporting Functions
+     */
+
+    fun isRecipeSelected(recipe: Recipe): Boolean {
+        return favoriteListInteractionManager.isRecipeSelected(recipe)
     }
 
     private fun getSelectedRecipes() = favoriteListInteractionManager.getSelectedRecipes()

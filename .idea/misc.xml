@@ -10,6 +10,7 @@
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/avd_shoppinglist_progress.xml" value="0.1" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_baseline_check_box_24.xml" value="0.1" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_baseline_check_box_outline_blank_24.xml" value="0.1" />
+        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_baseline_checklist_24.xml" value="0.2564814814814815" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.25384615384615383" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.2574074074074074" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.2833333333333333" />
@@ -17,12 +18,15 @@
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.22135416666666666" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_baseline_view_list_24.xml" value="0.25052083333333336" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2265625" />
+        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/purple_color.xml" value="0.217351598173516" />
+        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/purple_gradient.xml" value="0.217351598173516" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/shoppinglist_child_border.xml" value="0.25052083333333336" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/shoppinglist_child_border_checked.xml" value="0.25052083333333336" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/shoppinglist_child_border_unchecked.xml" value="0.25052083333333336" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/shoppinglist_progress.xml" value="0.1" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/shoppinglist_state.xml" value="0.1" />
-        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/drawable/teal_gradient.xml" value="0.25052083333333336" />
+        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/fragment_account.xml" value="0.20520833333333333" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/fragment_favorite.xml" value="0.20520833333333333" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/fragment_search.xml" value="0.20520833333333333" />
@@ -33,7 +37,7 @@
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/layout_multiselection_toolbar.xml" value="0.10094637223974763" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/layout_search_list_item.xml" value="0.29891304347826086" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/shopping_list_child.xml" value="0.2421875" />
-        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/shopping_list_parent.xml" value="0.12890625" />
+        <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/layout/shopping_list_parent.xml" value="0.25" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/menu/favorite_fragment_menu.xml" value="0.25" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/menu/favorite_fragment_multiselection_menu.xml" value="0.23854166666666668" />
         <entry key="..\:/Projects/My Attempts at Coding/RecipeAppFiveLearning/app/src/main/res/menu/favorite_recipe_menu.xml" value="0.36666666666666664" />

@@ -2,9 +2,7 @@ package com.example.recipeappfivelearning.presentation.main.search.list
 
 import android.app.SearchManager
 import android.content.Context.SEARCH_SERVICE
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -13,7 +11,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipeappfivelearning.R
 import com.example.recipeappfivelearning.business.domain.models.Recipe
@@ -104,8 +101,6 @@ class SearchFragment : BaseSearchFragment(),
             }
         }
 
-        searchPlate.setTextColor(Color.WHITE)
-
         searchPlate.setOnEditorActionListener{ v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
                 || actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -121,17 +116,6 @@ class SearchFragment : BaseSearchFragment(),
             executeNewQuery(searchQuery)
         }
 
-    }
-
-    private fun executeNewQuery(query: String) {
-        viewModel.onTriggerEvent(SearchEvents.UpdateQuery(query))
-        viewModel.onTriggerEvent(SearchEvents.NewSearch)
-        resetUI()
-    }
-
-    private fun resetUI() {
-        uiCommunicationListener.hideSoftKeyboard()
-        binding.focusableView.requestFocus()
     }
 
     private fun initRecyclerView() {
@@ -171,6 +155,17 @@ class SearchFragment : BaseSearchFragment(),
         initSearchView()
     }
 
+    private fun executeNewQuery(query: String) {
+        viewModel.onTriggerEvent(SearchEvents.UpdateQuery(query))
+        viewModel.onTriggerEvent(SearchEvents.NewSearch)
+        resetUI()
+    }
+
+    private fun resetUI() {
+        uiCommunicationListener.hideSoftKeyboard()
+        binding.focusableView.requestFocus()
+    }
+
     override fun onItemSelected(position: Int, item: Recipe) {
         try {
             viewModel.onTriggerEvent(SearchEvents.SaveToTemporaryRecipeDb(item))
@@ -181,7 +176,7 @@ class SearchFragment : BaseSearchFragment(),
         } catch (e: Exception) {
             e.printStackTrace()
             viewModel.onTriggerEvent(
-                SearchEvents.Error(
+                SearchEvents.AppendToMessageQueue(
                     stateMessage = StateMessage(
                         response = Response(
                             message = e.message,
@@ -197,11 +192,33 @@ class SearchFragment : BaseSearchFragment(),
     override fun onFavoriteIconClicked(position: Int, item: Recipe) {
         viewModel.onTriggerEvent(SearchEvents.SaveOrDeleteRecipeFromDb(item))
         recyclerAdapter?.notifyItemChanged(position, item)
+
+        if(item.isFavorite) {
+            viewModel.onTriggerEvent(
+                SearchEvents.AppendToMessageQueue(
+                    stateMessage = StateMessage(
+                        response = Response(
+                            message = "${item.recipeName} Added To Favorites",
+                            uiComponentType = UIComponentType.Toast,
+                            messageType = MessageType.None
+                        )
+                    )
+                )
+            )
+        } else {
+            viewModel.onTriggerEvent(
+                SearchEvents.AppendToMessageQueue(
+                    stateMessage = StateMessage(
+                        response = Response(
+                            message = "${item.recipeName} Removed From Favorites",
+                            uiComponentType = UIComponentType.Toast,
+                            messageType = MessageType.None
+                        )
+                    )
+                )
+            )
+        }
+
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        recyclerAdapter = null
-        _binding = null
-    }
 }

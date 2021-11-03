@@ -5,17 +5,23 @@ import com.example.recipeappfivelearning.business.domain.util.StateMessage
 
 sealed class SearchEvents{
 
+    /**
+     * Search
+     */
+
     object NewSearch: SearchEvents()
+
+    object NextPage: SearchEvents()
 
     data class UpdateQuery(
         val query: String
     ): SearchEvents()
 
-    object NextPage: SearchEvents()
+    object CompareSearchToFavorite: SearchEvents()
 
-    data class SaveToTemporaryRecipeDb(
-        val recipe: Recipe
-    ): SearchEvents()
+    /**
+     * Save/Delete To Database
+     */
 
     data class SaveOrDeleteRecipeFromDb(
         val recipe: Recipe
@@ -29,10 +35,16 @@ sealed class SearchEvents{
         val recipe: Recipe
     ): SearchEvents()
 
-    object CompareSearchToFavorite: SearchEvents()
+    data class SaveToTemporaryRecipeDb(
+        val recipe: Recipe
+    ): SearchEvents()
+
+    /**
+     * Alert Dialogs
+     */
+
+    data class AppendToMessageQueue(val stateMessage: StateMessage): SearchEvents()
 
     object OnRemoveHeadFromQueue: SearchEvents()
-
-    data class Error(val stateMessage: StateMessage): SearchEvents()
 
 }

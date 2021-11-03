@@ -2,8 +2,11 @@ package com.example.recipeappfivelearning.presentation.main.shoppinglist.expanda
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
+import android.graphics.drawable.Animatable
 import android.view.*
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.LayoutAnimationController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
@@ -81,14 +84,9 @@ class ShoppingListAdapter(
 
         fun bind(item: Recipe) = with(itemView) {
 
-            binding.shoppingListParentRecyclerview.layoutManager = LinearLayoutManager(
-                context, LinearLayoutManager.VERTICAL, false)
+            binding.icon.setImageResource(if(item.isExpanded) R.drawable.collapse else R.drawable.expand)
 
-            ingredientListAdapter = IngredientListAdapter(
-                this@ShoppingListViewHolder
-            )
-
-            binding.shoppingListParentRecyclerview.adapter = ingredientListAdapter
+            initIngredientListAdapter(binding, context)
 
             expandOnInit(item, item.isExpanded, context)
 
@@ -97,6 +95,7 @@ class ShoppingListAdapter(
                 interaction?.onItemSelected(adapterPosition, item)
                 expandOnClicked(item, item.isExpanded, context)
                 interaction?.expand(!item.isExpanded, item)
+                animateIsExpand(binding, item)
             }
 
             itemView.setOnLongClickListener {
@@ -112,7 +111,7 @@ class ShoppingListAdapter(
             selectedRecipe.observe(lifecycleOwner, {recipe->
                 if (recipe != null) {
                     if (recipe.contains(mRecipe)) {
-                        binding.shoppingListCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor))
+                        binding.shoppingListCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.multiSelectionModeColor))
                     }
                     else {
                         binding.shoppingListCardView.setBackgroundColor(Color.WHITE)
@@ -121,6 +120,17 @@ class ShoppingListAdapter(
                     binding.shoppingListCardView.setBackgroundColor(Color.WHITE)
                 }
             })
+        }
+
+        private fun initIngredientListAdapter(binding: ShoppingListParentBinding, context: Context) {
+            binding.shoppingListParentRecyclerview.layoutManager = LinearLayoutManager(
+                context, LinearLayoutManager.VERTICAL, false)
+
+            ingredientListAdapter = IngredientListAdapter(
+                this@ShoppingListViewHolder
+            )
+
+            binding.shoppingListParentRecyclerview.adapter = ingredientListAdapter
         }
 
         private fun expandOnInit(item: Recipe, isExpanded: Boolean, context: Context) {
@@ -154,6 +164,13 @@ class ShoppingListAdapter(
 //                Log.d("AppDebug", "ShoppingListAdapter: else")
                 }
             }
+        }
+
+        private fun animateIsExpand(binding: ShoppingListParentBinding, item: Recipe) {
+            binding.icon.visibility = View.VISIBLE
+            binding.icon.setImageResource(if(item.isExpanded) R.drawable.collapse_animated else R.drawable.expand_animated)
+            val drawable = binding.icon.drawable as Animatable
+            drawable.start()
         }
 
         override fun onIsCheckedClickedIngredientListAdapter(item: Recipe.Ingredient) {
