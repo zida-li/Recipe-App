@@ -28,3 +28,12 @@ Features:<br>
 <li><strong>Pagination</strong></li>  
 <li><strong>Glide</strong></li>
 <li><strong>Nested RecyclerView</strong></li>
+
+<h2><strong> To Do:</strong></h2>
+<li>Advanced Search</li>
+<li>Ability to order Favorites/ShoppingList</li>
+<li>Toggle between gridview/listview</li>
+<li>Offline Cache</li>
+<li>Firebase authentication and implementation so users can have their saved recipes/shopping list carry over to multiple devices.</li>
+<li>Implement webview for cooking instructions for recipes (API links to external websites)</li>
+<li>Improve XML.</li>
