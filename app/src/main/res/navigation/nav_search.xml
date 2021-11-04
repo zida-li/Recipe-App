@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.recipeappfivelearning.presentation.main.search.list.SearchFragment"
+        android:name="us.zidali.recipeapp.presentation.main.search.list.SearchFragment"
         android:label="" >
         <action
             android:id="@+id/action_searchFragment_to_viewRecipeFragment"
@@ -19,6 +19,6 @@
     </fragment>
     <fragment
         android:id="@+id/viewRecipeFragment"
-        android:name="com.example.recipeappfivelearning.presentation.main.search.detail.ViewRecipeFragment"
+        android:name="us.zidali.recipeapp.presentation.main.search.detail.ViewRecipeFragment"
         android:label="" />
 </navigation>
