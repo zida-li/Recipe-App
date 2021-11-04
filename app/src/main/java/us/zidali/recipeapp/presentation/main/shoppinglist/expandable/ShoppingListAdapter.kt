@@ -93,7 +93,9 @@ class ShoppingListAdapter(
                 interaction?.onItemSelected(adapterPosition, item)
                 expandOnClicked(item, item.isExpanded, context)
                 interaction?.expand(!item.isExpanded, item)
-                animateIsExpand(binding, item)
+                if(!item.isMultiSelectionModeEnabled) {
+                    animateIsExpand(binding, item)
+                }
             }
 
             itemView.setOnLongClickListener {
