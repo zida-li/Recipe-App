@@ -4,6 +4,8 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import us.zidali.recipeapp.business.datasource.cache.main.FavoriteRecipeDao
 import us.zidali.recipeapp.business.datasource.cache.main.FavoriteRecipeEntity
+import us.zidali.recipeapp.business.datasource.cache.main.apikey.ApiKeyDao
+import us.zidali.recipeapp.business.datasource.cache.main.apikey.ApiKeyEntity
 import us.zidali.recipeapp.business.datasource.cache.main.search.TemporaryRecipeDao
 import us.zidali.recipeapp.business.datasource.cache.main.search.TemporaryRecipeEntity
 import us.zidali.recipeapp.business.datasource.cache.main.shoppinglist.ShoppingListDao
@@ -17,7 +19,8 @@ import us.zidali.recipeapp.business.datasource.cache.main.shoppinglist.relations
     FavoriteRecipeEntity::class,
     TemporaryRecipeEntity::class,
     ShoppingListEntity::class,
-    ShoppingListIngredientEntity::class], version = 1)
+    ShoppingListIngredientEntity::class,
+    ApiKeyEntity::class], version = 1)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun getTemporaryRecipeDao(): TemporaryRecipeDao
@@ -29,6 +32,8 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun getShoppingListIngredientDao(): ShoppingListIngredientDao
 
     abstract fun getRecipeWithIngredientDao(): RecipeWithIngredientDao
+
+    abstract fun getApiKeyDao(): ApiKeyDao
 
     companion object {
         const val DATABASE_NAME = "app_db"

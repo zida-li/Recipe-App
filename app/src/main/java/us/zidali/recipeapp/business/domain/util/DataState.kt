@@ -1,5 +1,9 @@
 package us.zidali.recipeapp.business.domain.util
 
+/**
+ * I used this directly from one of mitch's projects: codingwithmitch.com
+ */
+
 data class DataState<T>(
     val stateMessage: StateMessage? = null,
     val data: T? = null,

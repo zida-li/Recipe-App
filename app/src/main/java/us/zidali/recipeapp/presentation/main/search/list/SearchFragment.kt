@@ -3,6 +3,7 @@ package us.zidali.recipeapp.presentation.main.search.list
 import android.app.SearchManager
 import android.content.Context.SEARCH_SERVICE
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -16,6 +17,7 @@ import us.zidali.recipeapp.R
 import us.zidali.recipeapp.business.domain.models.Recipe
 import us.zidali.recipeapp.business.domain.util.*
 import us.zidali.recipeapp.databinding.FragmentSearchBinding
+import us.zidali.recipeapp.presentation.main.favorite.list.FavoriteEvents
 import us.zidali.recipeapp.presentation.main.search.BaseSearchFragment
 import us.zidali.recipeapp.presentation.util.TopSpacingItemDecoration
 import us.zidali.recipeapp.presentation.util.processQueue
@@ -56,6 +58,7 @@ class SearchFragment : BaseSearchFragment(),
 
             }
         }
+        viewModel.onTriggerEvent(SearchEvents.CheckForApiKey)
         super.onResume()
     }
 
@@ -76,6 +79,11 @@ class SearchFragment : BaseSearchFragment(),
             recyclerAdapter?.apply {
                 submitList(recipeList = state.recipeList)
                 recyclerAdapter?.notifyDataSetChanged()
+            }
+
+            if(state.navigateToApiFragment) {
+                findNavController().navigate(R.id.action_searchFragment_to_searchFragmentApiKeyFragment)
+                viewModel.setNavigateToApiFragmentFalse()
             }
 
         })

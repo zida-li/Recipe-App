@@ -71,8 +71,8 @@ class SearchRecipes (
             emit(
                 DataState.error<SearchState>(
                     response = Response(
-                        message = "SearchRecipes: ApiCall/CacheCall was Unsuccessful",
-                        uiComponentType = UIComponentType.None,
+                        message = "Please check your Internet Connection & ApiKey",
+                        uiComponentType = UIComponentType.Dialog,
                         messageType = MessageType.Error
                     )
                 )

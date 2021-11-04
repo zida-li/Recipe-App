@@ -70,9 +70,9 @@ constructor(
                     if(state.initialListSize != initialSize) {
                         state.initialListSize = list.size
 
-                        setNeedToReloadToTrue()
+                        setDataLoadingTrue()
                         this.state.value = state.copy(recipeList = list)
-                        setNeedToReloadToFalse()
+                        setDataLoadingFalse()
 
                     }
                 }
@@ -141,12 +141,12 @@ constructor(
      * Supporting Functions
      */
 
-    private fun setNeedToReloadToTrue() {
-        state.value?.needToReload = true
+    private fun setDataLoadingTrue() {
+        state.value?.dataLoading = true
     }
 
-    private fun setNeedToReloadToFalse() {
-        state.value?.needToReload = false
+    private fun setDataLoadingFalse() {
+        state.value?.dataLoading = false
     }
 
     private fun setToolbarState(shoppingListToolbarState: ShoppingListToolbarState) {

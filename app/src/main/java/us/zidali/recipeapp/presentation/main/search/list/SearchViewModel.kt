@@ -1,17 +1,16 @@
 package us.zidali.recipeapp.presentation.main.search.list
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import us.zidali.recipeapp.R
 import us.zidali.recipeapp.business.domain.models.Recipe
-import us.zidali.recipeapp.business.domain.util.Constants
-import us.zidali.recipeapp.business.domain.util.StateMessage
-import us.zidali.recipeapp.business.domain.util.UIComponentType
-import us.zidali.recipeapp.business.domain.util.doesMessageAlreadyExistInQueue
+import us.zidali.recipeapp.business.domain.util.*
+import us.zidali.recipeapp.business.interactors.main.apikey.FetchApiKey
 import us.zidali.recipeapp.business.interactors.main.search.SaveRecipeToFavorite
 import us.zidali.recipeapp.business.interactors.main.search.list.CompareSearchToFavorite
 import us.zidali.recipeapp.business.interactors.main.search.list.SaveRecipeToTemporaryRecipeDb
@@ -30,6 +29,7 @@ constructor(
     private val saveRecipeToFavorite: SaveRecipeToFavorite,
     private val deleteRecipeFromFavorite: DeleteRecipeFromFavorite,
     private val compareSearchToFavorite: CompareSearchToFavorite,
+    private val fetchApiKey: FetchApiKey,
 ): ViewModel() {
 
     private val TAG: String = "AppDebug"
@@ -68,6 +68,9 @@ constructor(
             is SearchEvents.OnRemoveHeadFromQueue -> {
                 onRemoveHeadFromQueue()
             }
+            is SearchEvents.CheckForApiKey -> {
+                checkForApiKey()
+            }
         }
     }
 
@@ -79,8 +82,8 @@ constructor(
         resetSearchState()
         state.value?.let { state->
             searchRecipes.execute(
-                app_key = Constants.app_key,
-                app_id = Constants.app_id,
+                app_key = state.apiKey!!.app_key,
+                app_id = state.apiKey!!.app_id,
                 query = state.query,
                 from = state.fromPage?: 0,
                 to = state.toPage?: 10,
@@ -92,6 +95,10 @@ constructor(
                     this.state.value = state.copy(recipeList = list.recipeList)
                 }
 
+                dataState.stateMessage?.let { stateMessage ->
+                    appendToMessageQueue(stateMessage)
+                }
+
             }.launchIn(viewModelScope)
         }
     }
@@ -100,8 +107,8 @@ constructor(
         incrementPageNumber()
         state.value?.let { state->
             searchRecipes.execute(
-                app_key = Constants.app_key,
-                app_id = Constants.app_id,
+                app_key = state.apiKey!!.app_key,
+                app_id = state.apiKey!!.app_id,
                 query = state.query,
                 from = state.fromPage?: 0,
                 to = state.toPage?: 10,
@@ -180,8 +187,31 @@ constructor(
                 queue.remove()
                 this.state.value = state.copy(queue = queue)
             } catch (e: Exception) {
-                Log.d(TAG, "onRemoveHeadFromQueue: Nothing to remove from DialogQueue")
+//                Log.d(TAG, "onRemoveHeadFromQueue: Nothing to remove from DialogQueue")
             }
+        }
+    }
+
+    /**
+     * ApiKey
+     */
+
+    private fun checkForApiKey() {
+        state.value?.let { state->
+            fetchApiKey.execute().onEach { dataState ->
+
+                setDataLoadingTrue()
+                dataState.data?.let {
+                    this.state.value = state.copy(apiKey = it)
+                }
+                setDataLoadingFalse()
+                if(state.apiKey == null) {
+                    if(!state.dataLoading) {
+                        apiKeyNull()
+                    }
+                }
+
+            }.launchIn(viewModelScope)
         }
     }
 
@@ -216,6 +246,45 @@ constructor(
         val current = state.value?.recipeList
         current?.addAll(recipes)
         state.value?.recipeList = current!!
+    }
+
+    private fun setDataLoadingTrue() {
+        state.value?.dataLoading = true
+    }
+
+    private fun setDataLoadingFalse() {
+        state.value?.dataLoading = false
+    }
+
+    private fun setNavigateToApiFragmentTrue () {
+        state.value?.navigateToApiFragment = true
+
+    }
+
+    fun setNavigateToApiFragmentFalse () {
+        state.value?.navigateToApiFragment = false
+    }
+
+    private fun apiKeyNull() {
+        val callback: AreYouSureCallback = object: AreYouSureCallback {
+
+            override fun proceed() {
+                setNavigateToApiFragmentTrue()
+            }
+
+            override fun cancel() {
+                //do nothing
+            }
+        }
+        appendToMessageQueue(stateMessage = StateMessage(
+            response = Response(
+                message = "No ApiKey Found, Would you like to enter one?",
+                uiComponentType = UIComponentType.AreYouSureDialog(callback),
+                messageType = MessageType.Info
+                )
+            )
+        )
+
     }
 
 }

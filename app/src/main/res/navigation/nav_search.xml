@@ -16,9 +16,20 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"
             />
+        <action
+            android:id="@+id/action_searchFragment_to_searchFragmentApiKeyFragment"
+            app:destination="@id/searchFragmentApiKeyFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/viewRecipeFragment"
         android:name="us.zidali.recipeapp.presentation.main.search.detail.ViewRecipeFragment"
+        android:label="" />
+    <fragment
+        android:id="@+id/searchFragmentApiKeyFragment"
+        android:name="us.zidali.recipeapp.presentation.main.search.apikey.SearchFragmentApiKeyFragment"
         android:label="" />
 </navigation>

@@ -4,6 +4,7 @@
     <string name="favorite">Favorite</string>
     <string name="shopping_list">Shopping List</string>
     <string name="account">Account</string>
+    <string name="api_key">ApiKey</string>
 
     <string name="holder_text">Holder Text</string>
     <string name="text_error">Error</string>
@@ -20,4 +21,11 @@
     <string name="delete_from_shoppingList">Delete From Shopping List</string>
     <string name="grid_view">Grid View</string>
     <string name="list_view">List View</string>
+    <string name="app_id">Application ID: ""</string>
+    <string name="app_key">Application Key: ""</string>
+    <string name="set_new_key">Set App ID and App Key</string>
+    <string name="set">Set</string>
+    <string name="attention">Attention</string>
+    <string name="current_api_key">API Key Info:</string>
+    <string name="no_apikey_found">No Api Key Found</string>
 </resources>

@@ -1,5 +1,6 @@
 package us.zidali.recipeapp.presentation.main.search.list
 
+import us.zidali.recipeapp.business.domain.models.ApiKey
 import us.zidali.recipeapp.business.domain.models.Recipe
 import us.zidali.recipeapp.business.domain.util.Queue
 import us.zidali.recipeapp.business.domain.util.StateMessage
@@ -14,5 +15,8 @@ data class SearchState (
     var pageSize: Int = 10,
     var fromPage: Int? = 0,
     var toPage: Int? = 10,
+    var apiKey: ApiKey? = null,
+    var dataLoading: Boolean = true,
+    var navigateToApiFragment: Boolean = false,
     val queue: Queue<StateMessage> = Queue(mutableListOf()),
 )

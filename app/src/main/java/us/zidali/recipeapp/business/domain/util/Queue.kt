@@ -3,6 +3,7 @@ package us.zidali.recipeapp.business.domain.util
 /**
  * Kotlin version of a java.util Queue
  * https://docs.oracle.com/javase/8/docs/api/java/util/Queue.html
+ * I used this directly from one of mitch's projects: codingwithmitch.com
  */
 class Queue<T> (list:MutableList<T>){
 

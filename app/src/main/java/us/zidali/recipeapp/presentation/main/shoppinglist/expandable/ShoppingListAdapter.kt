@@ -3,6 +3,7 @@ package us.zidali.recipeapp.presentation.main.shoppinglist.expandable
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Animatable
+import android.util.Log
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
 import androidx.core.content.ContextCompat
@@ -132,12 +133,12 @@ class ShoppingListAdapter(
 
         private fun expandOnInit(item: Recipe, isExpanded: Boolean, context: Context) {
             if(isExpanded) {
-//                Log.d("AppDebug", "ShoppingListAdapter: expand")
+//                Log.d("AppDebug", "ShoppingListAdapter: expandOnInit() expand ${item.recipeName}")
                 ingredientListAdapter.submitList(
                     item.recipeIngredientCheck!!
                 )
             } else if (!isExpanded){
-//                Log.d("AppDebug", "ShoppingListAdapter: else")
+//                Log.d("AppDebug", "ShoppingListAdapter: expandOnInit() else ${item.recipeName}")
                 ingredientListAdapter.submitList(
                     item.recipeIngredientCheckEmpty
                 )
@@ -147,18 +148,15 @@ class ShoppingListAdapter(
         private fun expandOnClicked(item: Recipe, isExpanded: Boolean, context: Context) {
             if (!item.isMultiSelectionModeEnabled){
                 if (!isExpanded) {
-//                Log.d("AppDebug", "ShoppingListAdapter: expand")
-                    binding.shoppingListParentRecyclerview.layoutManager =
-                        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+//                Log.d("AppDebug", "ShoppingListAdapter: expandOnClicked() expand ${item.recipeName}")
                     ingredientListAdapter.submitList(
                         item.recipeIngredientCheck!!
                     )
-                    binding.shoppingListParentRecyclerview.adapter = ingredientListAdapter
                 } else if (isExpanded) {
                     ingredientListAdapter.submitList(
                         item.recipeIngredientCheckEmpty
                     )
-//                Log.d("AppDebug", "ShoppingListAdapter: else")
+//                Log.d("AppDebug", "ShoppingListAdapter: expandOnClicked() else ${item.recipeName}")
                 }
             }
         }

@@ -7,11 +7,14 @@ import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import us.zidali.recipeapp.business.datasource.cache.AppDatabase
 import us.zidali.recipeapp.business.datasource.cache.main.FavoriteRecipeDao
+import us.zidali.recipeapp.business.datasource.cache.main.apikey.ApiKeyDao
 import us.zidali.recipeapp.business.datasource.cache.main.search.TemporaryRecipeDao
 import us.zidali.recipeapp.business.datasource.cache.main.shoppinglist.ShoppingListDao
 import us.zidali.recipeapp.business.datasource.cache.main.shoppinglist.ShoppingListIngredientDao
 import us.zidali.recipeapp.business.datasource.cache.main.shoppinglist.relations.RecipeWithIngredientDao
 import us.zidali.recipeapp.business.datasource.network.main.MainService
+import us.zidali.recipeapp.business.interactors.main.apikey.FetchApiKey
+import us.zidali.recipeapp.business.interactors.main.apikey.UpdateApiKey
 import us.zidali.recipeapp.business.interactors.main.favorite.detail.DeleteMultipleRecipesFromFavorite
 import us.zidali.recipeapp.business.interactors.main.favorite.detail.FetchFavoriteRecipe
 import us.zidali.recipeapp.business.interactors.main.favorite.list.FetchFavoriteRecipes
@@ -211,6 +214,26 @@ object MainModule {
         )
     }
 
+    @Singleton
+    @Provides
+    fun provideFetchApiKey(
+        apiKeyDao: ApiKeyDao
+    ): FetchApiKey {
+        return FetchApiKey(
+            apiKeyDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideUpdateApiKey(
+        apiKeyDao: ApiKeyDao
+    ): UpdateApiKey {
+        return UpdateApiKey(
+            apiKeyDao
+        )
+    }
+
     /**
      * DATABASE
      */
@@ -242,6 +265,12 @@ object MainModule {
     @Provides
     fun provideRecipeWithIngredientDao(app: AppDatabase): RecipeWithIngredientDao {
         return app.getRecipeWithIngredientDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideApiKeyDao(app: AppDatabase): ApiKeyDao {
+        return app.getApiKeyDao()
     }
 
 }

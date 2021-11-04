@@ -109,7 +109,7 @@ constructor(
                 queue.remove() // can throw exception if empty
                 this.state.value = state.copy(queue = queue)
             } catch (e: Exception) {
-                Log.d(TAG, "removeHeadFromQueue: Nothing to remove from DialogQueue")
+//                Log.d(TAG, "removeHeadFromQueue: Nothing to remove from DialogQueue")
             }
         }
     }

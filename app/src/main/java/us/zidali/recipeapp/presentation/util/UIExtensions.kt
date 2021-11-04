@@ -9,6 +9,10 @@ import com.afollestad.materialdialogs.callbacks.onDismiss
 import us.zidali.recipeapp.R
 import us.zidali.recipeapp.business.domain.util.*
 
+/**
+ * I used this directly from one of mitch's projects: codingwithmitch.com
+ */
+
 private val TAG: String = "AppDebug"
 
 fun processQueue(
@@ -170,7 +174,7 @@ private fun Context.areYouSureDialog(
 ) {
     MaterialDialog(this)
         .show{
-            title(R.string.are_you_sure)
+            title(R.string.attention)
             message(text = message)
             negativeButton(R.string.text_cancel){
                 callback.cancel()

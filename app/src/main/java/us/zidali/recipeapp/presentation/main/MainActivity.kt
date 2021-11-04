@@ -56,6 +56,7 @@ class MainActivity : BaseActivity() {
                 R.id.searchFragment,
                 R.id.favoriteFragment,
                 R.id.shoppingListFragment,
+                R.id.nav_apikey
             )
         )
         binding.toolBar.setupWithNavController(navController, appBarConfiguration)

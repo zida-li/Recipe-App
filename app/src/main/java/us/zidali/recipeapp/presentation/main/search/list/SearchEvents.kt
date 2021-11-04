@@ -47,4 +47,9 @@ sealed class SearchEvents{
 
     object OnRemoveHeadFromQueue: SearchEvents()
 
+    /**
+     * ApiKey
+     */
+
+    object CheckForApiKey: SearchEvents()
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_apikey"
+    app:startDestination="@id/apiKeyFragment">
+
+    <fragment
+        android:id="@+id/apiKeyFragment"
+        android:name="us.zidali.recipeapp.presentation.main.apikey.ApiKeyFragment"
+        android:label="" />
+</navigation>
