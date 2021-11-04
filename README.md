@@ -1,14 +1,14 @@
 <h2><strong>Recipe App</strong></h2>  
 To use you will have to get and enter your own API key from the <strong><a href="https://developer.edamam.com/edamam-recipe-api">Edamam Recipe Api</a></strong>. Once you open the app you will be prompted to enter the Application ID and the Application Key. You can set new keys in the Api Key tab.
 <br>
+<br>
 <p><strong><a href="https://codingwithmitch.com/">Big thanks to CodingWithMitch</a> where I learned many skills required to build my own iteration of his recipe app</strong></p>   
 <h2><strong>About The App</strong></h2>  
 Features:<br>  
 <li>Ability to search recipes, save them to favorite, or add them and their ingredients to a shopping list.  
 <li>Shopping list keeps track of what ingredients you've checked even if you close the app.  
 <li>Search will automatically update and fill in the heart should you already have the recipe favorited.  
-<li>All 3 fragments UI are responsive and will update you accordingly if you save/delete recipes from another fragment. 
-
+<li>All 3 fragments UI are responsive and will update you accordingly if you save/delete recipes from another fragment.
 <br>  
 <br>  
 <center>  
