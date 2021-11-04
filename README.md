@@ -8,6 +8,10 @@ Features:<br>
 <li>Shopping list keeps track of what ingredients you've checked even if you close the app.
 <li>Search will automatically update and fill in the heart should you already have the recipe favorited.
 <li>All 3 fragments UI are responsive and will update you accordingly if you save/delete recipes from another fragment. For example: If you delete a recipe by clicking the heart on Search Fragment, it will automatically remove it from the UI in Favorite Fragment. 
+<center>
+<img class='header-img' src='https://user-images.githubusercontent.com/93685322/140242598-9a317c9b-10e7-4de6-8d6f-ece53ada9a65.PNG'/>
+<img class='header-img' src='https://user-images.githubusercontent.com/93685322/140242602-7cae1a2b-5769-4743-ad17-17be5323f7b9.PNG'/>
+</center>
 
 
 <h2><strong>Concepts/technologies Used:</strong></h2>
