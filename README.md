@@ -31,6 +31,7 @@ Features:<br>
 <li><strong>Nested RecyclerView</strong></li>
 
 <h2><strong> To Do:</strong></h2>
+<li>Unit Testing</li>
 <li>Advanced Search</li>
 <li>Ability to order Favorites/ShoppingList</li>
 <li>Toggle between gridview/listview</li>
