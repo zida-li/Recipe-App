@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="us.zidali.recipeapp.presentation.main.favorite.list.FavoriteFragment"
+        android:name="dev.zidali.recipeapp.presentation.main.favorite.list.FavoriteFragment"
         android:label="" >
         <action
             android:id="@+id/action_favoriteFragment_to_favoriteRecipeFragment"
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/favoriteRecipeFragment"
-        android:name="us.zidali.recipeapp.presentation.main.favorite.detail.FavoriteRecipeFragment"
+        android:name="dev.zidali.recipeapp.presentation.main.favorite.detail.FavoriteRecipeFragment"
         android:label="" >
         <action
             android:id="@+id/action_favoriteRecipeFragment_to_favoriteFragment"

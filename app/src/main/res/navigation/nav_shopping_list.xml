@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/shoppingListFragment"
-        android:name="us.zidali.recipeapp.presentation.main.shoppinglist.ShoppingListFragment"
+        android:name="dev.zidali.recipeapp.presentation.main.shoppinglist.ShoppingListFragment"
         android:label="" />
 </navigation>

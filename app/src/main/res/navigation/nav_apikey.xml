@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/apiKeyFragment"
-        android:name="us.zidali.recipeapp.presentation.main.apikey.ApiKeyFragment"
+        android:name="dev.zidali.recipeapp.presentation.main.apikey.ApiKeyFragment"
         android:label="" />
 </navigation>
