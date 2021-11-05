@@ -39,3 +39,4 @@ Features:<br>
 <li>Implement WebView for cooking instructions for recipes (API links to external websites)</li>
 <li>Improve XML.</li>
 <li>Implement a navigation drawer and move ApiKey Fragment there, also add the ability to toggle between light/darkmode there</li>
+<li>Implement loading animations</li>
