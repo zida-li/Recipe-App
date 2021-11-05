@@ -36,5 +36,6 @@ Features:<br>
 <li>Toggle between gridview/listview</li>
 <li>Offline Cache</li>
 <li>Firebase authentication and implementation so users can have their saved recipes/shopping list carry over to multiple devices.</li>
-<li>Implement webview for cooking instructions for recipes (API links to external websites)</li>
+<li>Implement WebView for cooking instructions for recipes (API links to external websites)</li>
 <li>Improve XML.</li>
+<li>Implement a navigation drawer and move ApiKey Fragment there, also add the ability to toggle between light/darkmode there</li>
