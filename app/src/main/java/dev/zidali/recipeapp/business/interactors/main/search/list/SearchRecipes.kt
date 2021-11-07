@@ -25,7 +25,6 @@ class SearchRecipes (
         from: Int,
         to: Int
     ): Flow<DataState<SearchState>> = flow {
-
         try {
             val recipesFromApi: MutableList<Recipe> = ArrayList()
             val recipesFromFavorites: MutableList<Recipe> = ArrayList()
