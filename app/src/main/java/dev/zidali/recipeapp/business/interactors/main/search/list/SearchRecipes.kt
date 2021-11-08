@@ -70,7 +70,7 @@ class SearchRecipes (
             emit(
                 DataState.error<SearchState>(
                     response = Response(
-                        message = "Please check your Internet Connection & ApiKey",
+                        message = "Check ApiKey and Internet Connection",
                         uiComponentType = UIComponentType.Dialog,
                         messageType = MessageType.Error
                     )

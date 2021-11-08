@@ -2,10 +2,14 @@ package dev.zidali.recipeapp.interactors.search
 
 import com.google.gson.GsonBuilder
 import dev.zidali.recipeapp.business.datasource.cache.main.FavoriteRecipeDao
+import dev.zidali.recipeapp.business.datasource.cache.main.toFavoriteEntity
+import dev.zidali.recipeapp.business.datasource.cache.main.toFavoriteRecipe
 import dev.zidali.recipeapp.business.datasource.network.main.MainService
+import dev.zidali.recipeapp.business.domain.models.Recipe
 import dev.zidali.recipeapp.business.interactors.main.search.list.SearchRecipes
 import dev.zidali.recipeapp.datasource.cache.AppDatabaseFake
 import dev.zidali.recipeapp.datasource.cache.FavoriteRecipeDaoFake
+import dev.zidali.recipeapp.datasource.network.main.search.ConfirmRecipeExists
 import dev.zidali.recipeapp.datasource.network.main.search.SearchRecipesResponses
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
@@ -29,23 +33,23 @@ class SearchRecipesTest {
 
     //dependencies
     private lateinit var mainService: MainService
-    private lateinit var favoriteRecipeDao: FavoriteRecipeDao
+    private lateinit var cache: FavoriteRecipeDao
 
     @BeforeEach
     fun setup() {
         mockWebServer = MockWebServer()
         mockWebServer.start()
-        baseUrl = mockWebServer.url("https://api.edamam.com")
+        baseUrl = mockWebServer.url("/recipe/test/")
         mainService = Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
             .create(MainService::class.java)
 
-        favoriteRecipeDao = FavoriteRecipeDaoFake(appDataBase)
+        cache = FavoriteRecipeDaoFake(appDataBase)
 
         searchRecipes = SearchRecipes(
-            favoriteRecipeDao = favoriteRecipeDao,
+            favoriteRecipeDao = cache,
             mainService = mainService,
         )
 
@@ -62,6 +66,14 @@ class SearchRecipesTest {
 
         val apiKey = SearchRecipesResponses.apiKey
 
+        //insert a duplicate recipe into cache, to test if SearchRecipe sets isFavorite to true
+        val recipe = ConfirmRecipeExists.recipe
+        var cachedRecipe = cache.getAllRecipes()
+        assert(cachedRecipe.isEmpty())
+        cache.insertRecipe(recipe.toFavoriteEntity())
+        cachedRecipe = cache.getAllRecipes()
+        assert(cachedRecipe.size == 1)
+
         val emissions = searchRecipes.execute(
             app_id = apiKey.app_id,
             app_key = apiKey.app_key,
@@ -70,10 +82,17 @@ class SearchRecipesTest {
             to = 10,
         ).toList()
 
-        assert(emissions[0].data == null)
-        assert(emissions[0].data?.recipeList == null)
-//        assert(emissions[0].data?.recipeList?.get(0) != null)
-//        assert(emissions[0].data?.recipeList?.get(0) is Recipe)
+        assert(emissions[0].data?.recipeList?.size == 10)
+        assert(emissions[0].data?.recipeList?.get(0) != null)
+        assert(emissions[0].data?.recipeList?.get(0) is Recipe)
+
+        //Position 0 is a guaranteed duplicate, so its isFavorite value will be set to true
+        assert(emissions[0].data?.recipeList?.get(0)!!.isFavorite)
+
+        //Making sure other recipes are unaltered
+        assert(!emissions[0].data?.recipeList?.get(1)!!.isFavorite)
     }
+
+
 
 }
