@@ -20,7 +20,7 @@ import dev.zidali.recipeapp.business.datasource.cache.main.shoppinglist.relation
     TemporaryRecipeEntity::class,
     ShoppingListEntity::class,
     ShoppingListIngredientEntity::class,
-    ApiKeyEntity::class], version = 1)
+    ApiKeyEntity::class], version = 2)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun getTemporaryRecipeDao(): TemporaryRecipeDao

@@ -13,9 +13,12 @@ interface TemporaryRecipeDao {
     suspend fun insertRecipe(recipe: TemporaryRecipeEntity): Long
 
     @Query("SELECT * FROM temporaryRecipe WHERE label = :label")
-    suspend fun getRecipeByLabel(label: String): TemporaryRecipeEntity
+    suspend fun getRecipeByLabel(label: String): TemporaryRecipeEntity?
 
     @Query("DELETE FROM temporaryRecipe")
     suspend fun deleteAllRecipes()
+
+    @Query("SELECT * FROM temporaryRecipe")
+    suspend fun getAllRecipes(): MutableList<TemporaryRecipeEntity>
 
 }

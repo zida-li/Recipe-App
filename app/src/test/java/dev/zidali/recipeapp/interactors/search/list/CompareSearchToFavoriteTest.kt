@@ -1,16 +1,16 @@
-package dev.zidali.recipeapp.interactors.search
+package dev.zidali.recipeapp.interactors.search.list
 
 import com.google.gson.GsonBuilder
 import dev.zidali.recipeapp.business.datasource.cache.main.FavoriteRecipeDao
 import dev.zidali.recipeapp.business.datasource.cache.main.toFavoriteEntity
-import dev.zidali.recipeapp.business.datasource.cache.main.toFavoriteRecipe
 import dev.zidali.recipeapp.business.datasource.network.main.MainService
 import dev.zidali.recipeapp.business.domain.models.Recipe
+import dev.zidali.recipeapp.business.interactors.main.search.list.CompareSearchToFavorite
 import dev.zidali.recipeapp.business.interactors.main.search.list.SearchRecipes
 import dev.zidali.recipeapp.datasource.cache.AppDatabaseFake
 import dev.zidali.recipeapp.datasource.cache.FavoriteRecipeDaoFake
-import dev.zidali.recipeapp.datasource.network.main.search.ConfirmRecipeExists
 import dev.zidali.recipeapp.datasource.network.main.search.SearchRecipesResponses
+import dev.zidali.recipeapp.datasource.network.main.search.SingleDuplicateRecipe
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import okhttp3.HttpUrl
@@ -22,18 +22,20 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.HttpURLConnection
 
-class SearchRecipesTest {
+class CompareSearchToFavoriteTest {
+
 
     private val appDataBase = AppDatabaseFake()
     private lateinit var mockWebServer: MockWebServer
     private lateinit var baseUrl: HttpUrl
 
     //system in test
-    private lateinit var searchRecipes: SearchRecipes
+    private lateinit var compareSearchToFavorite: CompareSearchToFavorite
 
     //dependencies
     private lateinit var mainService: MainService
     private lateinit var cache: FavoriteRecipeDao
+    private lateinit var searchRecipes: SearchRecipes
 
     @BeforeEach
     fun setup() {
@@ -48,6 +50,10 @@ class SearchRecipesTest {
 
         cache = FavoriteRecipeDaoFake(appDataBase)
 
+        compareSearchToFavorite = CompareSearchToFavorite(
+            favoriteRecipeDao = cache
+        )
+
         searchRecipes = SearchRecipes(
             favoriteRecipeDao = cache,
             mainService = mainService,
@@ -56,7 +62,7 @@ class SearchRecipesTest {
     }
 
     @Test
-    fun success_10Recipes() = runBlocking {
+    fun success_recipeSetToFavorite() = runBlocking {
 
         mockWebServer.enqueue(
             MockResponse()
@@ -65,14 +71,6 @@ class SearchRecipesTest {
         )
 
         val apiKey = SearchRecipesResponses.apiKey
-
-        //insert a duplicate recipe into cache, to test if SearchRecipe sets isFavorite to true
-        val recipe = ConfirmRecipeExists.recipe
-        var cachedRecipe = cache.getAllRecipes()
-        assert(cachedRecipe.isEmpty())
-        cache.insertRecipe(recipe.toFavoriteEntity())
-        cachedRecipe = cache.getAllRecipes()
-        assert(cachedRecipe.size == 1)
 
         val emissions = searchRecipes.execute(
             app_id = apiKey.app_id,
@@ -86,13 +84,24 @@ class SearchRecipesTest {
         assert(emissions[0].data?.recipeList?.get(0) != null)
         assert(emissions[0].data?.recipeList?.get(0) is Recipe)
 
-        //Position 0 is a guaranteed duplicate, so its isFavorite value will be set to true
+        assert(!emissions[0].data?.recipeList?.get(0)!!.isFavorite)
+
+
+        val recipe = SingleDuplicateRecipe.recipe
+        var cachedRecipe = cache.getAllRecipes()
+        assert(cachedRecipe.isEmpty())
+        cache.insertRecipe(recipe.toFavoriteEntity())
+        cachedRecipe = cache.getAllRecipes()
+        assert(cachedRecipe.size == 1)
+
+        assert(!emissions[0].data?.recipeList?.get(0)!!.isFavorite)
+
+        compareSearchToFavorite.execute(
+            emissions[0].data?.recipeList!!
+        ).toList()
+
         assert(emissions[0].data?.recipeList?.get(0)!!.isFavorite)
-
-        //Making sure other recipes are unaltered
-        assert(!emissions[0].data?.recipeList?.get(1)!!.isFavorite)
     }
-
 
 
 }

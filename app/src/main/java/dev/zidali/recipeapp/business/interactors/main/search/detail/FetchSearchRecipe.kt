@@ -17,7 +17,7 @@ class FetchSearchRecipe (
         recipeName: String
     ): Flow<DataState<ViewRecipeState>> = flow {
 
-        val cacheCall = temporaryRecipeDao.getRecipeByLabel(recipeName).toTemporaryRecipe()
+        val cacheCall = temporaryRecipeDao.getRecipeByLabel(recipeName)?.toTemporaryRecipe()
 
         temporaryRecipeDao.deleteAllRecipes()
 

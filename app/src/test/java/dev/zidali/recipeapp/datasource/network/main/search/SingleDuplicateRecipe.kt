@@ -3,7 +3,7 @@ package dev.zidali.recipeapp.datasource.network.main.search
 import dev.zidali.recipeapp.business.domain.models.Recipe
 import dev.zidali.recipeapp.business.domain.util.Converters
 
-object ConfirmRecipeExists {
+object SingleDuplicateRecipe {
 
     val recipeName = "Chicken Vesuvio"
     val recipeImageUrl = "http://www.seriouseats.com/recipes/2011/12/chicken-vesuvio-recipe.html"
@@ -27,5 +27,6 @@ object ConfirmRecipeExists {
         isFavorite = isFavorite,
         isInShoppingList = isInShoppingList,
     )
+
 
 }
