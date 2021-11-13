@@ -5,10 +5,12 @@ import dev.zidali.recipeapp.business.datasource.cache.main.FavoriteRecipeDao
 import dev.zidali.recipeapp.business.datasource.cache.main.toFavoriteEntity
 import dev.zidali.recipeapp.business.datasource.network.main.MainService
 import dev.zidali.recipeapp.business.domain.models.Recipe
+import dev.zidali.recipeapp.business.domain.util.MessageType
+import dev.zidali.recipeapp.business.domain.util.UIComponentType
 import dev.zidali.recipeapp.business.interactors.main.search.list.SearchRecipes
 import dev.zidali.recipeapp.datasource.cache.AppDatabaseFake
 import dev.zidali.recipeapp.datasource.cache.FavoriteRecipeDaoFake
-import dev.zidali.recipeapp.datasource.network.main.search.SingleDuplicateRecipe
+import dev.zidali.recipeapp.datasource.testfakes.SingleDuplicateRecipe
 import dev.zidali.recipeapp.datasource.network.main.search.SearchRecipesResponses
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
@@ -90,6 +92,31 @@ class SearchRecipesTest {
 
         //Making sure other recipes are unaltered
         assert(!emissions[0].data?.recipeList?.get(1)!!.isFavorite)
+    }
+
+    @Test
+    fun error() = runBlocking {
+
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(HttpURLConnection.HTTP_OK)
+                .setBody(SearchRecipesResponses.failure_unauthorized)
+        )
+
+        val apiKey = SearchRecipesResponses.apiKey
+
+        val emissions = searchRecipes.execute(
+            app_id = apiKey.app_id,
+            app_key = apiKey.app_key,
+            query = "",
+            from = 0,
+            to = 10,
+        ).toList()
+
+        assert(emissions[0].stateMessage?.response?.message != null)
+        assert(emissions[0].stateMessage?.response?.uiComponentType is UIComponentType.Dialog)
+        assert(emissions[0].stateMessage?.response?.messageType is MessageType.Error)
+
     }
 
 

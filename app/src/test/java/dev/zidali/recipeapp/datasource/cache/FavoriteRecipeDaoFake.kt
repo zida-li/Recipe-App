@@ -19,7 +19,7 @@ class FavoriteRecipeDaoFake(
         val longArray = longArrayOf(recipes.size.toLong())
         for (recipe in recipes) {
             db.favoriteRecipe.removeIf {
-                it.recipeId == recipe.recipeId
+                it.recipeName == recipe.recipeName
             }
             db.favoriteRecipe.add(recipe)
         }

@@ -2,7 +2,6 @@ package dev.zidali.recipeapp.interactors.search
 
 import com.google.gson.GsonBuilder
 import dev.zidali.recipeapp.business.datasource.cache.main.FavoriteRecipeDao
-import dev.zidali.recipeapp.business.datasource.cache.main.toFavoriteEntity
 import dev.zidali.recipeapp.business.datasource.network.main.MainService
 import dev.zidali.recipeapp.business.domain.models.Recipe
 import dev.zidali.recipeapp.business.interactors.main.search.SaveRecipeToFavorite
@@ -10,7 +9,6 @@ import dev.zidali.recipeapp.business.interactors.main.search.list.SearchRecipes
 import dev.zidali.recipeapp.datasource.cache.AppDatabaseFake
 import dev.zidali.recipeapp.datasource.cache.FavoriteRecipeDaoFake
 import dev.zidali.recipeapp.datasource.network.main.search.SearchRecipesResponses
-import dev.zidali.recipeapp.datasource.network.main.search.SingleDuplicateRecipe
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import okhttp3.HttpUrl

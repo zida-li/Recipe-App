@@ -15,7 +15,7 @@ import dev.zidali.recipeapp.business.datasource.cache.main.shoppinglist.relation
 import dev.zidali.recipeapp.business.datasource.network.main.MainService
 import dev.zidali.recipeapp.business.interactors.main.apikey.FetchApiKey
 import dev.zidali.recipeapp.business.interactors.main.apikey.UpdateApiKey
-import dev.zidali.recipeapp.business.interactors.main.favorite.detail.DeleteMultipleRecipesFromFavorite
+import dev.zidali.recipeapp.business.interactors.main.favorite.list.DeleteMultipleRecipesFromFavorite
 import dev.zidali.recipeapp.business.interactors.main.favorite.detail.FetchFavoriteRecipe
 import dev.zidali.recipeapp.business.interactors.main.favorite.list.FetchFavoriteRecipes
 import dev.zidali.recipeapp.business.interactors.main.search.SaveRecipeToFavorite

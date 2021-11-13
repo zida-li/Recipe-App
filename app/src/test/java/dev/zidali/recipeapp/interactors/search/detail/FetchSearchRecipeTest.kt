@@ -5,7 +5,7 @@ import dev.zidali.recipeapp.business.datasource.cache.main.search.toTemporaryEnt
 import dev.zidali.recipeapp.business.interactors.main.search.detail.FetchSearchRecipe
 import dev.zidali.recipeapp.datasource.cache.AppDatabaseFake
 import dev.zidali.recipeapp.datasource.cache.TemporaryRecipeDaoFake
-import dev.zidali.recipeapp.datasource.network.main.search.SingleDuplicateRecipe
+import dev.zidali.recipeapp.datasource.testfakes.SingleDuplicateRecipe
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach

@@ -1,4 +1,4 @@
-package dev.zidali.recipeapp.business.interactors.main.favorite.detail
+package dev.zidali.recipeapp.business.interactors.main.favorite.list
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

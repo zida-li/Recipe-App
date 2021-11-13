@@ -10,7 +10,7 @@ import dev.zidali.recipeapp.business.interactors.main.search.list.SearchRecipes
 import dev.zidali.recipeapp.datasource.cache.AppDatabaseFake
 import dev.zidali.recipeapp.datasource.cache.FavoriteRecipeDaoFake
 import dev.zidali.recipeapp.datasource.network.main.search.SearchRecipesResponses
-import dev.zidali.recipeapp.datasource.network.main.search.SingleDuplicateRecipe
+import dev.zidali.recipeapp.datasource.testfakes.SingleDuplicateRecipe
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import okhttp3.HttpUrl

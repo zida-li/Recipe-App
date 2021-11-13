@@ -34,8 +34,8 @@ class SaveRecipeToTemporaryRecipeDbTest {
     //dependencies
     private lateinit var searchRecipes: SearchRecipes
     private lateinit var mainService: MainService
-    private lateinit var cache1: TemporaryRecipeDao
-    private lateinit var cache2: FavoriteRecipeDao
+    private lateinit var temporaryRecipeDao: TemporaryRecipeDao
+    private lateinit var favoriteRecipeDao: FavoriteRecipeDao
 
     @BeforeEach
     fun setup() {
@@ -48,17 +48,17 @@ class SaveRecipeToTemporaryRecipeDbTest {
             .build()
             .create(MainService::class.java)
 
-        cache1 = TemporaryRecipeDaoFake(appDataBase)
+        temporaryRecipeDao = TemporaryRecipeDaoFake(appDataBase)
 
-        cache2 = FavoriteRecipeDaoFake(appDataBase)
+        favoriteRecipeDao = FavoriteRecipeDaoFake(appDataBase)
 
         searchRecipes = SearchRecipes(
-            favoriteRecipeDao = cache2,
-            mainService = mainService,
+            mainService,
+            favoriteRecipeDao
         )
 
         saveRecipeToTemporaryRecipeDb = SaveRecipeToTemporaryRecipeDb(
-            temporaryRecipeDao = cache1
+            temporaryRecipeDao
         )
 
     }
@@ -86,17 +86,17 @@ class SaveRecipeToTemporaryRecipeDbTest {
         assert(emissions[0].data?.recipeList?.get(0) != null)
         assert(emissions[0].data?.recipeList?.get(0) is Recipe)
 
-        var confirmCacheSize = cache1.getAllRecipes()
+        var confirmCacheSize = temporaryRecipeDao.getAllRecipes()
         assert(confirmCacheSize.isEmpty())
 
         saveRecipeToTemporaryRecipeDb.execute(
             recipe = emissions[0].data?.recipeList?.get(0)!!
         ).toList()
 
-        confirmCacheSize = cache1.getAllRecipes()
+        confirmCacheSize = temporaryRecipeDao.getAllRecipes()
         assert(confirmCacheSize.isNotEmpty())
 
-        val cache = cache1.getRecipeByLabel(emissions[0].data?.recipeList?.get(0)?.recipeName!!)
+        val cache = temporaryRecipeDao.getRecipeByLabel(emissions[0].data?.recipeList?.get(0)?.recipeName!!)
         assert(cache?.recipeId == emissions[0].data?.recipeList?.get(0)?.recipeId)
 
     }

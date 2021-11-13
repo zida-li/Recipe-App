@@ -11,7 +11,7 @@ import dev.zidali.recipeapp.business.domain.models.Recipe
 import dev.zidali.recipeapp.business.domain.util.StateMessage
 import dev.zidali.recipeapp.business.domain.util.UIComponentType
 import dev.zidali.recipeapp.business.domain.util.doesMessageAlreadyExistInQueue
-import dev.zidali.recipeapp.business.interactors.main.favorite.detail.DeleteMultipleRecipesFromFavorite
+import dev.zidali.recipeapp.business.interactors.main.favorite.list.DeleteMultipleRecipesFromFavorite
 import dev.zidali.recipeapp.business.interactors.main.favorite.list.FetchFavoriteRecipes
 import javax.inject.Inject
 

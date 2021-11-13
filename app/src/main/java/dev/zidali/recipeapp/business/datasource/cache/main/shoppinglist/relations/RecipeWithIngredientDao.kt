@@ -1,8 +1,7 @@
 package dev.zidali.recipeapp.business.datasource.cache.main.shoppinglist.relations
 
-import androidx.room.Dao
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
+import dev.zidali.recipeapp.business.datasource.cache.main.shoppinglist.ShoppingListEntity
 
 @Dao
 interface RecipeWithIngredientDao {
